@@ -1,0 +1,45 @@
+![Masochistic Survival Logo](images/masochistic-survival-logo.png)
+
+## Compatibility
+
+Tested on Spigot-1.21.5.
+
+## Introduction
+
+Make survival harder keeping the spirit of vanilla survival.
+
+## Features
+
+* Nasty Enderman: a percentage of Endermans attack players immediately on spawn and ignore carved pumpkins
+* Nasty Archer: arrow archers have a chance to add both positive and negative effects to their arrows
+* Nasty Shooter: shooting mobs target the closest player immediately when spawned with direct vision to them
+* Nasty Ender Dragon: the Ender Dragon has increased regen, explosion resistance and damage limit, periodically resurrects healing crystals, and targets fireballs and random endermans to aggressive players
+* Explosive Shooter: a percentage of shooters equip explosive projectiles 
+* Greedy Villager: villagers don't sell imbalanced clothes with environmental protection and mending
+
+## Commands
+
+`masochisticsurvival reload` - reload config from disk
+
+## Permissions
+
+* Access to 'reload' command:
+`masochisticsurvival.reload` (default: op)
+
+## Configuration
+[Default configuration file](src/main/resources/config.yml)
+
+## Author
+I will be happy to add some features or fix bugs. My mail: uprial@gmail.com.
+
+## Useful links
+* [Project on GitHub]
+* [Project on Bukkit Dev]
+* [Project on Spigot]
+
+## Related projects
+* CustomCreatures: [Bukkit Dev](http://dev.bukkit.org/bukkit-plugins/customcreatures/), [GitHub](https://github.com/uprial/customcreatures), [Spigot](https://www.spigotmc.org/resources/customcreatures.68711/)
+* CustomNukes: [Bukkit Dev](http://dev.bukkit.org/bukkit-plugins/customnukes/), [GitHub](https://github.com/uprial/customnukes), [Spigot](https://www.spigotmc.org/resources/customnukes.68710/)
+* CustomRecipes: [Bukkit Dev](https://dev.bukkit.org/projects/custom-recipes), [GitHub](https://github.com/uprial/customrecipes/), [Spigot](https://www.spigotmc.org/resources/customrecipes.89435/)
+* CustomVillage: [Bukkit Dev](http://dev.bukkit.org/bukkit-plugins/customvillage/), [GitHub](https://github.com/uprial/customvillage/), [Spigot](https://www.spigotmc.org/resources/customvillage.69170/)
+* TakeAim: [Bukkit Dev](https://dev.bukkit.org/projects/takeaim), [GitHub](https://github.com/uprial/takeaim), [Spigot](https://www.spigotmc.org/resources/takeaim.68713/)

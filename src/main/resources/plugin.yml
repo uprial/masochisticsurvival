@@ -1,0 +1,14 @@
+name: MasochisticSurvival
+main: com.gmail.uprial.masochisticsurvival.MasochisticSurvival
+version: 0.1.0
+api-version: 1.14
+commands:
+  masochisticsurvival:
+    description: MasochisticSurvival config help
+    usage: /masochisticsurvival help
+    permission:
+    permission-message:
+permissions:
+  masochisticsurvival.reload:
+    description: Gives access to MasochisticSurvival 'reload' command
+    default: op

@@ -1,0 +1,42 @@
+#
+# ==== General info ====
+#
+# * After editing of this file you need to check server logs to be
+# sure that no errors was appeared.
+#
+
+#
+# Show debug info. Possible values: true | false (default = false)
+#
+# This option can affect the performance.
+#
+debug: false
+
+nasty-enderman:
+  percentage: 0.1
+
+nasty-archer:
+  positive-percentage: 0.3
+  negative-percentage: 1.0
+
+nasty-shooter:
+  percentage: 100
+
+nasty-ender-dragon:
+  enabled: true
+  world-name: world_the_end
+  resurrection-interval-in-s: 30
+  # According to https://minecraft.fandom.com/wiki/Ender_Dragon,
+  # the Ender Dragon has 200.0 health.
+  explosion-damage-limit-per-s: 50.0
+  explosion-damage-reduction: 5.0
+  balls-interval-in-s: 3
+  regen-multiplier: 2.0
+
+explosive-shooter:
+  percentage: 1.0
+  power: 2.0
+
+greedy-villager:
+  replace-protection: true
+  replace-mending: true
