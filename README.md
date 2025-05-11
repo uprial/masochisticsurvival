@@ -10,6 +10,7 @@ Make survival harder keeping the spirit of vanilla survival.
 
 ## Features
 
+* Synergies perfectly with [TakeAim](https://github.com/uprial/takeaim) and [CustomCreatures](https://github.com/uprial/customcreatures) plugins
 * Nasty Enderman: a percentage of Endermans attack players immediately on spawn and ignore carved pumpkins
 * Nasty Archer: arrow archers have a chance to add both positive and negative effects to their arrows
 * Nasty Shooter: shooting mobs target the closest player immediately when spawned with direct vision to them
