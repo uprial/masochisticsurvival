@@ -34,9 +34,9 @@ Make survival harder keeping the spirit of vanilla survival.
 I will be happy to add some features or fix bugs. My mail: uprial@gmail.com.
 
 ## Useful links
-* [Project on GitHub]
-* [Project on Bukkit Dev]
-* [Project on Spigot]
+* [Project on GitHub](https://github.com/uprial/masochisticsurvival)
+* [Project on Bukkit Dev](https://legacy.curseforge.com/minecraft/bukkit-plugins/masochisticsurvival)
+* [Project on Spigot](https://www.spigotmc.org/resources/masochisticsurvival.124943/)
 
 ## Related projects
 * CustomCreatures: [Bukkit Dev](http://dev.bukkit.org/bukkit-plugins/customcreatures/), [GitHub](https://github.com/uprial/customcreatures), [Spigot](https://www.spigotmc.org/resources/customcreatures.68711/)
