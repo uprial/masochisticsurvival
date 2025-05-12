@@ -12,16 +12,22 @@
 #
 debug: false
 
+# A <percentage> of Endermans attack players immediately on spawn and ignore carved pumpkins
 nasty-enderman:
   percentage: 0.1
 
+# Arrow archers have a chance to add both <positive> and <negative> effects to their arrows
 nasty-archer:
   positive-percentage: 0.3
   negative-percentage: 1.0
 
+# Shooting mobs target the closest player immediately when spawned with direct vision to them
 angry-shooter:
   percentage: 100
 
+# The Ender Dragon has <increased regen>, explosion <resistance> and <damage limit>,
+# <periodically resurrects> healing crystals,
+# and targets <fireballs> and random endermans to aggressive players.
 nasty-ender-dragon:
   enabled: true
   world-name: world_the_end
@@ -33,10 +39,12 @@ nasty-ender-dragon:
   balls-interval-in-s: 3
   regen-multiplier: 2.0
 
+# A <percentage> of shooters equip explosive projectiles
 explosive-shooter:
   percentage: 1.0
   power: 2.0
 
+# Villagers don't sell imbalanced clothes with <environmental protection> and <mending>
 greedy-villager:
   replace-protection: true
   replace-mending: true
