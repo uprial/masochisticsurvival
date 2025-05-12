@@ -6,19 +6,19 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import static com.gmail.uprial.masochisticsurvival.listeners.NastyShooterListener.getFromConfig;
+import static com.gmail.uprial.masochisticsurvival.listeners.AngryShooterListener.getFromConfig;
 import static org.junit.Assert.*;
 
-public class NastyShooterListenerTest extends TestConfigBase {
+public class AngryShooterListenerTest extends TestConfigBase {
     @Rule
     public final ExpectedException e = ExpectedException.none();
 
     @Test
     public void testWhole() throws Exception {
-        NastyShooterListener listener = getFromConfig(getPreparedConfig(
-                        "ns:",
+        AngryShooterListener listener = getFromConfig(getPreparedConfig(
+                        "as:",
                         "  percentage: 100"),
-                getParanoiacCustomLogger(), "ns", "'ns'");
+                getParanoiacCustomLogger(), "as", "'as'");
         assertNotNull(listener);
         assertEquals("{percentage: 100}",
                 listener.toString());
@@ -26,29 +26,29 @@ public class NastyShooterListenerTest extends TestConfigBase {
 
     @Test
     public void testNull() throws Exception {
-        NastyShooterListener listener = getFromConfig(getPreparedConfig(
-                        "ns:",
+        AngryShooterListener listener = getFromConfig(getPreparedConfig(
+                        "as:",
                         " percentage: 0"),
-                getDebugFearingCustomLogger(), "ns", "'ns'");
+                getDebugFearingCustomLogger(), "as", "'as'");
         assertNull(listener);
     }
 
     @Test
     public void testEmpty() throws Exception {
         e.expect(InvalidConfigException.class);
-        e.expectMessage("Empty percentage of 'ns'");
+        e.expectMessage("Empty percentage of 'as'");
         getFromConfig(getPreparedConfig(
                         "?:"),
-                getCustomLogger(), "ns", "'ns'");
+                getCustomLogger(), "as", "'as'");
     }
 
     @Test
     public void testWrongPercentage() throws Exception {
         e.expect(InvalidConfigException.class);
-        e.expectMessage("A percentage of 'ns' is not a double");
+        e.expectMessage("A percentage of 'as' is not a double");
         getFromConfig(getPreparedConfig(
-                        "ns:",
+                        "as:",
                         " percentage: v"),
-                getCustomLogger(), "ns", "'ns'");
+                getCustomLogger(), "as", "'as'");
     }
 }

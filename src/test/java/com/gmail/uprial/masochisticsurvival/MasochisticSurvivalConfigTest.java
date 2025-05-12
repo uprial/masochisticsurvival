@@ -44,7 +44,7 @@ public class MasochisticSurvivalConfigTest extends TestConfigBase {
         assertEquals(
                 "{nasty-enderman={percentage: 0.1}, " +
                         "nasty-archer={positive-percentage: 0.3, negative-percentage: 1}, " +
-                        "nasty-shooter={percentage: 100}, " +
+                        "angry-shooter={percentage: 100}, " +
                         "nasty-ender-dragon={world-name: world_the_end, " +
                         "resurrection-interval-in-s: 30, explosion-damage-limit-per-s: 50, " +
                         "explosion-damage-reduction: 5, balls-interval-in-s: 3, " +
@@ -57,7 +57,7 @@ public class MasochisticSurvivalConfigTest extends TestConfigBase {
                         "nasty-archer:",
                         "  positive-percentage: 0.3",
                         "  negative-percentage: 1.0",
-                        "nasty-shooter:",
+                        "angry-shooter:",
                         "  percentage: 100",
                         "nasty-ender-dragon:",
                         "  enabled: true",

@@ -19,7 +19,7 @@ nasty-archer:
   positive-percentage: 0.3
   negative-percentage: 1.0
 
-nasty-shooter:
+angry-shooter:
   percentage: 100
 
 nasty-ender-dragon:

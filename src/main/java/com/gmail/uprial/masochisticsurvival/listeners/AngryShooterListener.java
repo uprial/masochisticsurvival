@@ -23,12 +23,12 @@ import static com.gmail.uprial.masochisticsurvival.common.DoubleHelper.formatDou
 import static com.gmail.uprial.masochisticsurvival.common.Formatter.format;
 import static com.gmail.uprial.masochisticsurvival.common.Utils.joinPaths;
 
-public class NastyShooterListener implements Listener {
+public class AngryShooterListener implements Listener {
     private final double percentage;
 
     private final CustomLogger customLogger;
 
-    public NastyShooterListener(final CustomLogger customLogger,
+    public AngryShooterListener(final CustomLogger customLogger,
                                 final double percentage) {
         this.customLogger = customLogger;
         this.percentage = percentage;
@@ -117,7 +117,7 @@ public class NastyShooterListener implements Listener {
         );
     }
 
-    public static NastyShooterListener getFromConfig(FileConfiguration config, CustomLogger customLogger, String key, String title) throws InvalidConfigException {
+    public static AngryShooterListener getFromConfig(FileConfiguration config, CustomLogger customLogger, String key, String title) throws InvalidConfigException {
         double percentage = ConfigReaderNumbers.getDouble(config, customLogger,
                 joinPaths(key, "percentage"), String.format("percentage of %s", title), 0.0D, RandomUtils.MAX_PERCENT);
 
@@ -125,7 +125,7 @@ public class NastyShooterListener implements Listener {
             return null;
         }
 
-        return new NastyShooterListener(customLogger, percentage);
+        return new AngryShooterListener(customLogger, percentage);
     }
 
     @Override

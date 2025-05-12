@@ -37,7 +37,7 @@ public final class MasochisticSurvivalConfig {
         final Map<String,Listener> listeners = ImmutableMap.<String,Listener>builder()
                 .put("nasty-enderman", NastyEndermanListener.getFromConfig(config, customLogger, "nasty-enderman", "'nasty-enderman'"))
                 .put("nasty-archer", NastyArcherListener.getFromConfig(plugin, config, customLogger, "nasty-archer", "'nasty-archer'"))
-                .put("nasty-shooter", NastyShooterListener.getFromConfig(config, customLogger, "nasty-shooter", "'nasty-shooter'"))
+                .put("angry-shooter", AngryShooterListener.getFromConfig(config, customLogger, "angry-shooter", "'angry-shooter'"))
                 .put("nasty-ender-dragon", NastyEnderDragonListener.getFromConfig(plugin, config, customLogger, "nasty-ender-dragon", "'nasty-ender-dragon'"))
                 .put("explosive-shooter", ExplosiveShooterListener.getFromConfig(plugin, config, customLogger, "explosive-shooter", "'explosive-shooter'"))
                 .put("greedy-villager", GreedyVillagerListener.getFromConfig(config, customLogger, "greedy-villager", "'greedy-villager'"))
