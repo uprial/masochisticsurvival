@@ -40,7 +40,7 @@ public final class MasochisticSurvival extends JavaPlugin {
         HandlerList.unregisterAll(this);
     }
 
-    public boolean reloadMasochisticConfig(CustomLogger userLogger) {
+    public boolean reloadMasochisticSurvivalConfig(CustomLogger userLogger) {
         reloadConfig();
 
         final MasochisticSurvivalConfig masochisticSurvivalConfig = loadConfig(this, getConfig(), consoleLogger, userLogger);

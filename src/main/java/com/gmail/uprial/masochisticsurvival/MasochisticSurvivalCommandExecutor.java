@@ -21,7 +21,7 @@ class MasochisticSurvivalCommandExecutor implements CommandExecutor {
             final CustomLogger customLogger = new CustomLogger(plugin.getLogger(), sender);
             if ((args.length >= 1) && (args[0].equalsIgnoreCase("reload"))) {
                 if (sender.hasPermission(COMMAND_NS + ".reload")) {
-                    if(plugin.reloadMasochisticConfig(customLogger)) {
+                    if(plugin.reloadMasochisticSurvivalConfig(customLogger)) {
                         customLogger.info("MasochisticSurvival config reloaded.");
                     }
                     return true;
