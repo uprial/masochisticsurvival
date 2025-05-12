@@ -43,7 +43,7 @@ public final class MasochisticSurvival extends JavaPlugin {
     public boolean reloadMasochisticConfig(CustomLogger userLogger) {
         reloadConfig();
 
-        final MasochisticSurvivalConfig masochisticSurvivalConfig = loadConfig(this, getConfig(), userLogger, consoleLogger);
+        final MasochisticSurvivalConfig masochisticSurvivalConfig = loadConfig(this, getConfig(), consoleLogger, userLogger);
         if(masochisticSurvivalConfig != null) {
             unregister();
             register(masochisticSurvivalConfig);
@@ -93,6 +93,9 @@ public final class MasochisticSurvival extends JavaPlugin {
             masochisticSurvivalConfig = MasochisticSurvivalConfig.getFromConfig(plugin, config, mainLogger);
         } catch (InvalidConfigException e) {
             mainLogger.error(e.getMessage());
+            if(secondLogger != null) {
+                secondLogger.error(e.getMessage());
+            }
         }
 
         return masochisticSurvivalConfig;

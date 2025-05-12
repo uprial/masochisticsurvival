@@ -90,6 +90,8 @@ public class NastyEnderDragonListener implements Listener {
         if(!BEDROCKS_UPDATED.get().equals(worldName)) {
             BEDROCKS_UPDATED.set(worldName);
 
+            BEDROCKS.clear();
+
             for (int x = -MAX_CHUNK_XZ; x <= MAX_CHUNK_XZ; x++) {
                 for (int z = -MAX_CHUNK_XZ; z <= MAX_CHUNK_XZ; z++) {
                     final double distance = getDistance(x, z);
@@ -245,8 +247,8 @@ public class NastyEnderDragonListener implements Listener {
                     && (newDamage < oldDamage)
                     // Otherwise, too many log messages will be produced.
                     && (newDamage > 0.0D)) {
-                customLogger.debug(String.format("Changed explosive damage to %s from %.2f to %.2f",
-                        format(event.getEntity()), oldDamage, newDamage));
+                customLogger.debug(String.format("Changed explosive damage to %s from %.2f to %.2f, new limit: %.2f",
+                        format(event.getEntity()), oldDamage, newDamage, limit - newDamage));
             }
         }
     }
