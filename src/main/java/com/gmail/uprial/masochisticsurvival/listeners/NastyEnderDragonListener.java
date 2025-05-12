@@ -20,7 +20,7 @@ import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.projectiles.ProjectileSource;
 
 import java.util.*;
-import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 
 import static com.gmail.uprial.masochisticsurvival.common.DoubleHelper.formatDoubleValue;
 import static com.gmail.uprial.masochisticsurvival.common.Formatter.format;
@@ -39,7 +39,7 @@ public class NastyEnderDragonListener implements Listener {
     private final int ballsIntervalInS;
     private final double regenMultiplier;
 
-    private final Set<Location> bedrocks = new HashSet<>();
+    private static final Set<Location> BEDROCKS = new HashSet<>();
 
     public NastyEnderDragonListener(final MasochisticSurvival plugin,
                                     final CustomLogger customLogger,
@@ -83,11 +83,12 @@ public class NastyEnderDragonListener implements Listener {
     private static final double MAX_CHUNK_RADIUS = 4;
     private static final int    MAX_CHUNK_XZ     = 3;
 
-    private final AtomicBoolean bedrocksCacheUpdated = new AtomicBoolean(false);
+    private static final AtomicReference<String> BEDROCKS_UPDATED = new AtomicReference<>("");
+
     private void updateBedrocksCache(final World world) {
         // update the cache only once
-        if(!bedrocksCacheUpdated.get()) {
-            bedrocksCacheUpdated.set(true);
+        if(!BEDROCKS_UPDATED.get().equals(worldName)) {
+            BEDROCKS_UPDATED.set(worldName);
 
             for (int x = -MAX_CHUNK_XZ; x <= MAX_CHUNK_XZ; x++) {
                 for (int z = -MAX_CHUNK_XZ; z <= MAX_CHUNK_XZ; z++) {
@@ -95,17 +96,17 @@ public class NastyEnderDragonListener implements Listener {
                     if ((distance > MIN_CHUNK_RADIUS) && (distance <= MAX_CHUNK_RADIUS)) {
                         final Location bedrock = searchBedrock(world.getChunkAt(x, z, true));
                         if(bedrock != null) {
-                            bedrocks.add(bedrock);
+                            BEDROCKS.add(bedrock);
                         }
                     }
                 }
             }
-            if(bedrocks.size() == PILLARS_COUNT) {
+            if(BEDROCKS.size() == PILLARS_COUNT) {
                 customLogger.info(String.format("Detected %d of %d bedrocks",
-                        bedrocks.size(), PILLARS_COUNT));
+                        BEDROCKS.size(), PILLARS_COUNT));
             } else {
                 customLogger.error(String.format("Detected %d bedrocks instead of %d",
-                        bedrocks.size(), PILLARS_COUNT));
+                        BEDROCKS.size(), PILLARS_COUNT));
             }
         }
     }
@@ -153,7 +154,7 @@ public class NastyEnderDragonListener implements Listener {
             crystals.removeIf(crystal -> !crystal.isValid());
 
             final Set<Location> bedrocksWithoutCrystals = new HashSet<>();
-            for(final Location bedrock : bedrocks) {
+            for(final Location bedrock : BEDROCKS) {
                 boolean found = false;
                 for (final EnderCrystal crystal : crystals) {
                     if (crystal.getLocation().distance(bedrock2crystal(bedrock)) < 1.0D) {
