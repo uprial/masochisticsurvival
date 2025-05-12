@@ -8,6 +8,11 @@ import static org.junit.Assert.assertEquals;
 
 public class UtilsTest {
     @Test
+    public void testSeconds2ticks() {
+        assertEquals(40, seconds2ticks(2));
+    }
+
+    @Test
     public void testJoinEmptyStrings() {
         assertEquals("", joinStrings(",", Lists.newArrayList(new String[]{})));
     }
