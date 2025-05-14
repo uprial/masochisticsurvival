@@ -8,6 +8,8 @@ Tested on Spigot-1.21.5.
 
 Make survival harder keeping the spirit of vanilla survival.
 
+The most essential aspects are configurable.
+
 ## Features
 
 * Synergies perfectly with [TakeAim](https://github.com/uprial/takeaim) and [CustomCreatures](https://github.com/uprial/customcreatures) plugins
