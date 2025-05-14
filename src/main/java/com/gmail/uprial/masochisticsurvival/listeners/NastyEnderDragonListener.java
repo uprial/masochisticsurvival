@@ -380,13 +380,13 @@ public class NastyEnderDragonListener implements Listener {
         int resurrectionIntervalInS = ConfigReaderNumbers.getInt(config, customLogger,
                 joinPaths(key, "resurrection-interval-in-s"), String.format("resurrection interval in s of %s", title), 0, 300);
         double explosionDamageLimitPerS = ConfigReaderNumbers.getDouble(config, customLogger,
-                joinPaths(key, "explosion-damage-limit-per-s"), String.format("explosion damage limit per s of %s", title), 0.0D, RandomUtils.MAX_PERCENT);
+                joinPaths(key, "explosion-damage-limit-per-s"), String.format("explosion damage limit per s of %s", title), 0.0D, 200.0D);
         double explosionDamageReduction = ConfigReaderNumbers.getDouble(config, customLogger,
-                joinPaths(key, "explosion-damage-reduction"), String.format("explosion damage reduction of %s", title), 0.0D, RandomUtils.MAX_PERCENT);
+                joinPaths(key, "explosion-damage-reduction"), String.format("explosion damage reduction of %s", title), 0.0D, 200.0D);
         int ballsIntervalS = ConfigReaderNumbers.getInt(config, customLogger,
                 joinPaths(key, "balls-interval-in-s"), String.format("balls interval in s of %s", title), 1, 300);
         double regenMultiplier = ConfigReaderNumbers.getDouble(config, customLogger,
-                joinPaths(key, "regen-multiplier"), String.format("regen multiplier of %s", title), 0.0D, 10.0D);
+                joinPaths(key, "regen-multiplier"), String.format("regen multiplier of %s", title), 0.0D, 200.0D);
 
         return new NastyEnderDragonListener(plugin, customLogger,
                 worldName,
