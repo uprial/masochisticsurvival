@@ -133,6 +133,7 @@ public class NastyArcherListener implements Listener {
                 final LivingEntity entity = (LivingEntity)archer;
 
                 final Set<PotionEffect> potionEffects = getMetadataOrDefault(plugin, entity, MK_EFFECTS, () -> {
+                    // Called once per entity life: empty lists are also cached in metadata
                     final Set<PotionEffect> newPotionEffects = new HashSet<>();
                     for (Map.Entry<PotionEffectType, E> entry : effectMap.entrySet()) {
                         if (RandomUtils.PASS(getPercentage(entry.getValue().isPositive()))) {

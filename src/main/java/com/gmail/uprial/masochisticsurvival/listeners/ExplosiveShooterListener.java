@@ -49,6 +49,7 @@ public class ExplosiveShooterListener implements Listener {
                 final LivingEntity entity = (LivingEntity)shooter;
 
                 final Boolean explosion = getMetadataOrDefault(plugin, entity, MK_EXPLOSION, ()  -> {
+                    // Called once per entity life: empty lists are also cached in metadata
                     final boolean newExplosion;
                     if(RandomUtils.PASS(percentage)) {
                         newExplosion = true;
