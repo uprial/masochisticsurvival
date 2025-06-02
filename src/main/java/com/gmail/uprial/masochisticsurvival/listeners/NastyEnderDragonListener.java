@@ -103,6 +103,9 @@ public class NastyEnderDragonListener implements Listener {
                     }
                 }
             }
+            for(final Location bedrock : BEDROCKS) {
+                resurrect(world, bedrock, false);
+            }
             if(BEDROCKS.size() == PILLARS_COUNT) {
                 customLogger.info(String.format("Detected %d of %d bedrocks",
                         BEDROCKS.size(), PILLARS_COUNT));
@@ -176,7 +179,7 @@ public class NastyEnderDragonListener implements Listener {
                  */
                 final Location bedrock = RandomUtils.getSetItem(bedrocksWithoutCrystals);
 
-                resurrect(world, bedrock);
+                resurrect(world, bedrock, true);
 
                 if(customLogger.isDebugMode()) {
                     customLogger.debug(String.format("Crystal at %s resurrected", format(bedrock)));
@@ -282,11 +285,15 @@ public class NastyEnderDragonListener implements Listener {
         in all directions of the bedrock block at the top of the end spikes are deleted.
      */
     private static final int CLEARANCE_RADIUS = 10;
-    private void resurrect(final World world, final Location bedrock) {
+    private static final int IRON_BARS_HEIGHT = 3;
+    private static final int IRON_BARS_RADIUS = 2;
+    private void resurrect(final World world, final Location bedrock, final boolean update) {
         final int x = bedrock.getBlockX();
         final int y = bedrock.getBlockY();
         final int z = bedrock.getBlockZ();
-        world.createExplosion(bedrock2crystal(bedrock), CLEARANCE_RADIUS);
+        if(update) {
+            world.createExplosion(bedrock2crystal(bedrock), CLEARANCE_RADIUS);
+        }
 
         for (int dy = -CLEARANCE_RADIUS; dy < CLEARANCE_RADIUS; dy++) {
             for (int dx = -CLEARANCE_RADIUS; dx < CLEARANCE_RADIUS; dx++) {
@@ -300,10 +307,12 @@ public class NastyEnderDragonListener implements Listener {
                         material = Material.OBSIDIAN;
                     } else if ((dy < 0)) { // && (!block.getType().equals(Material.OBSIDIAN))) {
                         material = null;//Material.AIR;
-                    } else if ((dy == 3) && (abs(dx) <= 3) && (abs(dz) <= 3)) {
+                    } else if ((dy == IRON_BARS_HEIGHT)
+                            && (abs(dx) <= IRON_BARS_RADIUS) && (abs(dz) <= IRON_BARS_RADIUS)) {
                         material = Material.IRON_BARS;
-                    } else if ((dy >= 0) && (dy < 3) &&
-                            (abs(dx) == 3 && abs(dz) <= 3 || abs(dx) <= 3 && abs(dz) == 3)) {
+                    } else if ((dy >= 0) && (dy < IRON_BARS_HEIGHT) &&
+                            (abs(dx) == IRON_BARS_RADIUS && abs(dz) <= IRON_BARS_RADIUS
+                                    || abs(dx) <= IRON_BARS_RADIUS && abs(dz) == IRON_BARS_RADIUS)) {
                         material = Material.IRON_BARS;
                     } else {
                         material = Material.AIR;
@@ -316,7 +325,9 @@ public class NastyEnderDragonListener implements Listener {
             }
         }
 
-        world.spawnEntity(bedrock2crystal(bedrock), EntityType.END_CRYSTAL);
+        if(update) {
+            world.spawnEntity(bedrock2crystal(bedrock), EntityType.END_CRYSTAL);
+        }
     }
 
     private void launch(final EnderDragon enderDragon, final Player player) {
