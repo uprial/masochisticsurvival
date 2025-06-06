@@ -75,7 +75,7 @@ public class AngryShooterListener implements Listener {
                     && (!player.isInvisible())
                     && (!player.isInvulnerable())
                     && isMonsterSeeingPlayer(mob, player)) {
-                final double distance = getAimPoint(player).distance(getAimPoint(mob));
+                final double distance = TakeAimAdapter.getAimPoint(player).distance(TakeAimAdapter.getAimPoint(mob));
 
                 if ((closestPlayer == null) || (distance < closestDistance)) {
                     closestPlayer = player;
@@ -88,8 +88,8 @@ public class AngryShooterListener implements Listener {
     }
 
     private boolean isMonsterSeeingPlayer(final Mob mob, final Player player) {
-        final Location fromLocation = getAimPoint(mob);
-        final Location toLocation = getAimPoint(player);
+        final Location fromLocation = TakeAimAdapter.getAimPoint(mob);
+        final Location toLocation = TakeAimAdapter.getAimPoint(player);
         // Check for direct vision
         final RayTraceResult rayTraceResult = fromLocation.getWorld().rayTraceBlocks(
                 fromLocation,
@@ -99,11 +99,6 @@ public class AngryShooterListener implements Listener {
                 FluidCollisionMode.ALWAYS);
 
         return (rayTraceResult == null);
-    }
-
-    // According to TakeAim:ProjectileHoming
-    private Location getAimPoint(final LivingEntity targetEntity) {
-        return targetEntity.getEyeLocation();
     }
 
     public static Vector getDirection(final Location fromLocation, final Location toLocation) {

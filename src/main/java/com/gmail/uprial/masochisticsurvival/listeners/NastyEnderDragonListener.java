@@ -339,18 +339,7 @@ public class NastyEnderDragonListener implements Listener {
                     return;
                 }
 
-                TakeAimAdapter.setTarget(enderDragon, player);
-                enderDragon.launchProjectile(DragonFireball.class);
-
-                /*
-                    I carefully tested, and TakeAim works without this fixture.
-
-                    I decided to keep this comment in case I forget I tested.
-
-                Bukkit.getPluginManager().callEvent(
-                        new ProjectileLaunchEvent(dragonFireball));
-                 */
-
+                TakeAimAdapter.launchFireball(enderDragon, player, DragonFireball.class);
             }, seconds2ticks(ballsIntervalInS * i));
         }
     }
