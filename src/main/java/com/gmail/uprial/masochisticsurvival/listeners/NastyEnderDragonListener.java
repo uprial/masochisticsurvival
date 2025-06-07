@@ -194,10 +194,15 @@ public class NastyEnderDragonListener implements Listener {
             if(damager instanceof Player) {
                 final Player player = (Player)damager;
 
+                //Ender Dragon sees everything!
+                //if (AngerHelper.isValidPlayer(player)) {
                 launch((EnderDragon)event.getEntity(), player);
 
                 // Target a random enderman to the player
                 if (EndermanUtils.isAppropriatePlayer(player)) {
+                        //Wait for flying or gliding players on the ground!
+                        //&& (!player.isFlying())
+                        //&& (!player.isGliding())) {
                     for (final Enderman enderman : world.getEntitiesByClass(Enderman.class)) {
                         if (enderman.isValid()
                                 // Any distance 100 >> X >> 0 works for a random pick

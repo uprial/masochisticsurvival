@@ -1,5 +1,6 @@
 package com.gmail.uprial.masochisticsurvival.listeners;
 
+import com.gmail.uprial.masochisticsurvival.common.AngerHelper;
 import com.gmail.uprial.masochisticsurvival.common.CustomLogger;
 import com.gmail.uprial.masochisticsurvival.common.EndermanUtils;
 import com.gmail.uprial.masochisticsurvival.common.RandomUtils;
@@ -33,18 +34,16 @@ public class NastyEndermanListener implements Listener {
     }
 
     private Player getStrongestPlayer(final World world) {
-        Player strongestPlayer = null;
-
-        for (final Player player : world.getEntitiesByClass(Player.class)) {
-            if ((strongestPlayer == null || strongestPlayer.getHealth() < player.getHealth())
-                    && (EndermanUtils.isAppropriatePlayer(player))
-                    && (!player.isFlying()) && (!player.isGliding())
-                    && (!player.isInvisible()) && (!player.isInvulnerable())) {
-                strongestPlayer = player;
+        return AngerHelper.getSmallestItem(world.getEntitiesByClass(Player.class), (final Player player) -> {
+            if((EndermanUtils.isAppropriatePlayer(player))
+                    && (!player.isFlying())
+                    && (!player.isGliding())
+                    && (AngerHelper.isValidPlayer(player))) {
+                return -player.getHealth();
+            } else {
+                return null;
             }
-        }
-
-        return strongestPlayer;
+        });
     }
 
     @EventHandler(priority = EventPriority.NORMAL)

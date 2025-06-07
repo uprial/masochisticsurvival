@@ -1,5 +1,6 @@
 package com.gmail.uprial.masochisticsurvival.listeners;
 
+import com.gmail.uprial.masochisticsurvival.common.AngerHelper;
 import com.gmail.uprial.masochisticsurvival.common.CustomLogger;
 import com.gmail.uprial.masochisticsurvival.common.RandomUtils;
 import com.gmail.uprial.masochisticsurvival.common.TakeAimAdapter;
@@ -15,7 +16,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.util.RayTraceResult;
-import org.bukkit.util.Vector;
 
 import java.util.Set;
 
@@ -67,49 +67,25 @@ public class AngryShooterListener implements Listener {
     }
 
     private Player getClosestVisiblePlayer(final Mob mob) {
-        Player closestPlayer = null;
-        Double closestDistance = null;
-
-        for (final Player player : mob.getWorld().getEntitiesByClass(Player.class)) {
-            if(player.isValid()
-                    && (!player.isInvisible())
-                    && (!player.isInvulnerable())
-                    && isMonsterSeeingPlayer(mob, player)) {
-                final double distance = TakeAimAdapter.getAimPoint(player).distance(TakeAimAdapter.getAimPoint(mob));
-
-                if ((closestPlayer == null) || (distance < closestDistance)) {
-                    closestPlayer = player;
-                    closestDistance = distance;
-                }
+        return AngerHelper.getSmallestItem(mob.getWorld().getEntitiesByClass(Player.class), (final Player player) -> {
+            if(AngerHelper.isValidPlayer(player) && isMonsterSeeingPlayer(mob, player)) {
+                return TakeAimAdapter.getAimPoint(player).distance(TakeAimAdapter.getAimPoint(mob));
+            } else {
+                return null;
             }
-        }
-
-        return closestPlayer;
+        });
     }
 
     private boolean isMonsterSeeingPlayer(final Mob mob, final Player player) {
         final Location fromLocation = TakeAimAdapter.getAimPoint(mob);
         final Location toLocation = TakeAimAdapter.getAimPoint(player);
         // Check for direct vision
-        final RayTraceResult rayTraceResult = fromLocation.getWorld().rayTraceBlocks(
+        final RayTraceResult rayTraceResult = AngerHelper.rayTraceBlocks(
                 fromLocation,
-                getDirection(fromLocation, toLocation),
-                // -1.0D to avoid colliding with the player itself
-                toLocation.distance(fromLocation) - 1.0D,
+                toLocation,
                 FluidCollisionMode.ALWAYS);
 
         return (rayTraceResult == null);
-    }
-
-    public static Vector getDirection(final Location fromLocation, final Location toLocation) {
-        final Location direction = toLocation.clone().subtract(fromLocation);
-        final double length = direction.length();
-
-        return new Vector(
-                direction.getX() / length,
-                direction.getY() / length,
-                direction.getZ() / length
-        );
     }
 
     public static AngryShooterListener getFromConfig(FileConfiguration config, CustomLogger customLogger, String key, String title) throws InvalidConfigException {
