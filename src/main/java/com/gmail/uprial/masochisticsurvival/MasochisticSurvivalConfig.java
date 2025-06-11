@@ -34,14 +34,14 @@ public final class MasochisticSurvivalConfig {
     }
 
     public static MasochisticSurvivalConfig getFromConfig(MasochisticSurvival plugin, FileConfiguration config, CustomLogger customLogger) throws InvalidConfigException {
-        final Map<String,Listener> listeners = ImmutableMap.<String,Listener>builder()
-                .put("nasty-enderman", NastyEndermanListener.getFromConfig(config, customLogger, "nasty-enderman", "'nasty-enderman'"))
-                .put("nasty-archer", NastyArcherListener.getFromConfig(plugin, config, customLogger, "nasty-archer", "'nasty-archer'"))
-                .put("angry-shooter", AngryShooterListener.getFromConfig(config, customLogger, "angry-shooter", "'angry-shooter'"))
-                .put("nasty-ender-dragon", NastyEnderDragonListener.getFromConfig(plugin, config, customLogger, "nasty-ender-dragon", "'nasty-ender-dragon'"))
-                .put("explosive-shooter", ExplosiveShooterListener.getFromConfig(plugin, config, customLogger, "explosive-shooter", "'explosive-shooter'"))
-                .put("greedy-villager", GreedyVillagerListener.getFromConfig(config, customLogger, "greedy-villager", "'greedy-villager'"))
-                .build();
+        final Map<String,Listener> listeners = new LinkedHashMap<>();
+
+        listeners.put("nasty-enderman", NastyEndermanListener.getFromConfig(config, customLogger, "nasty-enderman", "'nasty-enderman'"));
+        listeners.put("nasty-archer", NastyArcherListener.getFromConfig(plugin, config, customLogger, "nasty-archer", "'nasty-archer'"));
+        listeners.put("angry-shooter", AngryShooterListener.getFromConfig(config, customLogger, "angry-shooter", "'angry-shooter'"));
+        listeners.put("nasty-ender-dragon", NastyEnderDragonListener.getFromConfig(plugin, config, customLogger, "nasty-ender-dragon", "'nasty-ender-dragon'"));
+        listeners.put("explosive-shooter", ExplosiveShooterListener.getFromConfig(plugin, config, customLogger, "explosive-shooter", "'explosive-shooter'"));
+        listeners.put("greedy-villager", GreedyVillagerListener.getFromConfig(config, customLogger, "greedy-villager", "'greedy-villager'"));
 
         return new MasochisticSurvivalConfig(listeners);
     }

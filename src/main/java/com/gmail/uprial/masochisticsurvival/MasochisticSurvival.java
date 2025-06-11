@@ -32,7 +32,9 @@ public final class MasochisticSurvival extends JavaPlugin {
 
     private void register(final MasochisticSurvivalConfig masochisticSurvivalConfig) {
         for(final Listener listener : masochisticSurvivalConfig.getListeners()) {
-            getServer().getPluginManager().registerEvents(listener, this);
+            if(listener != null) {
+                getServer().getPluginManager().registerEvents(listener, this);
+            }
         }
     }
 
