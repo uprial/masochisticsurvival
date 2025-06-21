@@ -69,7 +69,7 @@ public class AngryShooterListener implements Listener {
     private Player getClosestVisiblePlayer(final Mob mob) {
         return AngerHelper.getSmallestItem(mob.getWorld().getEntitiesByClass(Player.class), (final Player player) -> {
             if(AngerHelper.isValidPlayer(player) && isMonsterSeeingPlayer(mob, player)) {
-                return TakeAimAdapter.getAimPoint(player).distance(TakeAimAdapter.getAimPoint(mob));
+                return TakeAimAdapter.getAimPoint(player).distance(getLaunchPoint(mob));
             } else {
                 return null;
             }
@@ -77,7 +77,7 @@ public class AngryShooterListener implements Listener {
     }
 
     private boolean isMonsterSeeingPlayer(final Mob mob, final Player player) {
-        final Location fromLocation = TakeAimAdapter.getAimPoint(mob);
+        final Location fromLocation = getLaunchPoint(mob);
         final Location toLocation = TakeAimAdapter.getAimPoint(player);
         // Check for direct vision
         final RayTraceResult rayTraceResult = AngerHelper.rayTraceBlocks(
@@ -97,6 +97,10 @@ public class AngryShooterListener implements Listener {
         }
 
         return new AngryShooterListener(customLogger, percentage);
+    }
+
+    private Location getLaunchPoint(final Mob mob) {
+        return mob.getEyeLocation();
     }
 
     @Override
