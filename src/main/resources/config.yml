@@ -69,6 +69,9 @@ limit-elytras:
   # <boolean>
   enabled: true
   # <integer:-10_000..10_000>
-  world-max-height-excess: 50
+  initial-height-excess: 10
   # <integer:1..300>
-  freeze-ticks-in-s: 5
+  # According to https://minecraft.wiki/w/Powder_Snow#Freezing,
+  # after seven seconds, the player begins taking damage
+  # so the player start taking damage at 10 + 3 * 7 = 31 height excess.
+  height-per-freeze-second: 3

@@ -18,11 +18,11 @@ public class LimitElytrasListenerTest extends TestConfigBase {
         LimitElytrasListener listener = getFromConfig(getPreparedConfig(
                         "le:",
                         " enabled: true",
-                        " world-max-height-excess: 50",
-                        " freeze-ticks-in-s: 5"),
+                        " initial-height-excess: 10",
+                        " height-per-freeze-second: 3"),
                 getParanoiacCustomLogger(), "le", "'le'");
         assertNotNull(listener);
-        assertEquals("{world-max-height-excess: 50, freeze-ticks-in-s: 5}",
+        assertEquals("{initial-height-excess: 10, height-per-freeze-second: 3}",
                 listener.toString());
     }
 
@@ -47,23 +47,23 @@ public class LimitElytrasListenerTest extends TestConfigBase {
     @Test
     public void testWorldMaxHeightExcess() throws Exception {
         e.expect(InvalidConfigException.class);
-        e.expectMessage("A world max height excess of 'le' is not an integer");
+        e.expectMessage("A initial height excess of 'le' is not an integer");
         getFromConfig(getPreparedConfig(
                         "le:",
                         " enabled: true",
-                        " world-max-height-excess: v"),
+                        " initial-height-excess: v"),
                 getCustomLogger(), "le", "'le'");
     }
 
     @Test
     public void testFreezeTicksInS() throws Exception {
         e.expect(InvalidConfigException.class);
-        e.expectMessage("A freeze ticks in s of 'le' is not an integer");
+        e.expectMessage("A height per freeze second of 'le' is not an integer");
         getFromConfig(getPreparedConfig(
                         "le:",
                         " enabled: true",
-                        " world-max-height-excess: 50",
-                        " freeze-ticks-in-s: v"),
+                        " initial-height-excess: 10",
+                        " height-per-freeze-second: v"),
                 getCustomLogger(), "le", "'le'");
     }
 }

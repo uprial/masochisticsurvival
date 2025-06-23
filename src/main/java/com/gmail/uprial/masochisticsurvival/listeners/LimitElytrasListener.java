@@ -16,31 +16,32 @@ import static com.gmail.uprial.masochisticsurvival.common.Utils.joinPaths;
 import static com.gmail.uprial.masochisticsurvival.common.Utils.seconds2ticks;
 
 public class LimitElytrasListener implements Listener {
-    private final int worldMaxHeightExcess;
-    private final int freezeTicksInS;
+    private final int initialHeightExcess;
+    private final int heightPerFreezeSecond;
 
     private final CustomLogger customLogger;
 
     public LimitElytrasListener(final CustomLogger customLogger,
-                                final int worldMaxHeightExcess,
-                                final int freezeTicksInS) {
+                                final int initialHeightExcess,
+                                final int heightPerFreezeSecond) {
         this.customLogger = customLogger;
-        this.worldMaxHeightExcess = worldMaxHeightExcess;
-        this.freezeTicksInS = freezeTicksInS;
+        this.initialHeightExcess = initialHeightExcess;
+        this.heightPerFreezeSecond = heightPerFreezeSecond;
     }
 
     @EventHandler(priority = EventPriority.NORMAL)
     public void onPlayerMove(PlayerMoveEvent event) {
         if (!event.isCancelled()) {
             final Player player = event.getPlayer();
-            if(player.getLocation().getY() > player.getWorld().getMaxHeight() + worldMaxHeightExcess) {
-                /*
-                    According to https://minecraft.wiki/w/Powder_Snow#Freezing,
-                    After seven seconds, the player begins taking damage.
-                 */
-                player.setFreezeTicks(seconds2ticks(freezeTicksInS + 7));
+            final int freezeSeconds
+                    = (int)Math.round((player.getLocation().getY()
+                    - player.getWorld().getMaxHeight()
+                    - initialHeightExcess)
+                    / heightPerFreezeSecond);
+            if((freezeSeconds > 0) && (seconds2ticks(freezeSeconds) > player.getFreezeTicks())) {
+                player.setFreezeTicks(seconds2ticks(freezeSeconds));
                 if (customLogger.isDebugMode()) {
-                    customLogger.debug(String.format("%s frozen", format(player)));
+                    customLogger.debug(String.format("%s frozen for %d seconds", format(player), freezeSeconds));
                 }
             }
         }
@@ -53,16 +54,16 @@ public class LimitElytrasListener implements Listener {
             return null;
         }
 
-        int worldMaxHeightExcess = ConfigReaderNumbers.getInt(config, customLogger,
-                joinPaths(key, "world-max-height-excess"), String.format("world max height excess of %s", title), -10_000, 10_000);
-        int freezeTicksInS = ConfigReaderNumbers.getInt(config, customLogger,
-                joinPaths(key, "freeze-ticks-in-s"), String.format("freeze ticks in s of %s", title), 1, 300);
+        int initialHeightExcess = ConfigReaderNumbers.getInt(config, customLogger,
+                joinPaths(key, "initial-height-excess"), String.format("initial height excess of %s", title), -10_000, 10_000);
+        int heightPerFreezeSecond = ConfigReaderNumbers.getInt(config, customLogger,
+                joinPaths(key, "height-per-freeze-second"), String.format("height per freeze second of %s", title), 1, 300);
 
-        return new LimitElytrasListener(customLogger, worldMaxHeightExcess, freezeTicksInS);
+        return new LimitElytrasListener(customLogger, initialHeightExcess, heightPerFreezeSecond);
     }
 
     @Override
     public String toString() {
-        return String.format("{world-max-height-excess: %d, freeze-ticks-in-s: %d}", worldMaxHeightExcess, freezeTicksInS);
+        return String.format("{initial-height-excess: %d, height-per-freeze-second: %d}", initialHeightExcess, heightPerFreezeSecond);
     }
 }

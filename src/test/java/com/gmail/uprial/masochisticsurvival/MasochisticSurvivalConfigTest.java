@@ -80,7 +80,7 @@ public class MasochisticSurvivalConfigTest extends TestConfigBase {
                         "regen-multiplier: 2}, " +
                         "explosive-shooter={percentage: 1, power: 2}, " +
                         "greedy-villager={replace-protection: true, replace-mending: true}, " +
-                        "limit-elytras={world-max-height-excess: 50, freeze-ticks-in-s: 5}}",
+                        "limit-elytras={initial-height-excess: 10, height-per-freeze-second: 3}}",
                 loadConfig(getCustomLogger(), "debug: false",
                         "nasty-enderman:",
                         "  percentage: 0.1",
@@ -105,7 +105,7 @@ public class MasochisticSurvivalConfigTest extends TestConfigBase {
                         "  replace-mending: true",
                         "limit-elytras:",
                         "  enabled: true",
-                        "  world-max-height-excess: 50",
-                        "  freeze-ticks-in-s: 5").toString());
+                        "  initial-height-excess: 10",
+                        "  height-per-freeze-second: 3").toString());
     }
 }
