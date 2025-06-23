@@ -24,7 +24,25 @@ public class GreedyVillagerListener implements Listener {
     private final boolean replaceProtection;
     private final boolean replaceMending;
 
-    private final Map<Enchantment,Enchantment> enchantmentMutators = new HashMap<>();
+    private static class EnchantmentMutator {
+        final Enchantment enchantment;
+        final int survivalMaxLevel;
+
+        EnchantmentMutator(final Enchantment enchantment, final int survivalMaxLevel) {
+            this.enchantment = enchantment;
+            this.survivalMaxLevel = survivalMaxLevel;
+        }
+
+        Enchantment getEnchantment() {
+            return enchantment;
+        }
+
+        int getSurvivalMaxLevel() {
+            return survivalMaxLevel;
+        }
+    }
+
+    private final Map<Enchantment,EnchantmentMutator> enchantmentMutators = new HashMap<>();
 
     public GreedyVillagerListener(final CustomLogger customLogger,
                                   final boolean replaceProtection,
@@ -34,7 +52,12 @@ public class GreedyVillagerListener implements Listener {
         this.replaceMending = replaceMending;
 
         if(replaceProtection) {
-            enchantmentMutators.put(Enchantment.PROTECTION, Enchantment.THORNS);
+            /*
+                According to https://minecraft.wiki/w/Thorns,
+                Thorns applies a durability penalty to the armor.
+             */
+            enchantmentMutators.put(Enchantment.PROTECTION,
+                    new EnchantmentMutator(Enchantment.THORNS, 3));
         }
 
         if(replaceMending) {
@@ -42,8 +65,12 @@ public class GreedyVillagerListener implements Listener {
                 According to https://minecraft.wiki/w/Mending,
                 Mending can be obtained by trading with a librarian,
                 which means no weapons or tools with it can be traded.
+
+                IMO, knockback prevents swords from dealing a lot of melee damage per second,
+                and isn't a potential upgrade.
              */
-            enchantmentMutators.put(Enchantment.MENDING, Enchantment.THORNS);
+            enchantmentMutators.put(Enchantment.MENDING,
+                    new EnchantmentMutator(Enchantment.KNOCKBACK, 2));
         }
     }
 
@@ -65,23 +92,30 @@ public class GreedyVillagerListener implements Listener {
                         : result.getEnchantments();
 
                 for(Map.Entry<Enchantment,Integer> entry : enchantments.entrySet()) {
-                    final Enchantment mutator = enchantmentMutators.get(entry.getKey());
+                    final EnchantmentMutator mutator = enchantmentMutators.get(entry.getKey());
                     if(mutator != null) {
+                        final int oldLevel = entry.getValue();
+                        final int newLevel = oldLevel + mutator.getSurvivalMaxLevel();
+
+                        final Enchantment oldEnchantment = entry.getKey();
+                        final Enchantment newEnchantment = mutator.getEnchantment();
                         if(customLogger.isDebugMode()) {
                             customLogger.debug(String.format("Updating %s recipes for %s: changing %s-%d to %s-%d...",
                                     format(villager), result.getType(),
-                                    entry.getKey().getName(), entry.getValue(),
-                                    mutator.getName(), entry.getValue()));
+                                    oldEnchantment.getName(), oldLevel,
+                                    newEnchantment.getName(), newLevel));
                         }
 
                         if(result.getItemMeta() instanceof EnchantmentStorageMeta) {
                             final EnchantmentStorageMeta itemMeta = (EnchantmentStorageMeta)result.getItemMeta();
-                            itemMeta.removeStoredEnchant(entry.getKey());
-                            itemMeta.addStoredEnchant(mutator, entry.getValue(), false);
+                            itemMeta.removeStoredEnchant(oldEnchantment);
+                            // ignoreLevelRestriction is a must to overcome the survival maximum level
+                            itemMeta.addStoredEnchant(newEnchantment, newLevel, true);
                             result.setItemMeta(itemMeta);
                         } else {
-                            result.removeEnchantment(entry.getKey());
-                            result.addEnchantment(mutator, entry.getValue());
+                            result.removeEnchantment(oldEnchantment);
+                            // unsafe is a must to overcome the survival maximum level
+                            result.addUnsafeEnchantment(newEnchantment, newLevel);
                         }
 
                         updatedOne = true;
