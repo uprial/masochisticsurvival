@@ -47,7 +47,7 @@ public class MasochisticSurvivalConfigTest extends TestConfigBase {
                         "angry-shooter={percentage: 100}, " +
                         "nasty-ender-dragon=null, " +
                         "explosive-shooter={percentage: 1, power: 2}, " +
-                        "greedy-villager=null}",
+                        "greedy-villager=null, limit-elytras=null}",
                 loadConfig(getCustomLogger(), "debug: false",
                         "nasty-enderman:",
                         "  percentage: 0.1",
@@ -63,7 +63,9 @@ public class MasochisticSurvivalConfigTest extends TestConfigBase {
                         "  power: 2.0",
                         "greedy-villager:",
                         "  replace-protection: false",
-                        "  replace-mending: false").toString());
+                        "  replace-mending: false",
+                        "limit-elytras:",
+                        "  enabled: false").toString());
     }
 
     @Test
@@ -77,7 +79,8 @@ public class MasochisticSurvivalConfigTest extends TestConfigBase {
                         "explosion-damage-reduction: 5, balls-interval-in-s: 3, " +
                         "regen-multiplier: 2}, " +
                         "explosive-shooter={percentage: 1, power: 2}, " +
-                        "greedy-villager={replace-protection: true, replace-mending: true}}",
+                        "greedy-villager={replace-protection: true, replace-mending: true}, " +
+                        "limit-elytras={world-max-height-excess: 50, freeze-ticks-in-s: 5}}",
                 loadConfig(getCustomLogger(), "debug: false",
                         "nasty-enderman:",
                         "  percentage: 0.1",
@@ -99,6 +102,10 @@ public class MasochisticSurvivalConfigTest extends TestConfigBase {
                         "  power: 2.0",
                         "greedy-villager:",
                         "  replace-protection: true",
-                        "  replace-mending: true").toString());
+                        "  replace-mending: true",
+                        "limit-elytras:",
+                        "  enabled: true",
+                        "  world-max-height-excess: 50",
+                        "  freeze-ticks-in-s: 5").toString());
     }
 }

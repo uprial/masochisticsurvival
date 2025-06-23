@@ -4,7 +4,6 @@ import com.gmail.uprial.masochisticsurvival.common.CustomLogger;
 import com.gmail.uprial.masochisticsurvival.config.ConfigReaderSimple;
 import com.gmail.uprial.masochisticsurvival.config.InvalidConfigException;
 import com.gmail.uprial.masochisticsurvival.listeners.*;
-import com.google.common.collect.ImmutableMap;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.event.Listener;
 
@@ -42,6 +41,7 @@ public final class MasochisticSurvivalConfig {
         listeners.put("nasty-ender-dragon", NastyEnderDragonListener.getFromConfig(plugin, config, customLogger, "nasty-ender-dragon", "'nasty-ender-dragon'"));
         listeners.put("explosive-shooter", ExplosiveShooterListener.getFromConfig(plugin, config, customLogger, "explosive-shooter", "'explosive-shooter'"));
         listeners.put("greedy-villager", GreedyVillagerListener.getFromConfig(config, customLogger, "greedy-villager", "'greedy-villager'"));
+        listeners.put("limit-elytras", LimitElytrasListener.getFromConfig(config, customLogger, "limit-elytras", "'limit-elytras'"));
 
         return new MasochisticSurvivalConfig(listeners);
     }

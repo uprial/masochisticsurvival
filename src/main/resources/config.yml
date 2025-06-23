@@ -63,3 +63,12 @@ greedy-villager:
   replace-protection: true
   # <boolean>
   replace-mending: true
+
+# Players flying too high are frozen
+limit-elytras:
+  # <boolean>
+  enabled: true
+  # <integer:-10_000..10_000>
+  world-max-height-excess: 50
+  # <integer:1..300>
+  freeze-ticks-in-s: 5

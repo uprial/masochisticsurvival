@@ -19,6 +19,7 @@ The most essential aspects are configurable.
 * Nasty Ender Dragon: the Ender Dragon has increased regen, explosion resistance and damage limit, periodically resurrects healing crystals, and targets fireballs and random endermans to aggressive players
 * Explosive Shooter: a percentage of shooters equip explosive projectiles 
 * Greedy Villager: villagers don't sell imbalanced clothes with environmental protection and mending
+* Limit Elytras: players flying too high are frozen
 
 ## Commands
 
