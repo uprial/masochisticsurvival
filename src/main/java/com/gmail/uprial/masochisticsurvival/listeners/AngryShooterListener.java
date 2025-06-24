@@ -77,15 +77,14 @@ public class AngryShooterListener implements Listener {
     }
 
     private boolean isMonsterSeeingPlayer(final Mob mob, final Player player) {
-        final Location fromLocation = getLaunchPoint(mob);
-        final Location toLocation = TakeAimAdapter.getAimPoint(player);
-        // Check for direct vision
-        final RayTraceResult rayTraceResult = AngerHelper.rayTraceBlocks(
-                fromLocation,
-                toLocation,
-                FluidCollisionMode.ALWAYS);
-
-        return (rayTraceResult == null);
+        return
+                // Don't anger entities across not simulated by the player
+                (AngerHelper.isSimulated(mob, player))
+                // Check for direct vision
+                && (null == AngerHelper.rayTraceBlocks(
+                        getLaunchPoint(mob),
+                        TakeAimAdapter.getAimPoint(player),
+                        FluidCollisionMode.ALWAYS));
     }
 
     public static AngryShooterListener getFromConfig(FileConfiguration config, CustomLogger customLogger, String key, String title) throws InvalidConfigException {

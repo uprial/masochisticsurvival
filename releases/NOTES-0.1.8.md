@@ -4,3 +4,4 @@
 # Bug fixes
 * Fixed default player aim point 
 * Added a fallback when TakeAim exists, but is disabled
+* Don't anger entities across not simulated by the player
