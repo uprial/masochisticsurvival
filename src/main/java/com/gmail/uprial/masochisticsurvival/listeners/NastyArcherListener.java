@@ -111,6 +111,8 @@ public class NastyArcherListener implements Listener {
             .put(PotionEffectType.SATURATION, E.AMAZING)
             .put(PotionEffectType.SLOW_FALLING, E.USELESS)
             .put(PotionEffectType.SLOWNESS, E.INCONVENIENT) // negative
+            .put(PotionEffectType.SPEED, E.GOOD)
+            .put(PotionEffectType.STRENGTH, E.AMAZING)
             // TRIAL_OMEN: duplicates BAD_OMEN
             .put(PotionEffectType.UNLUCK, E.INCONVENIENT) // negative
             .put(PotionEffectType.WATER_BREATHING, E.USELESS)
