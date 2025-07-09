@@ -51,7 +51,7 @@ public class NastyArcherListener implements Listener {
 
         INCONVENIENT(false, 60, 2),
         PAINFUL(false, 30, 1),
-        HARD(false, 7, 0);
+        INSANE(false, 1, 0);
 
         private final boolean positive;
         private final int duration;
@@ -83,7 +83,7 @@ public class NastyArcherListener implements Listener {
     final private Map<PotionEffectType,E> effectMap = ImmutableMap .<PotionEffectType, E>builder()
             .put(PotionEffectType.ABSORPTION, E.GOOD)
             .put(PotionEffectType.BAD_OMEN, E.INCONVENIENT) // negative
-            .put(PotionEffectType.BLINDNESS, E.HARD) // negative
+            .put(PotionEffectType.BLINDNESS, E.PAINFUL) // negative
             // CONDUIT_POWER: duplicates WATER_BREATHING
             .put(PotionEffectType.DARKNESS, E.INCONVENIENT) // negative
             // DOLPHINS_GRACE: doesn't work
@@ -94,7 +94,8 @@ public class NastyArcherListener implements Listener {
             .put(PotionEffectType.HERO_OF_THE_VILLAGE, E.USELESS)
             .put(PotionEffectType.HUNGER, E.PAINFUL) // negative
             .put(PotionEffectType.INFESTED, E.INCONVENIENT) // negative
-            .put(PotionEffectType.INSTANT_DAMAGE, E.HARD) // negative
+            // 8(♥) per second
+            .put(PotionEffectType.INSTANT_DAMAGE, E.INSANE) // negative
             .put(PotionEffectType.INSTANT_HEALTH, E.GOOD)
             .put(PotionEffectType.INVISIBILITY, E.GOOD)
             .put(PotionEffectType.JUMP_BOOST, E.GOOD)
@@ -112,7 +113,7 @@ public class NastyArcherListener implements Listener {
             .put(PotionEffectType.SLOW_FALLING, E.USELESS)
             .put(PotionEffectType.SLOWNESS, E.INCONVENIENT) // negative
             .put(PotionEffectType.SPEED, E.GOOD)
-            .put(PotionEffectType.STRENGTH, E.AMAZING)
+            .put(PotionEffectType.STRENGTH, E.GOOD)
             // TRIAL_OMEN: duplicates BAD_OMEN
             .put(PotionEffectType.UNLUCK, E.INCONVENIENT) // negative
             .put(PotionEffectType.WATER_BREATHING, E.USELESS)
