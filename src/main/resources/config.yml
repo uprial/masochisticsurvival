@@ -63,6 +63,7 @@ greedy-villager:
   replace-protection: true
   # <boolean>
   replace-mending: true
+  # Disabling all flags above, you'll disable the whole section
 
 # Players flying too high are frozen
 limit-elytras:
