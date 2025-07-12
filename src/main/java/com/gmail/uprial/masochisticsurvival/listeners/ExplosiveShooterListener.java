@@ -78,12 +78,14 @@ public class ExplosiveShooterListener implements Listener {
     public static ExplosiveShooterListener getFromConfig(MasochisticSurvival plugin, FileConfiguration config, CustomLogger customLogger, String key, String title) throws InvalidConfigException {
         double percentage = ConfigReaderNumbers.getDouble(config, customLogger,
                 joinPaths(key, "percentage"), String.format("percentage of %s", title), 0.0D, RandomUtils.MAX_PERCENT);
-        double power = ConfigReaderNumbers.getDouble(config, customLogger,
-                joinPaths(key, "power"), String.format("power of %s", title), 0.0D, 16.0D);
 
         if(percentage <= 0.0D){
             return null;
         }
+
+        double power = ConfigReaderNumbers.getDouble(config, customLogger,
+                joinPaths(key, "power"), String.format("power of %s", title), 0.0D, 16.0D);
+
 
         return new ExplosiveShooterListener(plugin, customLogger, percentage, power);
     }

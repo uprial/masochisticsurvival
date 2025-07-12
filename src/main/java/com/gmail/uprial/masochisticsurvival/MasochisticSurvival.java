@@ -2,6 +2,7 @@ package com.gmail.uprial.masochisticsurvival;
 
 import com.gmail.uprial.masochisticsurvival.common.CustomLogger;
 import com.gmail.uprial.masochisticsurvival.config.InvalidConfigException;
+import com.gmail.uprial.masochisticsurvival.listeners.TimeListener;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.HandlerList;
@@ -9,6 +10,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.gmail.uprial.masochisticsurvival.MasochisticSurvivalCommandExecutor.COMMAND_NS;
 
@@ -17,6 +20,8 @@ public final class MasochisticSurvival extends JavaPlugin {
     private final File configFile = new File(getDataFolder(), CONFIG_FILE_NAME);
 
     private CustomLogger consoleLogger = null;
+
+    private List<TimeListener> timeListenerList = new ArrayList<>();
 
     @Override
     public void onEnable() {
@@ -34,12 +39,19 @@ public final class MasochisticSurvival extends JavaPlugin {
         for(final Listener listener : masochisticSurvivalConfig.getListeners()) {
             if(listener != null) {
                 getServer().getPluginManager().registerEvents(listener, this);
+                if(listener instanceof TimeListener) {
+                    final TimeListener timeListener = (TimeListener) listener;
+                    timeListener.register();
+                    timeListenerList.add(timeListener);
+                }
             }
         }
     }
 
     private void unregister() {
         HandlerList.unregisterAll(this);
+        timeListenerList.forEach(TimeListener::unregister);
+        timeListenerList.clear();
     }
 
     public boolean reloadMasochisticSurvivalConfig(CustomLogger userLogger) {

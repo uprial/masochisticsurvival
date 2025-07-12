@@ -29,8 +29,7 @@ public class ExplosiveShooterListenerTest extends TestConfigBase {
     public void testNull() throws Exception {
         ExplosiveShooterListener listener = getFromConfig(null, getPreparedConfig(
                         "es:",
-                        " percentage: 0",
-                        " power: 2.0"),
+                        " percentage: 0"),
                 getDebugFearingCustomLogger(), "es", "'es'");
         assertNull(listener);
     }

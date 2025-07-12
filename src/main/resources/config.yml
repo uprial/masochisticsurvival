@@ -24,10 +24,14 @@ nasty-archer:
   # <float:0..100>
   negative-percentage: 1.0
 
-# Shooting mobs target the closest player immediately when spawned with direct vision to them
+# Shooting mobs target the closest visible player immediately when spawned, and then occasionally
 angry-shooter:
   # <float:0..100>
+  # 0 to disable all targeting
   percentage: 100
+  # <integer:0..300>
+  # 0 to disable occasional checks
+  try-angering-interval-in-s: 30
 
 # The Ender Dragon has <increased regen>, explosion <resistance> and <damage limit>,
 # <periodically resurrects> healing crystals,

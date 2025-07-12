@@ -15,7 +15,7 @@ The most essential aspects are configurable.
 * Synergies perfectly with [TakeAim](https://github.com/uprial/takeaim) and [CustomCreatures](https://github.com/uprial/customcreatures) plugins
 * Nasty Enderman: a percentage of Endermans attack players immediately on spawn and ignore carved pumpkins
 * Nasty Archer: arrow archers have a chance to add both positive and negative effects to their arrows
-* Angry Shooter: shooting mobs target the closest player immediately when spawned with direct vision to them
+* Angry Shooter: shooting mobs target the closest visible player immediately when spawned, and then occasionally
 * Nasty Ender Dragon: the Ender Dragon has increased regen, explosion resistance and damage limit, periodically resurrects healing crystals, and targets fireballs and random endermans to aggressive players
 * Explosive Shooter: a percentage of shooters equip explosive projectiles 
 * Greedy Villager: villagers don't sell imbalanced clothes with environmental protection and mending

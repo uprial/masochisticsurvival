@@ -37,7 +37,7 @@ public final class MasochisticSurvivalConfig {
 
         listeners.put("nasty-enderman", NastyEndermanListener.getFromConfig(config, customLogger, "nasty-enderman", "'nasty-enderman'"));
         listeners.put("nasty-archer", NastyArcherListener.getFromConfig(plugin, config, customLogger, "nasty-archer", "'nasty-archer'"));
-        listeners.put("angry-shooter", AngryShooterListener.getFromConfig(config, customLogger, "angry-shooter", "'angry-shooter'"));
+        listeners.put("angry-shooter", AngryShooterListener.getFromConfig(plugin, config, customLogger, "angry-shooter", "'angry-shooter'"));
         listeners.put("nasty-ender-dragon", NastyEnderDragonListener.getFromConfig(plugin, config, customLogger, "nasty-ender-dragon", "'nasty-ender-dragon'"));
         listeners.put("explosive-shooter", ExplosiveShooterListener.getFromConfig(plugin, config, customLogger, "explosive-shooter", "'explosive-shooter'"));
         listeners.put("greedy-villager", GreedyVillagerListener.getFromConfig(config, customLogger, "greedy-villager", "'greedy-villager'"));
