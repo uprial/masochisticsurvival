@@ -33,6 +33,13 @@ The most essential aspects are configurable.
 ## Configuration
 [Default configuration file](src/main/resources/config.yml)
 
+If you see in server logs something like
+`[Server thread/ERROR]: [MasochisticSurvival] [ERROR] Empty try angering interval in s of 'angry-shooter'`
+
+It could mean you updated the plugin version, and a new config parameter is now required.
+
+Please, try first to backup your old config file and remove it, so the plugin regenerates it.
+
 ## Author
 I will be happy to add some features or fix bugs. My mail: uprial@gmail.com.
 
