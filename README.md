@@ -35,7 +35,7 @@ The most essential aspects are configurable.
 
 If you see in server logs something like
 `[Server thread/ERROR]: [MasochisticSurvival] [ERROR] Empty try angering interval in s of 'angry-shooter'`
-- it could mean you updated the plugin version, and a new config parameter is now required.
+it could mean you updated the plugin version, and a new config parameter is now required.
 Please, try first to backup your old config file and remove it, so the plugin regenerates it.
 
 ## Author
