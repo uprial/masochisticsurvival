@@ -16,6 +16,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityRegainHealthEvent;
+import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.projectiles.ProjectileSource;
 
@@ -344,7 +345,9 @@ public class NastyEnderDragonListener implements Listener {
                     return;
                 }
 
-                TakeAimAdapter.launchFireball(enderDragon, player, DragonFireball.class);
+                TakeAimAdapter.launchFireball(enderDragon, player,
+                        EntityTargetEvent.TargetReason.CLOSEST_PLAYER,
+                        DragonFireball.class);
             }, seconds2ticks(ballsIntervalInS * i));
         }
     }

@@ -4,7 +4,6 @@ import com.gmail.uprial.masochisticsurvival.MasochisticSurvival;
 import com.gmail.uprial.masochisticsurvival.common.AngerHelper;
 import com.gmail.uprial.masochisticsurvival.common.CustomLogger;
 import com.gmail.uprial.masochisticsurvival.common.RandomUtils;
-import com.gmail.uprial.masochisticsurvival.common.TakeAimAdapter;
 import com.gmail.uprial.masochisticsurvival.config.ConfigReaderNumbers;
 import com.gmail.uprial.masochisticsurvival.config.InvalidConfigException;
 import com.google.common.collect.ImmutableSet;
@@ -17,6 +16,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.CreatureSpawnEvent;
+import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.*;
@@ -122,11 +122,13 @@ public class AngryShooterListener implements Listener, TimeListener {
         final Player player = getClosestVisiblePlayer(mob, players);
 
         if(player != null) {
-            TakeAimAdapter.setTarget(mob, player);
-
-            if (customLogger.isDebugMode()) {
-                customLogger.debug(String.format("%s targeted at %s", format(mob), format(player)));
-            }
+            TakeAimAdapter.setTarget(mob, player,
+                    EntityTargetEvent.TargetReason.CLOSEST_PLAYER,
+                    (final Mob _mob, final Player _player) -> {
+                        if (customLogger.isDebugMode()) {
+                            customLogger.debug(String.format("%s targeted at %s", format(mob), format(player)));
+                        }
+                    });
         }
     }
 

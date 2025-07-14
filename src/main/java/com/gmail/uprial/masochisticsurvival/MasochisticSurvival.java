@@ -2,6 +2,7 @@ package com.gmail.uprial.masochisticsurvival;
 
 import com.gmail.uprial.masochisticsurvival.common.CustomLogger;
 import com.gmail.uprial.masochisticsurvival.config.InvalidConfigException;
+import com.gmail.uprial.masochisticsurvival.listeners.TakeAimAdapter;
 import com.gmail.uprial.masochisticsurvival.listeners.TimeListener;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -21,7 +22,7 @@ public final class MasochisticSurvival extends JavaPlugin {
 
     private CustomLogger consoleLogger = null;
 
-    private List<TimeListener> timeListenerList = new ArrayList<>();
+    private final List<TimeListener> timeListenerList = new ArrayList<>();
 
     @Override
     public void onEnable() {
@@ -36,6 +37,7 @@ public final class MasochisticSurvival extends JavaPlugin {
     }
 
     private void register(final MasochisticSurvivalConfig masochisticSurvivalConfig) {
+        getServer().getPluginManager().registerEvents(new TakeAimAdapter(), this);
         for(final Listener listener : masochisticSurvivalConfig.getListeners()) {
             if(listener != null) {
                 getServer().getPluginManager().registerEvents(listener, this);
