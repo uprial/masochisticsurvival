@@ -21,6 +21,8 @@ The most essential aspects are configurable.
 * Greedy Villager: villagers don't sell imbalanced clothes with environmental protection and mending
 * Limit Elytras: players flying too high are frozen
 
+![a Minecraft picture: an enderman holds a pumpkin, a skeleton fires an enchanted arrow into a sad player, an ender dragon laughs, a villager doesn't trade, all mobs are smart](images/masochistic-survival-promo.png)
+
 ## Commands
 
 `masochisticsurvival reload` - reload config from disk
