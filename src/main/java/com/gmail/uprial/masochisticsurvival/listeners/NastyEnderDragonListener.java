@@ -35,6 +35,7 @@ public class NastyEnderDragonListener implements Listener {
 
     private final String worldName;
     private final int resurrectionIntervalInS;
+    private final int resurrectionAmount;
     private final double explosionDamageLimitPerS;
     private final double explosionDamageReduction;
     private final int ballsIntervalInS;
@@ -46,6 +47,7 @@ public class NastyEnderDragonListener implements Listener {
                                     final CustomLogger customLogger,
                                     final String worldName,
                                     final int resurrectionIntervalInS,
+                                    final int resurrectionAmount,
                                     final double explosionDamageLimitPerS,
                                     final double explosionDamageReduction,
                                     final int ballsIntervalInS,
@@ -54,6 +56,7 @@ public class NastyEnderDragonListener implements Listener {
         this.customLogger = customLogger;
         this.worldName = worldName;
         this.resurrectionIntervalInS = resurrectionIntervalInS;
+        this.resurrectionAmount = resurrectionAmount;
         this.explosionDamageLimitPerS = explosionDamageLimitPerS;
         this.explosionDamageReduction = explosionDamageReduction;
         this.ballsIntervalInS = ballsIntervalInS;
@@ -173,22 +176,30 @@ public class NastyEnderDragonListener implements Listener {
                 }
             }
 
-            if(!bedrocksWithoutCrystals.isEmpty()) {
-                /*
-                    Don't let the player predict
-                    which crystal location without crystals will be resurrected.
-                 */
-                final Location bedrock = RandomUtils.getSetItem(bedrocksWithoutCrystals);
-
-                resurrect(world, bedrock, true);
-
-                if(customLogger.isDebugMode()) {
-                    customLogger.debug(String.format("Crystal at %s resurrected", format(bedrock)));
-                }
-            } else {
+            if(bedrocksWithoutCrystals.isEmpty()) {
                 if (customLogger.isDebugMode()) {
                     customLogger.debug(String.format("%s attacked, but all crystals are in place", format(event.getEntity())));
                 }
+            } else {
+                int resurrectionsRemaining = resurrectionAmount;
+                do {
+                    /*
+                        Don't let the player predict
+                        which crystal location without crystals will be resurrected.
+                     */
+                    final Location bedrock = RandomUtils.getSetItem(bedrocksWithoutCrystals);
+
+                    resurrect(world, bedrock, true);
+
+                    bedrocksWithoutCrystals.remove(bedrock);
+
+                    resurrectionsRemaining--;
+
+                    if (customLogger.isDebugMode()) {
+                        customLogger.debug(String.format("Crystal at %s resurrected", format(bedrock)));
+                    }
+
+                } while ((resurrectionsRemaining > 0) && (!bedrocksWithoutCrystals.isEmpty()));
             }
 
             final Entity damager = getRealSource(event.getDamager());
@@ -387,6 +398,8 @@ public class NastyEnderDragonListener implements Listener {
                 joinPaths(key, "world-name"), String.format("world name of %s", title));
         int resurrectionIntervalInS = ConfigReaderNumbers.getInt(config, customLogger,
                 joinPaths(key, "resurrection-interval-in-s"), String.format("resurrection interval in s of %s", title), 0, 300);
+        int resurrectionAmount = ConfigReaderNumbers.getInt(config, customLogger,
+                joinPaths(key, "resurrection-amount"), String.format("resurrection amount of %s", title), 1, 10);
         double explosionDamageLimitPerS = ConfigReaderNumbers.getDouble(config, customLogger,
                 joinPaths(key, "explosion-damage-limit-per-s"), String.format("explosion damage limit per s of %s", title), 0.0D, 200.0D);
         double explosionDamageReduction = ConfigReaderNumbers.getDouble(config, customLogger,
@@ -399,6 +412,7 @@ public class NastyEnderDragonListener implements Listener {
         return new NastyEnderDragonListener(plugin, customLogger,
                 worldName,
                 resurrectionIntervalInS,
+                resurrectionAmount,
                 explosionDamageLimitPerS,
                 explosionDamageReduction,
                 ballsIntervalS,
@@ -409,12 +423,14 @@ public class NastyEnderDragonListener implements Listener {
     public String toString() {
         return String.format("{world-name: %s, " +
                         "resurrection-interval-in-s: %d, " +
+                        "resurrection-amount: %d, " +
                         "explosion-damage-limit-per-s: %s, " +
                         "explosion-damage-reduction: %s, " +
                         "balls-interval-in-s: %d, " +
                         "regen-multiplier: %s}",
                 worldName,
                 resurrectionIntervalInS,
+                resurrectionAmount,
                 formatDoubleValue(explosionDamageLimitPerS),
                 formatDoubleValue(explosionDamageReduction),
                 ballsIntervalInS,

@@ -75,9 +75,9 @@ public class MasochisticSurvivalConfigTest extends TestConfigBase {
                         "nasty-archer={positive-percentage: 0.3, negative-percentage: 1}, " +
                         "angry-shooter={percentage: 100, try-angering-interval-in-s: 30}, " +
                         "nasty-ender-dragon={world-name: world_the_end, " +
-                        "resurrection-interval-in-s: 30, explosion-damage-limit-per-s: 50, " +
-                        "explosion-damage-reduction: 5, balls-interval-in-s: 3, " +
-                        "regen-multiplier: 2}, " +
+                        "resurrection-interval-in-s: 30, resurrection-amount: 2, " +
+                        "explosion-damage-limit-per-s: 50, explosion-damage-reduction: 5, " +
+                        "balls-interval-in-s: 3, regen-multiplier: 2}, " +
                         "explosive-shooter={percentage: 1, power: 2}, " +
                         "greedy-villager={replace-protection: true, replace-mending: true}, " +
                         "limit-elytras={initial-height-excess: 10, height-per-freeze-second: 3}}",
@@ -94,6 +94,7 @@ public class MasochisticSurvivalConfigTest extends TestConfigBase {
                         "  enabled: true",
                         "  world-name: world_the_end",
                         "  resurrection-interval-in-s: 30",
+                        "  resurrection-amount: 2",
                         "  explosion-damage-limit-per-s: 50.0",
                         "  explosion-damage-reduction: 5.0",
                         "  balls-interval-in-s: 3",

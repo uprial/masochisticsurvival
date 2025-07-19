@@ -34,7 +34,7 @@ angry-shooter:
   try-angering-interval-in-s: 30
 
 # The Ender Dragon has <increased regen>, explosion <resistance> and <damage limit>,
-# <periodically resurrects> healing crystals,
+# <periodically resurrects> <resurrection-amount> healing crystals,
 # and targets <fireballs> and random endermans to aggressive players.
 nasty-ender-dragon:
   # <boolean>
@@ -43,6 +43,8 @@ nasty-ender-dragon:
   world-name: world_the_end
   # <integer:0..300>
   resurrection-interval-in-s: 30
+  # <integer:0..10>
+  resurrection-amount: 2
   # According to https://minecraft.fandom.com/wiki/Ender_Dragon,
   # the Ender Dragon has 200.0 health.
   # <float:0..200>

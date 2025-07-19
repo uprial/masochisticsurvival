@@ -19,6 +19,7 @@ public class NastyEnderDragonListenerTest extends TestConfigBase {
                         "ned:",
                         "  enabled: true",
                         "  world-name: world_the_end",
+                        "  resurrection-amount: 2",
                         "  resurrection-interval-in-s: 30",
                         "  explosion-damage-limit-per-s: 50.0",
                         "  explosion-damage-reduction: 5.0",
@@ -28,6 +29,7 @@ public class NastyEnderDragonListenerTest extends TestConfigBase {
         assertNotNull(listener);
         assertEquals("{world-name: world_the_end, " +
                         "resurrection-interval-in-s: 30, " +
+                        "resurrection-amount: 2, " +
                         "explosion-damage-limit-per-s: 50, " +
                         "explosion-damage-reduction: 5, " +
                         "balls-interval-in-s: 3, " +
@@ -87,6 +89,19 @@ public class NastyEnderDragonListenerTest extends TestConfigBase {
     }
 
     @Test
+    public void testWrongResurrectionAmount() throws Exception {
+        e.expect(InvalidConfigException.class);
+        e.expectMessage("A resurrection amount of 'ned' is not an integer");
+        getFromConfig(null, getPreparedConfig(
+                        "ned:",
+                        "  enabled: true",
+                        "  world-name: world_the_end",
+                        "  resurrection-interval-in-s: 30",
+                        "  resurrection-amount: 2.0"),
+                getCustomLogger(), "ned", "'ned'");
+    }
+
+    @Test
     public void testWrongExplosionDamageLimitPerS() throws Exception {
         e.expect(InvalidConfigException.class);
         e.expectMessage("A explosion damage limit per s of 'ned' is not a double");
@@ -95,6 +110,7 @@ public class NastyEnderDragonListenerTest extends TestConfigBase {
                         "  enabled: true",
                         "  world-name: world_the_end",
                         "  resurrection-interval-in-s: 30",
+                        "  resurrection-amount: 2",
                         "  explosion-damage-limit-per-s: x"),
                 getCustomLogger(), "ned", "'ned'");
     }
@@ -108,6 +124,7 @@ public class NastyEnderDragonListenerTest extends TestConfigBase {
                         "  enabled: true",
                         "  world-name: world_the_end",
                         "  resurrection-interval-in-s: 30",
+                        "  resurrection-amount: 2",
                         "  explosion-damage-limit-per-s: 50.0",
                         "  explosion-damage-reduction: x"),
                 getCustomLogger(), "ned", "'ned'");
@@ -122,6 +139,7 @@ public class NastyEnderDragonListenerTest extends TestConfigBase {
                         "  enabled: true",
                         "  world-name: world_the_end",
                         "  resurrection-interval-in-s: 30",
+                        "  resurrection-amount: 2",
                         "  explosion-damage-limit-per-s: 50.0",
                         "  explosion-damage-reduction: 5.0",
                         "  balls-interval-in-s: 3.0"),
@@ -137,6 +155,7 @@ public class NastyEnderDragonListenerTest extends TestConfigBase {
                         "  enabled: true",
                         "  world-name: world_the_end",
                         "  resurrection-interval-in-s: 30",
+                        "  resurrection-amount: 2",
                         "  explosion-damage-limit-per-s: 50.0",
                         "  explosion-damage-reduction: 5.0",
                         "  balls-interval-in-s: 3",
