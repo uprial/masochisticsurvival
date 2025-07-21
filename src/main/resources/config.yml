@@ -63,7 +63,7 @@ explosive-shooter:
   # <float:0..16>
   power: 2.0
 
-# Villagers don't sell imbalanced clothes with <environmental protection> and <mending>
+# Villagers don't sell or overprice imbalanced clothes with <environmental protection> and <mending>
 greedy-villager:
   # <boolean>
   replace-protection: true

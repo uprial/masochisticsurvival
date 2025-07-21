@@ -3,6 +3,7 @@ package com.gmail.uprial.masochisticsurvival.listeners;
 import com.gmail.uprial.masochisticsurvival.common.CustomLogger;
 import com.gmail.uprial.masochisticsurvival.config.ConfigReaderSimple;
 import com.gmail.uprial.masochisticsurvival.config.InvalidConfigException;
+import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Villager;
@@ -24,56 +25,13 @@ public class GreedyVillagerListener implements Listener {
     private final boolean replaceProtection;
     private final boolean replaceMending;
 
-    private static class EnchantmentMutator {
-        final Enchantment enchantment;
-        final int survivalMaxLevel;
-
-        EnchantmentMutator(final Enchantment enchantment, final int survivalMaxLevel) {
-            this.enchantment = enchantment;
-            this.survivalMaxLevel = survivalMaxLevel;
-        }
-
-        Enchantment getEnchantment() {
-            return enchantment;
-        }
-
-        int getSurvivalMaxLevel() {
-            return survivalMaxLevel;
-        }
-    }
-
-    private final Map<Enchantment,EnchantmentMutator> enchantmentMutators = new HashMap<>();
-
     public GreedyVillagerListener(final CustomLogger customLogger,
                                   final boolean replaceProtection,
                                   final boolean replaceMending) {
         this.customLogger = customLogger;
         this.replaceProtection = replaceProtection;
         this.replaceMending = replaceMending;
-
-        if(replaceProtection) {
-            /*
-                According to https://minecraft.wiki/w/Thorns,
-                Thorns applies a durability penalty to the armor.
-             */
-            enchantmentMutators.put(Enchantment.PROTECTION,
-                    new EnchantmentMutator(Enchantment.THORNS, 3));
-        }
-
-        if(replaceMending) {
-            /*
-                According to https://minecraft.wiki/w/Mending,
-                Mending can be obtained by trading with a librarian,
-                which means no weapons or tools with it can be traded.
-
-                IMO, knockback prevents swords from dealing a lot of melee damage per second,
-                and isn't a potential upgrade.
-             */
-            enchantmentMutators.put(Enchantment.MENDING,
-                    new EnchantmentMutator(Enchantment.KNOCKBACK, 2));
-        }
     }
-
 
     @EventHandler(priority = EventPriority.NORMAL)
     public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
@@ -86,19 +44,25 @@ public class GreedyVillagerListener implements Listener {
 
                 boolean updatedOne = false;
                 final ItemStack result = recipe.getResult();
+                final List<ItemStack> ingredients = recipe.getIngredients();
                 final Map<Enchantment,Integer> enchantments
                         = ((result.getItemMeta() instanceof EnchantmentStorageMeta))
                         ? ((EnchantmentStorageMeta) result.getItemMeta()).getStoredEnchants()
                         : result.getEnchantments();
 
                 for(Map.Entry<Enchantment,Integer> entry : enchantments.entrySet()) {
-                    final EnchantmentMutator mutator = enchantmentMutators.get(entry.getKey());
-                    if(mutator != null) {
-                        final int oldLevel = entry.getValue();
-                        final int newLevel = oldLevel + mutator.getSurvivalMaxLevel();
-
+                    if ((replaceProtection) && (entry.getKey().equals(Enchantment.PROTECTION))) {
                         final Enchantment oldEnchantment = entry.getKey();
-                        final Enchantment newEnchantment = mutator.getEnchantment();
+                        /*
+                            According to https://minecraft.wiki/w/Thorns,
+                            Thorns applies a durability penalty to the armor.
+                         */
+                        final Enchantment newEnchantment = Enchantment.THORNS;
+
+                        final int oldLevel = entry.getValue();
+                        // Survival maximum level is 3
+                        final int newLevel = oldLevel + 3;
+
                         if(customLogger.isDebugMode()) {
                             customLogger.debug(String.format("Updating %s recipes for %s: changing %s-%d to %s-%d...",
                                     format(villager), result.getType(),
@@ -119,9 +83,45 @@ public class GreedyVillagerListener implements Listener {
                         }
 
                         updatedOne = true;
+                    } else if ((replaceMending) && (entry.getKey().equals(Enchantment.MENDING))) {
+                        /*
+                            According to https://minecraft.wiki/w/Rarity,
+                            two Epic items not from the End.
+                         */
+                        final Set<Material> ingredientTypes = new HashSet<>();
+                        for(final ItemStack ingredient : ingredients) {
+                            ingredientTypes.add(ingredient.getType());
+                        }
+                        if(!ingredientTypes.contains(Material.HEAVY_CORE)
+                                || !ingredientTypes.contains(Material.SILENCE_ARMOR_TRIM_SMITHING_TEMPLATE)) {
+
+                            ingredients.clear();
+
+                            ingredients.add(new ItemStack(Material.HEAVY_CORE));
+                            ingredients.add(new ItemStack(Material.SILENCE_ARMOR_TRIM_SMITHING_TEMPLATE));
+
+                            updatedOne = true;
+                        }
                     }
                 }
+                /*
+                    Test data #1
 
+                    result.setType(Material.NETHERITE_LEGGINGS);
+                    result.addUnsafeEnchantment(Enchantment.PROTECTION, 3);
+
+                    updatedOne = true;
+                 */
+                /*
+                    Test data #2
+
+                    result.setType(Material.ENCHANTED_BOOK);
+                    final EnchantmentStorageMeta itemMeta = (EnchantmentStorageMeta) result.getItemMeta();
+                    itemMeta.addStoredEnchant(Enchantment.MENDING, 1, true);
+                    result.setItemMeta(itemMeta);
+
+                    updatedOne = true;
+                 */
                 /*
                     One potential "updated" boolean value
                     is split into updatedOne and updatedAny
@@ -140,7 +140,7 @@ public class GreedyVillagerListener implements Listener {
                             recipe.getDemand(),
                             recipe.getSpecialPrice()
                     );
-                    updatedRecipe.setIngredients(recipe.getIngredients());
+                    updatedRecipe.setIngredients(ingredients);
 
                     updatedRecipes.add(updatedRecipe);
 

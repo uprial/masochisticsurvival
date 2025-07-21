@@ -18,7 +18,7 @@ The most essential aspects are configurable.
 * Angry Shooter: shooting mobs target the closest visible player immediately when spawned, and then occasionally
 * Nasty Ender Dragon: the Ender Dragon has increased regen, explosion resistance and damage limit, periodically resurrects healing crystals, and targets fireballs and random endermans to aggressive players
 * Explosive Shooter: a percentage of shooters equip explosive projectiles 
-* Greedy Villager: villagers don't sell imbalanced clothes with environmental protection and mending
+* Greedy Villager: villagers don't sell or overprice imbalanced clothes with environmental protection and mending
 * Limit Elytras: players flying too high are frozen
 
 ![a Minecraft picture: an enderman holds a pumpkin, a skeleton fires an enchanted arrow into a sad player, an ender dragon laughs, a villager doesn't trade, all mobs are smart](images/masochistic-survival-promo.png)
