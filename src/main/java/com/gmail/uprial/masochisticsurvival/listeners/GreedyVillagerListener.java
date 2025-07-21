@@ -3,6 +3,7 @@ package com.gmail.uprial.masochisticsurvival.listeners;
 import com.gmail.uprial.masochisticsurvival.common.CustomLogger;
 import com.gmail.uprial.masochisticsurvival.config.ConfigReaderSimple;
 import com.gmail.uprial.masochisticsurvival.config.InvalidConfigException;
+import com.google.common.collect.ImmutableSet;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.enchantments.Enchantment;
@@ -51,61 +52,18 @@ public class GreedyVillagerListener implements Listener {
                         : result.getEnchantments();
 
                 for(Map.Entry<Enchantment,Integer> entry : enchantments.entrySet()) {
-                    if ((replaceProtection) && (entry.getKey().equals(Enchantment.PROTECTION))) {
-                        final Enchantment oldEnchantment = entry.getKey();
-                        /*
-                            According to https://minecraft.wiki/w/Thorns,
-                            Thorns applies a durability penalty to the armor.
-                         */
-                        final Enchantment newEnchantment = Enchantment.THORNS;
-
-                        final int oldLevel = entry.getValue();
-                        // Survival maximum level is 3
-                        final int newLevel = oldLevel + 3;
-
-                        if(customLogger.isDebugMode()) {
-                            customLogger.debug(String.format("Updating %s recipes for %s: changing %s-%d to %s-%d...",
-                                    format(villager), result.getType(),
-                                    oldEnchantment.getName(), oldLevel,
-                                    newEnchantment.getName(), newLevel));
-                        }
-
-                        if(result.getItemMeta() instanceof EnchantmentStorageMeta) {
-                            final EnchantmentStorageMeta itemMeta = (EnchantmentStorageMeta)result.getItemMeta();
-                            itemMeta.removeStoredEnchant(oldEnchantment);
-                            // ignoreLevelRestriction is a must to overcome the survival maximum level
-                            itemMeta.addStoredEnchant(newEnchantment, newLevel, true);
-                            result.setItemMeta(itemMeta);
-                        } else {
-                            result.removeEnchantment(oldEnchantment);
-                            // unsafe is a must to overcome the survival maximum level
-                            result.addUnsafeEnchantment(newEnchantment, newLevel);
-                        }
+                    if ((replaceProtection)
+                            && replacedProtection(villager, result, entry.getKey(), entry.getValue())) {
 
                         updatedOne = true;
-                    } else if ((replaceMending) && (entry.getKey().equals(Enchantment.MENDING))) {
-                        /*
-                            According to https://minecraft.wiki/w/Rarity,
-                            two Epic items not from the End.
-                         */
-                        final Set<Material> ingredientTypes = new HashSet<>();
-                        for(final ItemStack ingredient : ingredients) {
-                            ingredientTypes.add(ingredient.getType());
-                        }
-                        if(!ingredientTypes.contains(Material.HEAVY_CORE)
-                                || !ingredientTypes.contains(Material.SILENCE_ARMOR_TRIM_SMITHING_TEMPLATE)) {
+                    } else if ((replaceMending)
+                            && replacedMending(villager, entry.getKey(), ingredients)) {
 
-                            ingredients.clear();
-
-                            ingredients.add(new ItemStack(Material.HEAVY_CORE));
-                            ingredients.add(new ItemStack(Material.SILENCE_ARMOR_TRIM_SMITHING_TEMPLATE));
-
-                            updatedOne = true;
-                        }
+                        updatedOne = true;
                     }
                 }
                 /*
-                    Test data #1
+                    Test data
 
                     result.setType(Material.NETHERITE_LEGGINGS);
                     result.addUnsafeEnchantment(Enchantment.PROTECTION, 3);
@@ -113,7 +71,7 @@ public class GreedyVillagerListener implements Listener {
                     updatedOne = true;
                  */
                 /*
-                    Test data #2
+                    Test data
 
                     result.setType(Material.ENCHANTED_BOOK);
                     final EnchantmentStorageMeta itemMeta = (EnchantmentStorageMeta) result.getItemMeta();
@@ -157,6 +115,80 @@ public class GreedyVillagerListener implements Listener {
                 }
             }
         }
+    }
+
+    private boolean replacedProtection(final Villager villager,
+                                       final ItemStack result,
+                                       final Enchantment oldEnchantment,
+                                       final int oldLevel) {
+        if (!oldEnchantment.equals(Enchantment.PROTECTION)) {
+            return false;
+        }
+        /*
+            According to https://minecraft.wiki/w/Thorns,
+            Thorns applies a durability penalty to the armor.
+         */
+        final Enchantment newEnchantment = Enchantment.THORNS;
+
+        // Survival maximum level is 3
+        final int newLevel = oldLevel + 3;
+
+        if (result.getItemMeta() instanceof EnchantmentStorageMeta) {
+            final EnchantmentStorageMeta itemMeta = (EnchantmentStorageMeta) result.getItemMeta();
+            itemMeta.removeStoredEnchant(oldEnchantment);
+            // ignoreLevelRestriction is a must to overcome the survival maximum level
+            itemMeta.addStoredEnchant(newEnchantment, newLevel, true);
+            result.setItemMeta(itemMeta);
+        } else {
+            result.removeEnchantment(oldEnchantment);
+            // unsafe is a must to overcome the survival maximum level
+            result.addUnsafeEnchantment(newEnchantment, newLevel);
+        }
+
+        customLogger.info(String.format("Updating %s recipes for %s: changing %s-%d to %s-%d...",
+                format(villager), result.getType(),
+                oldEnchantment.getName(), oldLevel,
+                newEnchantment.getName(), newLevel));
+
+        return true;
+    }
+
+    /*
+        According to https://minecraft.wiki/w/Rarity,
+        two Epic items not from the End.
+
+        MerchantRecipe can only have maximum 2 ingredients.
+     */
+    private static final Set<Material> MENDING_MARKUPS = ImmutableSet.<Material>builder()
+            .add(Material.HEAVY_CORE)
+            .add(Material.SILENCE_ARMOR_TRIM_SMITHING_TEMPLATE)
+            .build();
+
+    private boolean replacedMending(final Villager villager,
+                                    final Enchantment enchantment,
+                                    final List<ItemStack> ingredients) {
+        if(!enchantment.equals(Enchantment.MENDING)) {
+            return false;
+        }
+
+        final Set<Material> existingMarkups = new HashSet<>();
+        for(final ItemStack ingredient : ingredients) {
+            existingMarkups.add(ingredient.getType());
+        }
+
+        if(existingMarkups.containsAll(MENDING_MARKUPS)) {
+            return false;
+        }
+
+        ingredients.clear();
+        for(final Material markup : MENDING_MARKUPS) {
+            ingredients.add(new ItemStack(markup));
+        }
+
+        customLogger.info(String.format("Updating %s ingredients for %s: changing %s to %s...",
+                format(villager), enchantment.getName(), existingMarkups, MENDING_MARKUPS));
+
+        return true;
     }
 
     public static GreedyVillagerListener getFromConfig(FileConfiguration config, CustomLogger customLogger, String key, String title) throws InvalidConfigException {
