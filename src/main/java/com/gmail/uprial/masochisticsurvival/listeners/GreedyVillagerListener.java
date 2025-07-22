@@ -1,9 +1,10 @@
 package com.gmail.uprial.masochisticsurvival.listeners;
 
 import com.gmail.uprial.masochisticsurvival.common.CustomLogger;
+import com.gmail.uprial.masochisticsurvival.common.RandomUtils;
 import com.gmail.uprial.masochisticsurvival.config.ConfigReaderSimple;
 import com.gmail.uprial.masochisticsurvival.config.InvalidConfigException;
-import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.ImmutableMap;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.enchantments.Enchantment;
@@ -24,14 +25,14 @@ import static com.gmail.uprial.masochisticsurvival.common.Utils.joinPaths;
 public class GreedyVillagerListener implements Listener {
     private final CustomLogger customLogger;
     private final boolean replaceProtection;
-    private final boolean replaceMending;
+    private final boolean overpriceMending;
 
     public GreedyVillagerListener(final CustomLogger customLogger,
                                   final boolean replaceProtection,
-                                  final boolean replaceMending) {
+                                  final boolean overpriceMending) {
         this.customLogger = customLogger;
         this.replaceProtection = replaceProtection;
-        this.replaceMending = replaceMending;
+        this.overpriceMending = overpriceMending;
     }
 
     @EventHandler(priority = EventPriority.NORMAL)
@@ -56,8 +57,8 @@ public class GreedyVillagerListener implements Listener {
                             && replacedProtection(villager, result, entry.getKey(), entry.getValue())) {
 
                         updatedOne = true;
-                    } else if ((replaceMending)
-                            && replacedMending(villager, entry.getKey(), ingredients)) {
+                    } else if ((overpriceMending)
+                            && overpricedMending(villager, entry.getKey(), ingredients)) {
 
                         updatedOne = true;
                     }
@@ -155,38 +156,56 @@ public class GreedyVillagerListener implements Listener {
 
     /*
         According to https://minecraft.wiki/w/Rarity,
-        two Epic items not from the End.
+        the Epic items.
 
-        MerchantRecipe can only have maximum 2 ingredients.
+        Dragon Egg is too unique.
+        Mace is a duplicate of Heavy Core.
      */
-    private static final Set<Material> MENDING_MARKUPS = ImmutableSet.<Material>builder()
-            .add(Material.HEAVY_CORE)
-            .add(Material.SILENCE_ARMOR_TRIM_SMITHING_TEMPLATE)
+    private static final Map<Material,Integer> PRIMARY_MARKUPS = ImmutableMap.<Material,Integer>builder()
+            .put(Material.ELYTRA, 2)
+            .put(Material.DRAGON_HEAD, 2)
+            .put(Material.HEAVY_CORE, 1)
+            .put(Material.SILENCE_ARMOR_TRIM_SMITHING_TEMPLATE, 1)
             .build();
 
-    private boolean replacedMending(final Villager villager,
-                                    final Enchantment enchantment,
-                                    final List<ItemStack> ingredients) {
+    /*
+        According to https://minecraft.wiki/w/Ore,
+        the most rare resource.
+
+        Emerald is easily traded in villages.
+     */
+    private static final Map<Material,Integer> SECONDARY_MARKUPS = ImmutableMap.<Material,Integer>builder()
+            .put(Material.DIAMOND_BLOCK, 16)
+            .put(Material.GOLD_BLOCK, 16)
+            .build();
+
+    // WARNING: MerchantRecipe can only have maximum 2 ingredients.
+
+    private boolean overpricedMending(final Villager villager,
+                                      final Enchantment enchantment,
+                                      final List<ItemStack> ingredients) {
         if(!enchantment.equals(Enchantment.MENDING)) {
             return false;
         }
 
-        final Set<Material> existingMarkups = new HashSet<>();
         for(final ItemStack ingredient : ingredients) {
-            existingMarkups.add(ingredient.getType());
-        }
-
-        if(existingMarkups.containsAll(MENDING_MARKUPS)) {
-            return false;
+            if(PRIMARY_MARKUPS.containsKey(ingredient.getType())) {
+                return false;
+            }
         }
 
         ingredients.clear();
-        for(final Material markup : MENDING_MARKUPS) {
-            ingredients.add(new ItemStack(markup));
-        }
 
-        customLogger.info(String.format("Updating %s ingredients for %s: changing %s to %s...",
-                format(villager), enchantment.getName(), existingMarkups, MENDING_MARKUPS));
+        final Material pmMaterial = RandomUtils.getSetItem(PRIMARY_MARKUPS.keySet());
+        final int pmAmount = PRIMARY_MARKUPS.get(pmMaterial);
+        ingredients.add(new ItemStack(pmMaterial, pmAmount));
+
+        final Material smMaterial = RandomUtils.getSetItem(SECONDARY_MARKUPS.keySet());
+        final int smAmount = SECONDARY_MARKUPS.get(smMaterial);
+        ingredients.add(new ItemStack(smMaterial, smAmount));
+
+        customLogger.info(String.format("Updating %s ingredients for %s to %s x %d and %s x %d...",
+                format(villager), enchantment.getName(), pmMaterial, pmAmount, smMaterial, smAmount));
 
         return true;
     }
@@ -195,7 +214,7 @@ public class GreedyVillagerListener implements Listener {
         boolean replaceProtection = ConfigReaderSimple.getBoolean(config, customLogger,
                 joinPaths(key, "replace-protection"), String.format("'replace protection' flag of %s", title));
         boolean replaceMending = ConfigReaderSimple.getBoolean(config, customLogger,
-                joinPaths(key, "replace-mending"), String.format("'replace mending' flag of %s", title));
+                joinPaths(key, "overprice-mending"), String.format("'overprice mending' flag of %s", title));
 
         if(!replaceProtection && !replaceMending) {
             return null;
@@ -206,7 +225,7 @@ public class GreedyVillagerListener implements Listener {
 
     @Override
     public String toString() {
-        return String.format("{replace-protection: %b, replace-mending: %b}",
-                replaceProtection, replaceMending);
+        return String.format("{replace-protection: %b, overprice-mending: %b}",
+                replaceProtection, overpriceMending);
     }
 }

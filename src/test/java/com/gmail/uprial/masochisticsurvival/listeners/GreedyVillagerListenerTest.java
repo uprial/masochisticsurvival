@@ -18,10 +18,10 @@ public class GreedyVillagerListenerTest extends TestConfigBase {
         GreedyVillagerListener listener = getFromConfig(getPreparedConfig(
                         "gv:",
                         "  replace-protection: true",
-                        "  replace-mending: true"),
+                        "  overprice-mending: true"),
                 getParanoiacCustomLogger(), "gv", "'gv'");
         assertNotNull(listener);
-        assertEquals("{replace-protection: true, replace-mending: true}",
+        assertEquals("{replace-protection: true, overprice-mending: true}",
                 listener.toString());
     }
 
@@ -30,7 +30,7 @@ public class GreedyVillagerListenerTest extends TestConfigBase {
         GreedyVillagerListener listener = getFromConfig(getPreparedConfig(
                         "gv:",
                         " replace-protection: false",
-                        " replace-mending: false"),
+                        " overprice-mending: false"),
                 getDebugFearingCustomLogger(), "gv", "'gv'");
         assertNull(listener);
     }
@@ -57,11 +57,11 @@ public class GreedyVillagerListenerTest extends TestConfigBase {
     @Test
     public void testWrongPower() throws Exception {
         e.expect(InvalidConfigException.class);
-        e.expectMessage("Invalid 'replace mending' flag of 'gv'");
+        e.expectMessage("Invalid 'overprice mending' flag of 'gv'");
         getFromConfig(getPreparedConfig(
                         "gv:",
                         " replace-protection: true",
-                        " replace-mending: v"),
+                        " overprice-mending: v"),
                 getCustomLogger(), "gv", "'gv'");
     }
 }

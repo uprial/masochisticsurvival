@@ -63,12 +63,12 @@ explosive-shooter:
   # <float:0..16>
   power: 2.0
 
-# Villagers don't sell or overprice imbalanced clothes with <environmental protection> and <mending>
+# Villagers don't sell imbalanced clothes with <environmental protection> and overprice imbalanced <mending>
 greedy-villager:
   # <boolean>
   replace-protection: true
   # <boolean>
-  replace-mending: true
+  overprice-mending: true
   # Disabling all flags above, you'll disable the whole section
 
 # Players flying too high are frozen

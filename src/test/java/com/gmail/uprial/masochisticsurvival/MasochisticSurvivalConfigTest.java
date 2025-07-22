@@ -63,7 +63,7 @@ public class MasochisticSurvivalConfigTest extends TestConfigBase {
                         "  percentage: 0.0",
                         "greedy-villager:",
                         "  replace-protection: false",
-                        "  replace-mending: false",
+                        "  overprice-mending: false",
                         "limit-elytras:",
                         "  enabled: false").toString());
     }
@@ -79,7 +79,7 @@ public class MasochisticSurvivalConfigTest extends TestConfigBase {
                         "explosion-damage-limit-per-s: 50, explosion-damage-reduction: 5, " +
                         "balls-interval-in-s: 3, regen-multiplier: 2}, " +
                         "explosive-shooter={percentage: 1, power: 2}, " +
-                        "greedy-villager={replace-protection: true, replace-mending: true}, " +
+                        "greedy-villager={replace-protection: true, overprice-mending: true}, " +
                         "limit-elytras={initial-height-excess: 10, height-per-freeze-second: 3}}",
                 loadConfig(getCustomLogger(), "debug: false",
                         "nasty-enderman:",
@@ -104,7 +104,7 @@ public class MasochisticSurvivalConfigTest extends TestConfigBase {
                         "  power: 2.0",
                         "greedy-villager:",
                         "  replace-protection: true",
-                        "  replace-mending: true",
+                        "  overprice-mending: true",
                         "limit-elytras:",
                         "  enabled: true",
                         "  initial-height-excess: 10",
