@@ -160,11 +160,20 @@ public class GreedyVillagerListener implements Listener {
 
         Dragon Egg is too unique.
         Mace is a duplicate of Heavy Core.
+
+        According to https://minecraft.wiki/w/Non-renewable_resource,
+        the hard items.
      */
     private static final Map<Material,Integer> PRIMARY_MARKUPS = ImmutableMap.<Material,Integer>builder()
+            // A farm of Withers may bring a lot of nether stars
+            .put(Material.NETHER_STAR, 4)
+            // Rare structures
+            .put(Material.HEART_OF_THE_SEA, 2)
             .put(Material.ELYTRA, 2)
             .put(Material.DRAGON_HEAD, 2)
+            // The rarest item
             .put(Material.HEAVY_CORE, 1)
+            // The rarest template
             .put(Material.SILENCE_ARMOR_TRIM_SMITHING_TEMPLATE, 1)
             .build();
 
@@ -177,6 +186,9 @@ public class GreedyVillagerListener implements Listener {
     private static final Map<Material,Integer> SECONDARY_MARKUPS = ImmutableMap.<Material,Integer>builder()
             .put(Material.DIAMOND_BLOCK, 16)
             .put(Material.GOLD_BLOCK, 16)
+            // Redstone and lapis : diamond and gold ~ 4:1
+            .put(Material.REDSTONE_BLOCK, 64)
+            .put(Material.LAPIS_BLOCK, 64)
             .build();
 
     // WARNING: MerchantRecipe can only have maximum 2 ingredients.
