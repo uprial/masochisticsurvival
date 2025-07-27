@@ -42,6 +42,7 @@ public final class MasochisticSurvivalConfig {
         listeners.put("explosive-shooter", ExplosiveShooterListener.getFromConfig(plugin, config, customLogger, "explosive-shooter", "'explosive-shooter'"));
         listeners.put("greedy-villager", GreedyVillagerListener.getFromConfig(config, customLogger, "greedy-villager", "'greedy-villager'"));
         listeners.put("limit-elytras", LimitElytrasListener.getFromConfig(config, customLogger, "limit-elytras", "'limit-elytras'"));
+        listeners.put("hydra-spiders", HydraSpiderListener.getFromConfig(config, customLogger, "hydra-spiders", "'hydra-spiders'"));
 
         return new MasochisticSurvivalConfig(listeners);
     }

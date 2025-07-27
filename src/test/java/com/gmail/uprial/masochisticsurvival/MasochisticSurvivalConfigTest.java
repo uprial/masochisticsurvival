@@ -48,7 +48,8 @@ public class MasochisticSurvivalConfigTest extends TestConfigBase {
                         "nasty-ender-dragon=null, " +
                         "explosive-shooter=null, " +
                         "greedy-villager=null, " +
-                        "limit-elytras=null}",
+                        "limit-elytras=null, " +
+                        "hydra-spiders=null}",
                 loadConfig(getCustomLogger(), "debug: false",
                         "nasty-enderman:",
                         "  percentage: 0.0",
@@ -65,7 +66,9 @@ public class MasochisticSurvivalConfigTest extends TestConfigBase {
                         "  replace-protection: false",
                         "  overprice-mending: false",
                         "limit-elytras:",
-                        "  enabled: false").toString());
+                        "  enabled: false",
+                        "hydra-spiders:",
+                        "  percentage: 0.0").toString());
     }
 
     @Test
@@ -80,7 +83,8 @@ public class MasochisticSurvivalConfigTest extends TestConfigBase {
                         "balls-interval-in-s: 3, regen-multiplier: 2}, " +
                         "explosive-shooter={percentage: 1, power: 2}, " +
                         "greedy-villager={replace-protection: true, overprice-mending: true}, " +
-                        "limit-elytras={initial-height-excess: 10, height-per-freeze-second: 3}}",
+                        "limit-elytras={initial-height-excess: 10, height-per-freeze-second: 3}, " +
+                        "hydra-spiders={percentage: 5, amount: 3, scale: 0.7, speed: 1.3}}",
                 loadConfig(getCustomLogger(), "debug: false",
                         "nasty-enderman:",
                         "  percentage: 0.1",
@@ -108,6 +112,11 @@ public class MasochisticSurvivalConfigTest extends TestConfigBase {
                         "limit-elytras:",
                         "  enabled: true",
                         "  initial-height-excess: 10",
-                        "  height-per-freeze-second: 3").toString());
+                        "  height-per-freeze-second: 3",
+                        "hydra-spiders:",
+                        "  percentage: 5.0",
+                        "  amount: 3",
+                        "  scale: 0.7",
+                        "  speed: 1.3").toString());
     }
 }

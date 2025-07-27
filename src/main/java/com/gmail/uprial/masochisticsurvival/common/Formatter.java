@@ -5,7 +5,10 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
 public class Formatter {
-   public static String format(final Entity entity) {
+    public static String format(final Entity entity) {
+        if (entity instanceof Player) {
+            return format((Player) entity);
+        }
         return String.format("%s[%s:%.0f:%.0f:%.0f]",
                 entity.getType(),
                 entity.getWorld().getName(),
