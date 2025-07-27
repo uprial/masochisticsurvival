@@ -65,7 +65,8 @@ public class ExplosiveShooterListener implements Listener {
                 });
 
                 if((explosion) && (distance(projectile, entity) > power)) {
-                    projectile.getWorld().createExplosion(projectile.getLocation(), (float)power, true);
+                    projectile.getWorld().createExplosion(
+                            projectile.getLocation(), (float)power, true, true, entity);
                 }
             }
         }
