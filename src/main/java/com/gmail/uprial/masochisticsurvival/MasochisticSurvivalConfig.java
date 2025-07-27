@@ -43,6 +43,7 @@ public final class MasochisticSurvivalConfig {
         listeners.put("greedy-villager", GreedyVillagerListener.getFromConfig(config, customLogger, "greedy-villager", "'greedy-villager'"));
         listeners.put("limit-elytras", LimitElytrasListener.getFromConfig(config, customLogger, "limit-elytras", "'limit-elytras'"));
         listeners.put("hydra-spiders", HydraSpiderListener.getFromConfig(config, customLogger, "hydra-spiders", "'hydra-spiders'"));
+        listeners.put("radical-phantoms", RadicalPhantomListener.getFromConfig(plugin, config, customLogger, "radical-phantoms", "'radical-phantoms'"));
 
         return new MasochisticSurvivalConfig(listeners);
     }

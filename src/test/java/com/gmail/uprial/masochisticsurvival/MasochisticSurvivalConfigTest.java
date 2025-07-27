@@ -49,7 +49,8 @@ public class MasochisticSurvivalConfigTest extends TestConfigBase {
                         "explosive-shooter=null, " +
                         "greedy-villager=null, " +
                         "limit-elytras=null, " +
-                        "hydra-spiders=null}",
+                        "hydra-spiders=null, " +
+                        "radical-phantoms=null}",
                 loadConfig(getCustomLogger(), "debug: false",
                         "nasty-enderman:",
                         "  percentage: 0.0",
@@ -68,6 +69,8 @@ public class MasochisticSurvivalConfigTest extends TestConfigBase {
                         "limit-elytras:",
                         "  enabled: false",
                         "hydra-spiders:",
+                        "  percentage: 0.0",
+                        "radical-phantoms:",
                         "  percentage: 0.0").toString());
     }
 
@@ -84,7 +87,8 @@ public class MasochisticSurvivalConfigTest extends TestConfigBase {
                         "explosive-shooter={percentage: 1, power: 2}, " +
                         "greedy-villager={replace-protection: true, overprice-mending: true}, " +
                         "limit-elytras={initial-height-excess: 10, height-per-freeze-second: 3}, " +
-                        "hydra-spiders={percentage: 5, amount: 3, scale: 0.7, speed: 1.3}}",
+                        "hydra-spiders={percentage: 5, amount: 3, scale: 0.7, speed: 1.3}, " +
+                        "radical-phantoms={percentage: 33.3, power: 3}}",
                 loadConfig(getCustomLogger(), "debug: false",
                         "nasty-enderman:",
                         "  percentage: 0.1",
@@ -117,6 +121,9 @@ public class MasochisticSurvivalConfigTest extends TestConfigBase {
                         "  percentage: 5.0",
                         "  amount: 3",
                         "  scale: 0.7",
-                        "  speed: 1.3").toString());
+                        "  speed: 1.3",
+                        "radical-phantoms:",
+                        "  percentage: 33.3",
+                        "  power: 3.0").toString());
     }
 }

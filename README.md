@@ -20,7 +20,8 @@ The most essential aspects are configurable.
 * Explosive Shooter: a percentage of shooters equip explosive projectiles 
 * Greedy Villager: villagers don't sell imbalanced clothes with environmental protection and overprice imbalanced mending
 * Limit Elytras: players flying too high are frozen
-* Hydra Spiders: a percentage of spiders multiply on death into smaller and faster
+* Hydra Spiders: a percentage of Spiders multiply on death into smaller and faster
+* Radical Phantoms: a percentage of Phantoms explode when give damage, take damage, or die
 
 ![a Minecraft picture: an enderman holds a pumpkin, a skeleton fires an enchanted arrow into a sad player, an ender dragon laughs, a villager doesn't trade, all mobs are smart](images/masochistic-survival-promo.png)
 
