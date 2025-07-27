@@ -83,7 +83,7 @@ limit-elytras:
   # so the player start taking damage at 10 + 3 * 7 = 31 height excess.
   height-per-freeze-second: 3
 
-# A <percentage> of spiders multiply <amount> times on death into smaller <scale> and faster <speed>
+# A <percentage> of Spiders multiply <amount> times on death into smaller <scale> and faster <speed>
 hydra-spiders:
   # <float:0..100>
   percentage: 5.0

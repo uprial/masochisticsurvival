@@ -34,11 +34,12 @@ public class ExplosiveShooterListener implements Listener {
         this.power = power;
     }
 
+    // WARNING: please keep the legacy prefix for backward compatibility
     private static final String MK_EXPLOSION = "rn_explosion";
 
     @SuppressWarnings({"unused"})
     @EventHandler(priority = EventPriority.NORMAL)
-    public void onProjectileHitEvent(ProjectileHitEvent event) {
+    public void onProjectileHit(ProjectileHitEvent event) {
         if (!event.isCancelled()) {
             final Projectile projectile = event.getEntity();
             final ProjectileSource shooter = projectile.getShooter();

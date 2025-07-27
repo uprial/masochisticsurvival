@@ -10,7 +10,6 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Enderman;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -49,7 +48,7 @@ public class NastyEndermanListener implements Listener {
     @EventHandler(priority = EventPriority.NORMAL)
     public void onCreatureSpawn(CreatureSpawnEvent event) {
         if (!event.isCancelled()
-                && event.getEntity().getType().equals(EntityType.ENDERMAN)
+                && (event.getEntity() instanceof Enderman)
                 && (RandomUtils.PASS(percentage))) {
 
             final Player player = getStrongestPlayer(event.getEntity().getWorld());

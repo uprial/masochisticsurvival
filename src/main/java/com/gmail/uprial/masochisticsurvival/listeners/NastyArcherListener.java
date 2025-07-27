@@ -42,6 +42,7 @@ public class NastyArcherListener implements Listener {
         this.negativePercentage = negativePercentage;
     }
 
+    // WARNING: please keep the legacy prefix for backward compatibility
     private static final String MK_EFFECTS = "rn_effects";
 
     private enum E {
@@ -125,7 +126,7 @@ public class NastyArcherListener implements Listener {
 
     @SuppressWarnings({"unused"})
     @EventHandler(priority = EventPriority.NORMAL)
-    public void onProjectileLaunchEvent(ProjectileLaunchEvent event) {
+    public void onProjectileLaunch(ProjectileLaunchEvent event) {
         if (!event.isCancelled()) {
             final Projectile projectile = event.getEntity();
             final ProjectileSource archer = projectile.getShooter();

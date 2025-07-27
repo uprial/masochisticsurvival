@@ -4,19 +4,13 @@ import com.gmail.uprial.masochisticsurvival.common.CustomLogger;
 import com.gmail.uprial.masochisticsurvival.common.RandomUtils;
 import com.gmail.uprial.masochisticsurvival.config.ConfigReaderNumbers;
 import com.gmail.uprial.masochisticsurvival.config.InvalidConfigException;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableSet;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.damage.DamageType;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
-
-import java.util.Map;
-import java.util.Set;
 
 import static com.gmail.uprial.masochisticsurvival.common.DoubleHelper.formatDoubleValue;
 import static com.gmail.uprial.masochisticsurvival.common.Formatter.format;
