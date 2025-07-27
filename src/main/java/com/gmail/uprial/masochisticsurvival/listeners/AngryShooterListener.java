@@ -35,12 +35,23 @@ public class AngryShooterListener implements Listener, TimeListener {
 
     private final BukkitRunnable task;
 
+    /*
+        According to https://minecraft.wiki/w/Mob#Hostile_mobs,
+        the following mobs have a range attack.
+
+        Additionally, Creeper exists to be annoying.
+     */
     private final static Set<EntityType> ENTITY_TYPES = ImmutableSet.<EntityType>builder()
             .add(EntityType.BLAZE)
             .add(EntityType.BOGGED)
             .add(EntityType.BREEZE)
             .add(EntityType.CREEPER)
+            .add(EntityType.ELDER_GUARDIAN)
+            .add(EntityType.EVOKER)
             .add(EntityType.GHAST)
+            .add(EntityType.GUARDIAN)
+            .add(EntityType.PILLAGER)
+            .add(EntityType.SHULKER)
             .add(EntityType.SKELETON)
             .add(EntityType.STRAY)
             .add(EntityType.WITCH)
