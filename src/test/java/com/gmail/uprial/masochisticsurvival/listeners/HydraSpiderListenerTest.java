@@ -20,10 +20,11 @@ public class HydraSpiderListenerTest extends TestConfigBase {
                         "  percentage: 5.0",
                         "  amount: 3",
                         "  scale: 0.7",
-                        "  speed: 1.3"),
+                        "  speed: 1.3",
+                        "  health: 0.7"),
                 getParanoiacCustomLogger(), "es", "'es'");
         assertNotNull(listener);
-        assertEquals("{percentage: 5, amount: 3, scale: 0.7, speed: 1.3}",
+        assertEquals("{percentage: 5, amount: 3, scale: 0.7, speed: 1.3, health: 0.7}",
                 listener.toString());
     }
 
@@ -88,6 +89,20 @@ public class HydraSpiderListenerTest extends TestConfigBase {
                         " amount: 3",
                         " scale: 0.7",
                         " speed: v"),
+                getCustomLogger(), "hs", "'hs'");
+    }
+
+    @Test
+    public void testWrongHealth() throws Exception {
+        e.expect(InvalidConfigException.class);
+        e.expectMessage("A health of 'hs' is not a double");
+        getFromConfig(getPreparedConfig(
+                        "hs:",
+                        " percentage: 5.0",
+                        " amount: 3",
+                        " scale: 0.7",
+                        " speed: 1.3",
+                        " health: v"),
                 getCustomLogger(), "hs", "'hs'");
     }
 }

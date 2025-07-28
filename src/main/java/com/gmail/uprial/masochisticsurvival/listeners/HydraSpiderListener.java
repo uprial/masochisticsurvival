@@ -22,17 +22,20 @@ public class HydraSpiderListener implements Listener {
     private final int amount;
     private final double scale;
     private final double speed;
+    private final double health;
 
     public HydraSpiderListener(final CustomLogger customLogger,
                                final double percentage,
                                final int amount,
                                final double scale,
-                               final double speed) {
+                               final double speed,
+                               final double health) {
         this.customLogger = customLogger;
         this.percentage = percentage;
         this.amount = amount;
         this.scale = scale;
         this.speed = speed;
+        this.health = health;
     }
 
     @SuppressWarnings({"unused"})
@@ -66,6 +69,7 @@ public class HydraSpiderListener implements Listener {
 
             final double newScale = spider.getAttribute(Attribute.SCALE).getBaseValue() * scale;
             final double newSpeed = spider.getAttribute(Attribute.MOVEMENT_SPEED).getBaseValue() * speed;
+            final double newHealth = spider.getAttribute(Attribute.MAX_HEALTH).getBaseValue() * health;
 
             for(int i = 0; i < amount; i++) {
                 final Spider hydra
@@ -73,11 +77,20 @@ public class HydraSpiderListener implements Listener {
 
                 hydra.getAttribute(Attribute.SCALE).setBaseValue(newScale);
                 hydra.getAttribute(Attribute.MOVEMENT_SPEED).setBaseValue(newSpeed);
+                hydra.getAttribute(Attribute.MAX_HEALTH).setBaseValue(newHealth);
+                if(health > 1.0D) {
+                    /*
+                        Because of rounding of float point variables we need to make sure that
+                        health of entity is lower than its max. health.
+                        So, we reduce an entity's health by this value.
+                     */
+                    hydra.setHealth(newHealth - 0.000001D);
+                }
                 hydra.setTarget(target);
             }
 
-            customLogger.info(String.format("%s multiplied %d times with %.2f scale, %.2f speed and %s target",
-                    format(spider), amount, newScale, newSpeed, format(target)));
+            customLogger.info(String.format("%s multiplied %d times with %.2f scale, %.2f speed, %.2f health and %s target",
+                    format(spider), amount, newScale, newSpeed, newHealth, format(target)));
         }
     }
 
@@ -100,13 +113,17 @@ public class HydraSpiderListener implements Listener {
                 joinPaths(key, "scale"), String.format("scale of %s", title), 0.0D, 2.0D);
         double speed = ConfigReaderNumbers.getDouble(config, customLogger,
                 joinPaths(key, "speed"), String.format("speed of %s", title), 0.0D, 2.0D);
+        double health = ConfigReaderNumbers.getDouble(config, customLogger,
+                joinPaths(key, "health"), String.format("health of %s", title), 0.0D, 2.0D);
 
-        return new HydraSpiderListener(customLogger, percentage, amount, scale, speed);
+        return new HydraSpiderListener(customLogger, percentage, amount, scale, speed, health);
     }
 
     @Override
     public String toString() {
-        return String.format("{percentage: %s, amount: %d, scale: %s, speed: %s}",
-                formatDoubleValue(percentage), amount, formatDoubleValue(scale), formatDoubleValue(speed));
+        return String.format("{percentage: %s, amount: %d, " +
+                        "scale: %s, speed: %s, health: %s}",
+                formatDoubleValue(percentage), amount,
+                formatDoubleValue(scale), formatDoubleValue(speed), formatDoubleValue(health));
     }
 }
