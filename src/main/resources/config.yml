@@ -15,7 +15,9 @@ debug: false
 # A <percentage> of Endermans attack players immediately on spawn and ignore carved pumpkins
 nasty-enderman:
   # <float:0..100>
-  percentage: 0.1
+  # The value was set based on feedback from a server with 14 active players,
+  # up to 11 online, with both hardcore and casual profiles.
+  percentage: 0.033
 
 # Arrow archers have a chance to add both <positive> and <negative> effects to their arrows
 nasty-archer:
