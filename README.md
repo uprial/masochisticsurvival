@@ -23,7 +23,7 @@ The most essential aspects are configurable.
 * Hydra Spiders: a percentage of Spiders multiply on death into smaller and faster
 * Radical Phantoms: a percentage of Phantoms explode when give damage, take damage, or die
 
-![a Minecraft picture: an enderman holds a pumpkin, a skeleton fires an enchanted arrow into a sad player, an ender dragon laughs, a villager doesn't trade, all mobs are smart](images/masochistic-survival-promo.png)
+![A Minecraft picture: an enderman holds a pumpkin, a skeleton fires an enchanted arrow into a sad player, an ender dragon laughs, a villager doesn't trade, a spider duplicates, a phantom explides, all mobs are smart](images/masochistic-survival-promo.png)
 
 ## Commands
 
