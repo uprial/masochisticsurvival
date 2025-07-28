@@ -88,7 +88,7 @@ public class MasochisticSurvivalConfigTest extends TestConfigBase {
                         "greedy-villager={replace-protection: true, overprice-mending: true}, " +
                         "limit-elytras={initial-height-excess: 10, height-per-freeze-second: 3}, " +
                         "hydra-spiders={percentage: 5, amount: 3, scale: 0.7, speed: 1.3}, " +
-                        "radical-phantoms={percentage: 33.3, power: 3}}",
+                        "radical-phantoms={percentage: 33.3, power: 3, cooldown: 5}}",
                 loadConfig(getCustomLogger(), "debug: false",
                         "nasty-enderman:",
                         "  percentage: 0.1",
@@ -124,6 +124,7 @@ public class MasochisticSurvivalConfigTest extends TestConfigBase {
                         "  speed: 1.3",
                         "radical-phantoms:",
                         "  percentage: 33.3",
-                        "  power: 3.0").toString());
+                        "  power: 3.0",
+                        "  cooldown: 5").toString());
     }
 }

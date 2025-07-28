@@ -5,6 +5,7 @@ import com.gmail.uprial.masochisticsurvival.common.CustomLogger;
 import com.gmail.uprial.masochisticsurvival.common.RandomUtils;
 import com.gmail.uprial.masochisticsurvival.config.ConfigReaderNumbers;
 import com.gmail.uprial.masochisticsurvival.config.InvalidConfigException;
+import com.google.common.collect.ImmutableMap;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
@@ -14,6 +15,8 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+
+import java.util.Map;
 
 import static com.gmail.uprial.masochisticsurvival.common.DoubleHelper.formatDoubleValue;
 import static com.gmail.uprial.masochisticsurvival.common.Formatter.format;
@@ -26,15 +29,18 @@ public class RadicalPhantomListener implements Listener {
     private final CustomLogger customLogger;
     private final double percentage;
     private final double power;
+    private final int cooldown;
 
     public RadicalPhantomListener(final MasochisticSurvival plugin,
                                   final CustomLogger customLogger,
                                   final double percentage,
-                                  final double power) {
+                                  final double power,
+                                  final int cooldown) {
         this.plugin = plugin;
         this.customLogger = customLogger;
         this.percentage = percentage;
         this.power = power;
+        this.cooldown = cooldown;
     }
 
     // WARNING: please keep the legacy prefix for backward compatibility
@@ -66,12 +72,18 @@ public class RadicalPhantomListener implements Listener {
         }
     }
 
-    private static final int EXPLOSION_INTERVAL = 1;
+    private static final Map<PotionEffectType,Integer> COOLDOWN_EFFECTS = ImmutableMap.<PotionEffectType,Integer>builder()
+            .put(PotionEffectType.GLOWING, 0)
+            .put(PotionEffectType.SPEED, 1)
+            // The highest potion amplifier that protects less than for 100%
+            .put(PotionEffectType.RESISTANCE, 3)
+            .build();
+
     private void explode(final Phantom phantom, final String context) {
         final Long currTime = System.currentTimeMillis();
         final Long lastTime = getMetadata(phantom, MK_EXPLODED);
 
-        if((lastTime == null) || (currTime - lastTime > 1_000L * EXPLOSION_INTERVAL)) {
+        if((lastTime == null) || (currTime - lastTime > 1_000L * cooldown)) {
             setMetadata(plugin, phantom, MK_EXPLODED, currTime);
 
             // Must be AFTER setMetadata() to prevent infinite cycles
@@ -80,8 +92,10 @@ public class RadicalPhantomListener implements Listener {
 
             // If not from onEntityDeath()
             if(!context.isEmpty()) {
-                phantom.addPotionEffect(
-                        new PotionEffect(PotionEffectType.GLOWING, seconds2ticks(EXPLOSION_INTERVAL), 0));
+                for(Map.Entry<PotionEffectType,Integer> entry : COOLDOWN_EFFECTS.entrySet()) {
+                    phantom.addPotionEffect(
+                            new PotionEffect(entry.getKey(), seconds2ticks(cooldown), entry.getValue()));
+                }
             }
 
             customLogger.info(String.format("%s%s exploded with power %.1f",
@@ -100,13 +114,15 @@ public class RadicalPhantomListener implements Listener {
         double power = ConfigReaderNumbers.getDouble(config, customLogger,
                 joinPaths(key, "power"), String.format("power of %s", title), 0.0D, 16.0D);
 
+        int cooldown = ConfigReaderNumbers.getInt(config, customLogger,
+                joinPaths(key, "cooldown"), String.format("cooldown of %s", title), 1, 300);
 
-        return new RadicalPhantomListener(plugin, customLogger, percentage, power);
+        return new RadicalPhantomListener(plugin, customLogger, percentage, power, cooldown);
     }
 
     @Override
     public String toString() {
-        return String.format("{percentage: %s, power: %s}",
-                formatDoubleValue(percentage), formatDoubleValue(power));
+        return String.format("{percentage: %s, power: %s, cooldown: %d}",
+                formatDoubleValue(percentage), formatDoubleValue(power), cooldown);
     }
 }

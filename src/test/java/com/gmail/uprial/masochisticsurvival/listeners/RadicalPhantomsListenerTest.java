@@ -18,10 +18,11 @@ public class RadicalPhantomsListenerTest extends TestConfigBase {
         RadicalPhantomListener listener = getFromConfig(null, getPreparedConfig(
                         "rp:",
                         "  percentage: 1.0",
-                        "  power: 3.0"),
+                        "  power: 3.0",
+                        "  cooldown: 5"),
                 getParanoiacCustomLogger(), "rp", "'rp'");
         assertNotNull(listener);
-        assertEquals("{percentage: 1, power: 3}",
+        assertEquals("{percentage: 1, power: 3, cooldown: 5}",
                 listener.toString());
     }
 
@@ -61,6 +62,18 @@ public class RadicalPhantomsListenerTest extends TestConfigBase {
                         "rp:",
                         " percentage: 1.0",
                         " power: v"),
+                getCustomLogger(), "rp", "'rp'");
+    }
+
+    @Test
+    public void testWrongCooldown() throws Exception {
+        e.expect(InvalidConfigException.class);
+        e.expectMessage("A cooldown of 'rp' is not an integer");
+        getFromConfig(null, getPreparedConfig(
+                        "rp:",
+                        " percentage: 1.0",
+                        " power: 3.0",
+                        " cooldown: v"),
                 getCustomLogger(), "rp", "'rp'");
     }
 }
