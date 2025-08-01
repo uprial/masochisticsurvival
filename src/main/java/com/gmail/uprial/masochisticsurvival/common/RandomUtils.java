@@ -14,6 +14,6 @@ public class RandomUtils {
     }
 
     public static boolean PASS(final double percentage) {
-        return (RANDOM.nextDouble() * MAX_PERCENT) < (percentage);
+        return (percentage >= MAX_PERCENT) || (RANDOM.nextDouble() * MAX_PERCENT) < (percentage);
     }
 }

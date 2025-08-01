@@ -2,16 +2,40 @@ package com.gmail.uprial.masochisticsurvival.listeners;
 
 import com.gmail.uprial.masochisticsurvival.config.InvalidConfigException;
 import com.gmail.uprial.masochisticsurvival.helpers.TestConfigBase;
+import org.bukkit.entity.Enemy;
+import org.bukkit.entity.EntityType;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import static com.gmail.uprial.masochisticsurvival.listeners.AngryShooterListener.TYPE_2_MODE;
 import static com.gmail.uprial.masochisticsurvival.listeners.AngryShooterListener.getFromConfig;
 import static org.junit.Assert.*;
 
 public class AngryShooterListenerTest extends TestConfigBase {
     @Rule
     public final ExpectedException e = ExpectedException.none();
+
+    @Test
+    public void testInterfaces() throws Exception {
+        for(final EntityType type : TYPE_2_MODE.keySet()) {
+            assertTrue(String.format("%s doesn't extend Enemy", type.getEntityClass()),
+                    getAllSuperInterfaces(type.getEntityClass()).contains(Enemy.class));
+        }
+    }
+
+    private Set<Class<?>> getAllSuperInterfaces(final Class<?> c) {
+        Set<Class<?>> interfaces = new HashSet<>();
+        for(Class<?> i : c.getInterfaces()) {
+            interfaces.add(i);
+            interfaces.addAll(getAllSuperInterfaces(i));
+        }
+
+        return interfaces;
+    }
 
     @Test
     public void testWhole() throws Exception {

@@ -6,7 +6,7 @@ import com.gmail.uprial.masochisticsurvival.common.CustomLogger;
 import com.gmail.uprial.masochisticsurvival.common.RandomUtils;
 import com.gmail.uprial.masochisticsurvival.config.ConfigReaderNumbers;
 import com.gmail.uprial.masochisticsurvival.config.InvalidConfigException;
-import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.ImmutableMap;
 import org.bukkit.FluidCollisionMode;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -40,21 +40,34 @@ public class AngryShooterListener implements Listener, TimeListener {
         the following mobs have a range attack.
 
         Additionally, Creeper exists to be annoying.
+
+        Make sure each entity extends the Enemy interface:
+        https://hub.spigotmc.org/javadocs/spigot/org/bukkit/entity/Enemy.html
      */
-    private final static Set<EntityType> ENTITY_TYPES = ImmutableSet.<EntityType>builder()
-            .add(EntityType.BLAZE)
-            .add(EntityType.BOGGED)
-            .add(EntityType.BREEZE)
-            .add(EntityType.CREEPER)
-            .add(EntityType.ELDER_GUARDIAN)
-            .add(EntityType.EVOKER)
-            .add(EntityType.GHAST)
-            .add(EntityType.GUARDIAN)
-            .add(EntityType.PILLAGER)
-            .add(EntityType.SHULKER)
-            .add(EntityType.SKELETON)
-            .add(EntityType.STRAY)
-            .add(EntityType.WITCH)
+    final static Map<EntityType,FluidCollisionMode> TYPE_2_MODE = ImmutableMap.<EntityType,FluidCollisionMode>builder()
+            // Water stops explosions
+            .put(EntityType.CREEPER, FluidCollisionMode.ALWAYS)
+            // Fireballs don't care about fluids
+            .put(EntityType.BLAZE, FluidCollisionMode.NEVER)
+            .put(EntityType.GHAST, FluidCollisionMode.NEVER)
+            // Water slows down the arrows
+            .put(EntityType.BOGGED, FluidCollisionMode.ALWAYS)
+            .put(EntityType.PILLAGER, FluidCollisionMode.ALWAYS)
+            .put(EntityType.SKELETON, FluidCollisionMode.ALWAYS)
+            .put(EntityType.STRAY, FluidCollisionMode.ALWAYS)
+            // Tridents are made for water
+            .put(EntityType.DROWNED, FluidCollisionMode.NEVER)
+            // Levitation status has no effect underwater
+            .put(EntityType.SHULKER, FluidCollisionMode.ALWAYS)
+            // Aquatic monsters
+            .put(EntityType.ELDER_GUARDIAN, FluidCollisionMode.NEVER)
+            .put(EntityType.GUARDIAN, FluidCollisionMode.NEVER)
+            // Tested that wind charges work good underwater
+            .put(EntityType.BREEZE, FluidCollisionMode.NEVER)
+            // Tested that Vexes don't swim deep
+            .put(EntityType.EVOKER, FluidCollisionMode.ALWAYS)
+            // Tested that water slows down the potions
+            .put(EntityType.WITCH, FluidCollisionMode.ALWAYS)
             .build();
 
     public AngryShooterListener(final MasochisticSurvival plugin,
@@ -89,6 +102,11 @@ public class AngryShooterListener implements Listener, TimeListener {
     }
 
     public void trigger() {
+        final long start = System.currentTimeMillis();
+        int processed = 0;
+        int appropriate = 0;
+        int total = 0;
+
         final Map<UUID, List<Player>> worldsPlayers = new HashMap<>();
         for(final Player player : plugin.getServer().getOnlinePlayers()) {
             if(AngerHelper.isValidPlayer(player)) {
@@ -97,22 +115,31 @@ public class AngryShooterListener implements Listener, TimeListener {
                         .add(player);
             }
         }
-        if(worldsPlayers.isEmpty()) {
-            return;
-        }
+        if (!worldsPlayers.isEmpty()) {
+            for (final World world : plugin.getServer().getWorlds()) {
+                if (worldsPlayers.containsKey(world.getUID())) {
+                    // Filtering not by Mob, to reduce the number of records
+                    for (final Enemy enemy : world.getEntitiesByClass(Enemy.class)) {
+                        if (TYPE_2_MODE.containsKey(enemy.getType())
+                                && enemy.isValid()) {
 
-        for(final World world : plugin.getServer().getWorlds()) {
-            if (worldsPlayers.containsKey(world.getUID())) {
-                for (final Mob mob : world.getEntitiesByClass(Mob.class)) {
-                    if (mob.isValid()
-                            && (RandomUtils.PASS(percentage))
-                            && ENTITY_TYPES.contains(mob.getType())) {
+                            if(RandomUtils.PASS(percentage)
+                                    && tryAngering((Mob)enemy, worldsPlayers.get(world.getUID()))) {
 
-                        tryAngering(mob,
-                                worldsPlayers.get(world.getUID()));
+                                processed++;
+                            }
+                            appropriate++;
+                        }
+                        total++;
                     }
                 }
             }
+        }
+
+        final long end = System.currentTimeMillis();
+        if(end - start >= 5) {
+            customLogger.warning(String.format("AngryShooter cron took %dms, angered %d/%d/%d enemies",
+                    end - start, processed, appropriate, total));
         }
     }
 
@@ -122,17 +149,20 @@ public class AngryShooterListener implements Listener, TimeListener {
         if (!event.isCancelled()
                 && (event.getEntity() instanceof Mob)
                 && (RandomUtils.PASS(percentage))
-                && ENTITY_TYPES.contains(event.getEntity().getType())) {
+                && TYPE_2_MODE.containsKey(event.getEntity().getType())) {
 
             tryAngering((Mob)event.getEntity(),
                     event.getEntity().getWorld().getEntitiesByClass(Player.class));
         }
     }
 
-    private void tryAngering(final Mob mob, final Collection<Player> players) {
+    private boolean tryAngering(final Mob mob, final Collection<Player> players) {
         final Player player = getClosestVisiblePlayer(mob, players);
 
-        if(player != null) {
+        if((player != null)
+                && ((mob.getTarget() == null)
+                || !mob.getTarget().getUniqueId().equals(player.getUniqueId()))) {
+
             TakeAimAdapter.setTarget(mob, player,
                     EntityTargetEvent.TargetReason.CLOSEST_PLAYER,
                     (final Mob _mob, final Player _player) -> {
@@ -140,12 +170,17 @@ public class AngryShooterListener implements Listener, TimeListener {
                             customLogger.debug(String.format("%s targeted at %s", format(mob), format(player)));
                         }
                     });
+
+            return true;
+        } else {
+            return false;
         }
     }
 
     private Player getClosestVisiblePlayer(final Mob mob, final Collection<Player> players) {
         return AngerHelper.getSmallestItem(players, (final Player player) -> {
-            if(AngerHelper.isValidPlayer(player) && isMonsterSeeingPlayer(mob, player)) {
+            // AngerHelper.isValidPlayer(player) is already checked in trigger()
+            if(isMonsterSeeingPlayer(mob, player)) {
                 return TakeAimAdapter.getAimPoint(player).distance(getLaunchPoint(mob));
             } else {
                 return null;
@@ -161,7 +196,7 @@ public class AngryShooterListener implements Listener, TimeListener {
                 && (null == AngerHelper.rayTraceBlocks(
                         getLaunchPoint(mob),
                         TakeAimAdapter.getAimPoint(player),
-                        FluidCollisionMode.ALWAYS));
+                        TYPE_2_MODE.get(mob.getType())));
     }
 
     public static AngryShooterListener getFromConfig(MasochisticSurvival plugin, FileConfiguration config, CustomLogger customLogger, String key, String title) throws InvalidConfigException {
