@@ -159,8 +159,7 @@ public class NastyEnderDragonListener implements Listener {
 
             final World world = event.getEntity().getWorld();
 
-            final Collection<EnderCrystal> crystals = world.getEntitiesByClass(EnderCrystal.class);
-            crystals.removeIf(crystal -> !crystal.isValid());
+            final Collection<EnderCrystal> crystals = EntitiesByClassHelper.get(world, EntityType.END_CRYSTAL);
 
             final Set<Location> bedrocksWithoutCrystals = new HashSet<>();
             for(final Location bedrock : BEDROCKS) {
@@ -215,10 +214,11 @@ public class NastyEnderDragonListener implements Listener {
                         //Wait for flying or gliding players on the ground!
                         //&& (!player.isFlying())
                         //&& (!player.isGliding())) {
-                    for (final Enderman enderman : world.getEntitiesByClass(Enderman.class)) {
-                        if (enderman.isValid()
+                    final Collection<Enderman> endermans = EntitiesByClassHelper.get(world, EntityType.ENDERMAN);
+                    for (final Enderman enderman : endermans) {
+                        if (
                                 // Any distance 100 >> X >> 0 works for a random pick
-                                && RandomUtils.PASS(10.0D)
+                                RandomUtils.PASS(10.0D)
                                 // Any distance << 200 works to avoid other islands
                                 && (enderman.getLocation().distance(player.getLocation()) < 100.D)) {
                             enderman.setTarget(player);

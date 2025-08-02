@@ -6,7 +6,7 @@
 * Sequentially decrease health to Hydra Spiders
 * Improved player reachability check for Angry Shooter across water
 * Added time spent warnings for future debug
-* Improved Angry Shooter performance
+* Improved Angry Shooter, Nasty Enderman, Nasty Ender Dragon performance
 # Bug fixes
 * Added missing mobs to Angry Shooter: Evokers, Guardians, Pillagers, Shulkers, Drowned
 * Fixed damage source tracking for Explosive Shooter
