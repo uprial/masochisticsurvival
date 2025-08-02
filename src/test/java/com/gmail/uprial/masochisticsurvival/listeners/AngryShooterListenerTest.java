@@ -4,6 +4,7 @@ import com.gmail.uprial.masochisticsurvival.config.InvalidConfigException;
 import com.gmail.uprial.masochisticsurvival.helpers.TestConfigBase;
 import org.bukkit.entity.Enemy;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Mob;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -24,6 +25,8 @@ public class AngryShooterListenerTest extends TestConfigBase {
         for(final EntityType type : TYPE_2_MODE.keySet()) {
             assertTrue(String.format("%s doesn't extend Enemy", type.getEntityClass()),
                     getAllSuperInterfaces(type.getEntityClass()).contains(Enemy.class));
+            assertTrue(String.format("%s doesn't extend Mob", type.getEntityClass()),
+                    getAllSuperInterfaces(type.getEntityClass()).contains(Mob.class));
         }
     }
 
