@@ -3,7 +3,6 @@ package com.gmail.uprial.masochisticsurvival.listeners;
 import com.gmail.uprial.masochisticsurvival.MasochisticSurvival;
 import com.gmail.uprial.masochisticsurvival.common.AngerHelper;
 import com.gmail.uprial.masochisticsurvival.common.CustomLogger;
-import com.gmail.uprial.masochisticsurvival.common.EntitiesByClassHelper;
 import com.gmail.uprial.masochisticsurvival.common.RandomUtils;
 import com.gmail.uprial.masochisticsurvival.config.ConfigReaderNumbers;
 import com.gmail.uprial.masochisticsurvival.config.InvalidConfigException;
@@ -21,7 +20,6 @@ import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import static com.gmail.uprial.masochisticsurvival.common.DoubleHelper.formatDoubleValue;
 import static com.gmail.uprial.masochisticsurvival.common.Formatter.format;
@@ -101,8 +99,10 @@ public class AngryShooterListener implements Listener, TimeListener {
 
     public void trigger() {
         final long start = System.currentTimeMillis();
-        final AtomicInteger processed = new AtomicInteger();
-        final AtomicInteger appropriate = new AtomicInteger();
+
+        int processed = 0;
+        int appropriate = 0;
+        int total = 0;
 
         final Map<UUID, List<Player>> worldsPlayers = new HashMap<>();
         for(final Player player : plugin.getServer().getOnlinePlayers()) {
@@ -115,22 +115,27 @@ public class AngryShooterListener implements Listener, TimeListener {
         if (!worldsPlayers.isEmpty()) {
             for (final World world : plugin.getServer().getWorlds()) {
                 if (worldsPlayers.containsKey(world.getUID())) {
-                    EntitiesByClassHelper.fetch(world, TYPE_2_MODE.keySet(), (Entity entity) -> {
-                        if(RandomUtils.PASS(percentage)
-                                && tryAngering((Mob)entity, worldsPlayers.get(world.getUID()))) {
+                    // Filtering not by Mob, to reduce the number of records
+                    for (final Enemy enemy : world.getEntitiesByClass(Enemy.class)) {
+                        if (TYPE_2_MODE.containsKey(enemy.getType())
+                                && enemy.isValid()) {
 
-                            processed.incrementAndGet();
+                            if(RandomUtils.PASS(percentage)
+                                    && tryAngering((Mob)enemy, worldsPlayers.get(world.getUID()))) {
+                                processed++;
+                            }
+                            appropriate++;
                         }
-                        appropriate.incrementAndGet();
-                    });
+                        total++;
+                    }
                 }
             }
         }
 
         final long end = System.currentTimeMillis();
         if(end - start >= 5) {
-            customLogger.warning(String.format("AngryShooter cron took %dms, angered %d/%d enemies",
-                    end - start, processed.get(), appropriate.get()));
+            customLogger.warning(String.format("AngryShooter cron took %dms, angered %d/%d/%d enemies",
+                    end - start, processed, appropriate, total));
         }
     }
 
@@ -142,7 +147,7 @@ public class AngryShooterListener implements Listener, TimeListener {
                 && (RandomUtils.PASS(percentage))
                 && TYPE_2_MODE.containsKey(event.getEntity().getType())) {
 
-            final Collection<Player> players = EntitiesByClassHelper.get(event.getEntity().getWorld(), EntityType.PLAYER);
+            final Collection<Player> players = event.getEntity().getWorld().getEntitiesByClass(Player.class);
             players.removeIf(player -> !AngerHelper.isValidPlayer(player));
             tryAngering((Mob)event.getEntity(), players);
         }

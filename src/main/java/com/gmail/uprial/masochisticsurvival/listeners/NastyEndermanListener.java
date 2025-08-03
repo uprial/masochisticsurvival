@@ -7,7 +7,6 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Enderman;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -31,7 +30,7 @@ public class NastyEndermanListener implements Listener {
     }
 
     private Player getStrongestPlayer(final World world) {
-        return AngerHelper.getSmallestItem(EntitiesByClassHelper.get(world, EntityType.PLAYER), (final Player player) -> {
+        return AngerHelper.getSmallestItem(world.getEntitiesByClass(Player.class), (final Player player) -> {
             if((EndermanUtils.isAppropriatePlayer(player))
                     && (!player.isFlying())
                     && (!player.isGliding())
