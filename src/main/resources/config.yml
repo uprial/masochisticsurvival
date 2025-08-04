@@ -34,6 +34,14 @@ angry-shooter:
   # <integer:0..300>
   # 0 to disable occasional checks
   try-angering-interval-in-s: 30
+  # <integer:1..3600_000>
+  #
+  # Show a warning when periodic player tracking takes more time than expected.
+  #
+  # When reporting to the plugin Author with details about
+  # the players online, other plugins, previous log records, etc.,
+  # you may request an improvement of the plugin for your server.
+  timeout-in-ms: 5
 
 # The Ender Dragon has <increased regen>, explosion <resistance> and <damage limit>,
 # <periodically resurrects> <resurrection-amount> healing crystals,

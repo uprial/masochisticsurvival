@@ -45,10 +45,13 @@ public class AngryShooterListenerTest extends TestConfigBase {
         AngryShooterListener listener = getFromConfig(null, getPreparedConfig(
                         "as:",
                         "  percentage: 100",
-                        "  try-angering-interval-in-s: 30"),
+                        "  try-angering-interval-in-s: 30",
+                        "  timeout-in-ms: 5"),
                 getParanoiacCustomLogger(), "as", "'as'");
         assertNotNull(listener);
-        assertEquals("{percentage: 100, try-angering-interval-in-s: 30}",
+        assertEquals("{percentage: 100, " +
+                        "try-angering-interval-in-s: 30, " +
+                        "timeout-in-ms: 5}",
                 listener.toString());
     }
 
@@ -100,4 +103,15 @@ public class AngryShooterListenerTest extends TestConfigBase {
                         "  try-angering-interval-in-s: -1"),
                 getCustomLogger(), "as", "'as'");
     }
-}
+
+    @Test
+    public void testWrongTimeoutInMS() throws Exception {
+        e.expect(InvalidConfigException.class);
+        e.expectMessage("A timeout in ms of 'as' should be at least 1");
+        getFromConfig(null, getPreparedConfig(
+                        "as:",
+                        "  percentage: 100",
+                        "  try-angering-interval-in-s: 30",
+                        "  timeout-in-ms: -1"),
+                getCustomLogger(), "as", "'as'");
+    }}

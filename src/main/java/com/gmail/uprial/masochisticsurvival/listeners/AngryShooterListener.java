@@ -28,6 +28,7 @@ import static com.gmail.uprial.masochisticsurvival.common.Utils.*;
 public class AngryShooterListener implements Listener, TimeListener {
     private final double percentage;
     private final int tryAngeringIntervalInS;
+    private final int timeoutInMs;
 
     private final MasochisticSurvival plugin;
     private final CustomLogger customLogger;
@@ -69,11 +70,13 @@ public class AngryShooterListener implements Listener, TimeListener {
     public AngryShooterListener(final MasochisticSurvival plugin,
                                 final CustomLogger customLogger,
                                 final double percentage,
-                                final int tryAngeringIntervalInS) {
+                                final int tryAngeringIntervalInS,
+                                final int timeoutInMs) {
         this.plugin = plugin;
         this.customLogger = customLogger;
         this.percentage = percentage;
         this.tryAngeringIntervalInS = tryAngeringIntervalInS;
+        this.timeoutInMs = timeoutInMs;
 
         task = new BukkitRunnable() {
             @Override
@@ -133,7 +136,7 @@ public class AngryShooterListener implements Listener, TimeListener {
         }
 
         final long end = System.currentTimeMillis();
-        if(end - start >= 5) {
+        if(end - start >= timeoutInMs) {
             customLogger.warning(String.format("AngryShooter cron took %dms, angered %d/%d/%d enemies",
                     end - start, processed, appropriate, total));
         }
@@ -211,8 +214,10 @@ public class AngryShooterListener implements Listener, TimeListener {
         int tryAngeringIntervalInS = ConfigReaderNumbers.getInt(config, customLogger,
                 joinPaths(key, "try-angering-interval-in-s"), String.format("try angering interval in s of %s", title), 0, 300);
 
+        int timeoutInMs = ConfigReaderNumbers.getInt(config, customLogger,
+                joinPaths(key, "timeout-in-ms"), String.format("timeout in ms of %s", title), 1, 3600_000);
 
-        return new AngryShooterListener(plugin, customLogger, percentage, tryAngeringIntervalInS);
+        return new AngryShooterListener(plugin, customLogger, percentage, tryAngeringIntervalInS, timeoutInMs);
     }
 
     private Location getLaunchPoint(final Mob mob) {
@@ -222,8 +227,10 @@ public class AngryShooterListener implements Listener, TimeListener {
     @Override
     public String toString() {
         return String.format("{percentage: %s, " +
-                        "try-angering-interval-in-s: %d}",
+                        "try-angering-interval-in-s: %d, " +
+                        "timeout-in-ms: %d}",
                 formatDoubleValue(percentage),
-                tryAngeringIntervalInS);
+                tryAngeringIntervalInS,
+                timeoutInMs);
     }
 }
