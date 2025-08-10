@@ -18,10 +18,11 @@ public class GreedyVillagerListenerTest extends TestConfigBase {
         GreedyVillagerListener listener = getFromConfig(getPreparedConfig(
                         "gv:",
                         "  replace-protection: true",
-                        "  overprice-mending: true"),
+                        "  overprice-mending: true",
+                        "  info-log-about-actions: true"),
                 getParanoiacCustomLogger(), "gv", "'gv'");
         assertNotNull(listener);
-        assertEquals("{replace-protection: true, overprice-mending: true}",
+        assertEquals("{replace-protection: true, overprice-mending: true, info-log-about-actions: true}",
                 listener.toString());
     }
 
@@ -62,6 +63,18 @@ public class GreedyVillagerListenerTest extends TestConfigBase {
                         "gv:",
                         " replace-protection: true",
                         " overprice-mending: v"),
+                getCustomLogger(), "gv", "'gv'");
+    }
+
+    @Test
+    public void testInfoLogAboutActions() throws Exception {
+        e.expect(InvalidConfigException.class);
+        e.expectMessage("Invalid 'info-log-about-actions' flag of 'gv'");
+        getFromConfig(getPreparedConfig(
+                        "gv:",
+                        " replace-protection: true",
+                        " overprice-mending: true",
+                        " info-log-about-actions: v"),
                 getCustomLogger(), "gv", "'gv'");
     }
 }

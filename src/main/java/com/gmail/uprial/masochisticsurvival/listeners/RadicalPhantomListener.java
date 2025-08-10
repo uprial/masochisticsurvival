@@ -4,6 +4,7 @@ import com.gmail.uprial.masochisticsurvival.MasochisticSurvival;
 import com.gmail.uprial.masochisticsurvival.common.CustomLogger;
 import com.gmail.uprial.masochisticsurvival.common.RandomUtils;
 import com.gmail.uprial.masochisticsurvival.config.ConfigReaderNumbers;
+import com.gmail.uprial.masochisticsurvival.config.ConfigReaderSimple;
 import com.gmail.uprial.masochisticsurvival.config.InvalidConfigException;
 import com.google.common.collect.ImmutableMap;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -30,17 +31,20 @@ public class RadicalPhantomListener implements Listener {
     private final double percentage;
     private final double power;
     private final int cooldown;
+    private final boolean infoLogAboutActions;
 
     public RadicalPhantomListener(final MasochisticSurvival plugin,
                                   final CustomLogger customLogger,
                                   final double percentage,
                                   final double power,
-                                  final int cooldown) {
+                                  final int cooldown,
+                                  final boolean infoLogAboutActions) {
         this.plugin = plugin;
         this.customLogger = customLogger;
         this.percentage = percentage;
         this.power = power;
         this.cooldown = cooldown;
+        this.infoLogAboutActions = infoLogAboutActions;
     }
 
     // WARNING: please keep the legacy prefix for backward compatibility
@@ -98,8 +102,14 @@ public class RadicalPhantomListener implements Listener {
                 }
             }
 
-            customLogger.info(String.format("%s%s exploded with power %.1f",
-                    format(phantom), context, power));
+            final String message = String.format("%s%s exploded with power %.1f",
+                    format(phantom), context, power);
+
+            if(infoLogAboutActions) {
+                customLogger.info(message);
+            } else {
+                customLogger.debug(message);
+            }
         }
     }
 
@@ -117,12 +127,15 @@ public class RadicalPhantomListener implements Listener {
         int cooldown = ConfigReaderNumbers.getInt(config, customLogger,
                 joinPaths(key, "cooldown"), String.format("cooldown of %s", title), 1, 300);
 
-        return new RadicalPhantomListener(plugin, customLogger, percentage, power, cooldown);
+        boolean infoLogAboutActions = ConfigReaderSimple.getBoolean(config, customLogger,
+                joinPaths(key, "info-log-about-actions"), String.format("'info-log-about-actions' flag of %s", title));
+
+        return new RadicalPhantomListener(plugin, customLogger, percentage, power, cooldown, infoLogAboutActions);
     }
 
     @Override
     public String toString() {
-        return String.format("{percentage: %s, power: %s, cooldown: %d}",
-                formatDoubleValue(percentage), formatDoubleValue(power), cooldown);
+        return String.format("{percentage: %s, power: %s, cooldown: %d, info-log-about-actions: %b}",
+                formatDoubleValue(percentage), formatDoubleValue(power), cooldown, infoLogAboutActions);
     }
 }

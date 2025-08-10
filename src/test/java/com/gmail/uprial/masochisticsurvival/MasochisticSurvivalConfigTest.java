@@ -77,7 +77,7 @@ public class MasochisticSurvivalConfigTest extends TestConfigBase {
     @Test
     public void testNormalConfig() throws Exception {
         assertEquals(
-                "{nasty-enderman={percentage: 0.1}, " +
+                "{nasty-enderman={percentage: 0.033, info-log-about-actions: true}, " +
                         "nasty-archer={positive-percentage: 0.3, negative-percentage: 1}, " +
                         "angry-shooter={percentage: 100, try-angering-interval-in-s: 30, timeout-in-ms: 5}, " +
                         "nasty-ender-dragon={world-name: world_the_end, " +
@@ -85,13 +85,14 @@ public class MasochisticSurvivalConfigTest extends TestConfigBase {
                         "explosion-damage-limit-per-s: 50, explosion-damage-reduction: 5, " +
                         "balls-interval-in-s: 3, regen-multiplier: 2}, " +
                         "explosive-shooter={percentage: 1, power: 2}, " +
-                        "greedy-villager={replace-protection: true, overprice-mending: true}, " +
+                        "greedy-villager={replace-protection: true, overprice-mending: true, info-log-about-actions: true}, " +
                         "limit-elytras={initial-height-excess: 10, height-per-freeze-second: 3}, " +
-                        "hydra-spiders={percentage: 5, amount: 3, scale: 0.7, speed: 1.3, health: 0.7}, " +
-                        "radical-phantoms={percentage: 33.3, power: 3, cooldown: 5}}",
+                        "hydra-spiders={percentage: 5, amount: 3, scale: 0.7, speed: 1.3, health: 0.7, info-log-about-actions: true}, " +
+                        "radical-phantoms={percentage: 33.3, power: 3, cooldown: 5, info-log-about-actions: true}}",
                 loadConfig(getCustomLogger(), "debug: false",
                         "nasty-enderman:",
-                        "  percentage: 0.1",
+                        "  percentage: 0.033",
+                        "  info-log-about-actions: true",
                         "nasty-archer:",
                         "  positive-percentage: 0.3",
                         "  negative-percentage: 1.0",
@@ -114,6 +115,7 @@ public class MasochisticSurvivalConfigTest extends TestConfigBase {
                         "greedy-villager:",
                         "  replace-protection: true",
                         "  overprice-mending: true",
+                        "  info-log-about-actions: true",
                         "limit-elytras:",
                         "  enabled: true",
                         "  initial-height-excess: 10",
@@ -124,9 +126,11 @@ public class MasochisticSurvivalConfigTest extends TestConfigBase {
                         "  scale: 0.7",
                         "  speed: 1.3",
                         "  health: 0.7",
+                        "  info-log-about-actions: true",
                         "radical-phantoms:",
                         "  percentage: 33.3",
                         "  power: 3.0",
-                        "  cooldown: 5").toString());
+                        "  cooldown: 5",
+                        "  info-log-about-actions: true").toString());
     }
 }

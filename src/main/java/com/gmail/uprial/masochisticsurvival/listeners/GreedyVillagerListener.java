@@ -26,13 +26,16 @@ public class GreedyVillagerListener implements Listener {
     private final CustomLogger customLogger;
     private final boolean replaceProtection;
     private final boolean overpriceMending;
+    private final boolean infoLogAboutActions;
 
     public GreedyVillagerListener(final CustomLogger customLogger,
                                   final boolean replaceProtection,
-                                  final boolean overpriceMending) {
+                                  final boolean overpriceMending,
+                                  final boolean infoLogAboutActions) {
         this.customLogger = customLogger;
         this.replaceProtection = replaceProtection;
         this.overpriceMending = overpriceMending;
+        this.infoLogAboutActions = infoLogAboutActions;
     }
 
     @EventHandler(priority = EventPriority.NORMAL)
@@ -146,10 +149,16 @@ public class GreedyVillagerListener implements Listener {
             result.addUnsafeEnchantment(newEnchantment, newLevel);
         }
 
-        customLogger.info(String.format("Updating %s recipes for %s: changing %s-%d to %s-%d...",
+        final String message = String.format("Updating %s recipes for %s: changing %s-%d to %s-%d...",
                 format(villager), result.getType(),
                 oldEnchantment.getName(), oldLevel,
-                newEnchantment.getName(), newLevel));
+                newEnchantment.getName(), newLevel);
+
+        if(infoLogAboutActions) {
+            customLogger.info(message);
+        } else {
+            customLogger.debug(message);
+        }
 
         return true;
     }
@@ -216,8 +225,14 @@ public class GreedyVillagerListener implements Listener {
         final int smAmount = SECONDARY_MARKUPS.get(smMaterial);
         ingredients.add(new ItemStack(smMaterial, smAmount));
 
-        customLogger.info(String.format("Updating %s ingredients for %s to %s x %d and %s x %d...",
-                format(villager), enchantment.getName(), pmMaterial, pmAmount, smMaterial, smAmount));
+        final String message = String.format("Updating %s ingredients for %s to %s x %d and %s x %d...",
+                format(villager), enchantment.getName(), pmMaterial, pmAmount, smMaterial, smAmount);
+
+        if(infoLogAboutActions) {
+            customLogger.info(message);
+        } else {
+            customLogger.debug(message);
+        }
 
         return true;
     }
@@ -232,12 +247,15 @@ public class GreedyVillagerListener implements Listener {
             return null;
         }
 
-        return new GreedyVillagerListener(customLogger, replaceProtection, replaceMending);
+        boolean infoLogAboutActions = ConfigReaderSimple.getBoolean(config, customLogger,
+                joinPaths(key, "info-log-about-actions"), String.format("'info-log-about-actions' flag of %s", title));
+
+        return new GreedyVillagerListener(customLogger, replaceProtection, replaceMending, infoLogAboutActions);
     }
 
     @Override
     public String toString() {
-        return String.format("{replace-protection: %b, overprice-mending: %b}",
-                replaceProtection, overpriceMending);
+        return String.format("{replace-protection: %b, overprice-mending: %b, info-log-about-actions: %b}",
+                replaceProtection, overpriceMending, infoLogAboutActions);
     }
 }

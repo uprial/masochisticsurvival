@@ -19,10 +19,11 @@ public class RadicalPhantomsListenerTest extends TestConfigBase {
                         "rp:",
                         "  percentage: 1.0",
                         "  power: 3.0",
-                        "  cooldown: 5"),
+                        "  cooldown: 5",
+                        "  info-log-about-actions: true"),
                 getParanoiacCustomLogger(), "rp", "'rp'");
         assertNotNull(listener);
-        assertEquals("{percentage: 1, power: 3, cooldown: 5}",
+        assertEquals("{percentage: 1, power: 3, cooldown: 5, info-log-about-actions: true}",
                 listener.toString());
     }
 
@@ -74,6 +75,19 @@ public class RadicalPhantomsListenerTest extends TestConfigBase {
                         " percentage: 1.0",
                         " power: 3.0",
                         " cooldown: v"),
+                getCustomLogger(), "rp", "'rp'");
+    }
+
+    @Test
+    public void testInfoLogAboutActions() throws Exception {
+        e.expect(InvalidConfigException.class);
+        e.expectMessage("Invalid 'info-log-about-actions' flag of 'rp'");
+        getFromConfig(null, getPreparedConfig(
+                        "rp:",
+                        " percentage: 1.0",
+                        " power: 3.0",
+                        " cooldown: 5",
+                        " info-log-about-actions: v"),
                 getCustomLogger(), "rp", "'rp'");
     }
 }

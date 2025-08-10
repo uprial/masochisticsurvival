@@ -17,10 +17,11 @@ public class NastyEndermanListenerTest extends TestConfigBase {
     public void testWhole() throws Exception {
         NastyEndermanListener listener = getFromConfig(getPreparedConfig(
                         "ne:",
-                        "  percentage: 0.1"),
+                        "  percentage: 0.033",
+                        "  info-log-about-actions: true"),
                 getParanoiacCustomLogger(), "ne", "'ne'");
         assertNotNull(listener);
-        assertEquals("{percentage: 0.1}",
+        assertEquals("{percentage: 0.033, info-log-about-actions: true}",
                 listener.toString());
     }
 
@@ -49,6 +50,17 @@ public class NastyEndermanListenerTest extends TestConfigBase {
         getFromConfig(getPreparedConfig(
                         "ne:",
                         " percentage: v"),
+                getCustomLogger(), "ne", "'ne'");
+    }
+
+    @Test
+    public void testInfoLogAboutActions() throws Exception {
+        e.expect(InvalidConfigException.class);
+        e.expectMessage("Invalid 'info-log-about-actions' flag of 'ne'");
+        getFromConfig(getPreparedConfig(
+                        "ne:",
+                        " percentage: 0.033",
+                        " info-log-about-actions: v"),
                 getCustomLogger(), "ne", "'ne'");
     }
 }

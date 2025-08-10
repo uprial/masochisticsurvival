@@ -21,10 +21,11 @@ public class HydraSpiderListenerTest extends TestConfigBase {
                         "  amount: 3",
                         "  scale: 0.7",
                         "  speed: 1.3",
-                        "  health: 0.7"),
+                        "  health: 0.7",
+                        "  info-log-about-actions: true"),
                 getParanoiacCustomLogger(), "es", "'es'");
         assertNotNull(listener);
-        assertEquals("{percentage: 5, amount: 3, scale: 0.7, speed: 1.3, health: 0.7}",
+        assertEquals("{percentage: 5, amount: 3, scale: 0.7, speed: 1.3, health: 0.7, info-log-about-actions: true}",
                 listener.toString());
     }
 
@@ -103,6 +104,21 @@ public class HydraSpiderListenerTest extends TestConfigBase {
                         " scale: 0.7",
                         " speed: 1.3",
                         " health: v"),
+                getCustomLogger(), "hs", "'hs'");
+    }
+
+    @Test
+    public void testInfoLogAboutActions() throws Exception {
+        e.expect(InvalidConfigException.class);
+        e.expectMessage("Invalid 'info-log-about-actions' flag of 'hs'");
+        getFromConfig(getPreparedConfig(
+                        "hs:",
+                        " percentage: 5.0",
+                        " amount: 3",
+                        " scale: 0.7",
+                        " speed: 1.3",
+                        " health: 0.7",
+                        " info-log-about-actions: v"),
                 getCustomLogger(), "hs", "'hs'");
     }
 }

@@ -18,6 +18,8 @@ nasty-enderman:
   # The value was set based on feedback from a server with 14 active players,
   # up to 11 online, with both hardcore and casual profiles.
   percentage: 0.033
+  # <boolean>
+  info-log-about-actions: true
 
 # Arrow archers have a chance to add both <positive> and <negative> effects to their arrows
 nasty-archer:
@@ -80,6 +82,8 @@ greedy-villager:
   # <boolean>
   overprice-mending: true
   # Disabling all flags above, you'll disable the whole section
+  # <boolean>
+  info-log-about-actions: true
 
 # Players flying too high are frozen
 limit-elytras:
@@ -105,6 +109,8 @@ hydra-spiders:
   speed: 1.3
   # <float:0..2>
   health: 0.7
+  # <boolean>
+  info-log-about-actions: true
 
 # A <percentage> of Phantoms explode with <power> and <cooldown> when give damage, take damage, or die
 radical-phantoms:
@@ -114,3 +120,5 @@ radical-phantoms:
   power: 3.0
   # <integer:1..300>
   cooldown: 5
+  # <boolean>
+  info-log-about-actions: true

@@ -2,6 +2,7 @@ package com.gmail.uprial.masochisticsurvival.listeners;
 
 import com.gmail.uprial.masochisticsurvival.common.*;
 import com.gmail.uprial.masochisticsurvival.config.ConfigReaderNumbers;
+import com.gmail.uprial.masochisticsurvival.config.ConfigReaderSimple;
 import com.gmail.uprial.masochisticsurvival.config.InvalidConfigException;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -20,13 +21,16 @@ import static com.gmail.uprial.masochisticsurvival.common.Utils.joinPaths;
 
 public class NastyEndermanListener implements Listener {
     private final double percentage;
+    private final boolean infoLogAboutActions;
 
     private final CustomLogger customLogger;
 
     private NastyEndermanListener(final CustomLogger customLogger,
-                                  final double percentage) {
+                                  final double percentage,
+                                  final boolean infoLogAboutActions) {
         this.customLogger = customLogger;
         this.percentage = percentage;
+        this.infoLogAboutActions = infoLogAboutActions;
     }
 
     private Player getStrongestPlayer(final World world) {
@@ -75,8 +79,14 @@ public class NastyEndermanListener implements Listener {
                 enderman.teleport(player.getLocation());
                 enderman.setTarget(player);
 
-                customLogger.info(String.format("%s targeted at %s with %.2f health",
-                        format(enderman), format(player), player.getHealth()));
+                final String message = String.format("%s targeted at %s with %.2f health",
+                        format(enderman), format(player), player.getHealth());
+
+                if(infoLogAboutActions) {
+                    customLogger.info(message);
+                } else {
+                    customLogger.debug(message);
+                }
             }
         }
     }
@@ -89,11 +99,15 @@ public class NastyEndermanListener implements Listener {
             return null;
         }
 
-        return new NastyEndermanListener(customLogger, percentage);
+        boolean infoLogAboutActions = ConfigReaderSimple.getBoolean(config, customLogger,
+                joinPaths(key, "info-log-about-actions"), String.format("'info-log-about-actions' flag of %s", title));
+
+        return new NastyEndermanListener(customLogger, percentage, infoLogAboutActions);
     }
 
     @Override
     public String toString() {
-        return String.format("{percentage: %s}", formatDoubleValue(percentage));
+        return String.format("{percentage: %s, info-log-about-actions: %b}",
+                formatDoubleValue(percentage), infoLogAboutActions);
     }
 }

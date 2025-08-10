@@ -3,6 +3,7 @@ package com.gmail.uprial.masochisticsurvival.listeners;
 import com.gmail.uprial.masochisticsurvival.common.CustomLogger;
 import com.gmail.uprial.masochisticsurvival.common.RandomUtils;
 import com.gmail.uprial.masochisticsurvival.config.ConfigReaderNumbers;
+import com.gmail.uprial.masochisticsurvival.config.ConfigReaderSimple;
 import com.gmail.uprial.masochisticsurvival.config.InvalidConfigException;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -23,19 +24,22 @@ public class HydraSpiderListener implements Listener {
     private final double scale;
     private final double speed;
     private final double health;
+    private final boolean infoLogAboutActions;
 
     public HydraSpiderListener(final CustomLogger customLogger,
                                final double percentage,
                                final int amount,
                                final double scale,
                                final double speed,
-                               final double health) {
+                               final double health,
+                               final boolean infoLogAboutActions) {
         this.customLogger = customLogger;
         this.percentage = percentage;
         this.amount = amount;
         this.scale = scale;
         this.speed = speed;
         this.health = health;
+        this.infoLogAboutActions = infoLogAboutActions;
     }
 
     @SuppressWarnings({"unused"})
@@ -89,8 +93,14 @@ public class HydraSpiderListener implements Listener {
                 hydra.setTarget(target);
             }
 
-            customLogger.info(String.format("%s multiplied %d times with %.2f scale, %.2f speed, %.2f health and %s target",
-                    format(spider), amount, newScale, newSpeed, newHealth, format(target)));
+            final String message = String.format("%s multiplied %d times with %.2f scale, %.2f speed, %.2f health and %s target",
+                    format(spider), amount, newScale, newSpeed, newHealth, format(target));
+
+            if(infoLogAboutActions) {
+                customLogger.info(message);
+            } else {
+                customLogger.debug(message);
+            }
         }
     }
 
@@ -116,14 +126,19 @@ public class HydraSpiderListener implements Listener {
         double health = ConfigReaderNumbers.getDouble(config, customLogger,
                 joinPaths(key, "health"), String.format("health of %s", title), 0.0D, 2.0D);
 
-        return new HydraSpiderListener(customLogger, percentage, amount, scale, speed, health);
+        boolean infoLogAboutActions = ConfigReaderSimple.getBoolean(config, customLogger,
+                joinPaths(key, "info-log-about-actions"), String.format("'info-log-about-actions' flag of %s", title));
+
+        return new HydraSpiderListener(customLogger, percentage, amount, scale, speed, health, infoLogAboutActions);
     }
 
     @Override
     public String toString() {
         return String.format("{percentage: %s, amount: %d, " +
-                        "scale: %s, speed: %s, health: %s}",
+                        "scale: %s, speed: %s, health: %s, " +
+                        "info-log-about-actions: %b}",
                 formatDoubleValue(percentage), amount,
-                formatDoubleValue(scale), formatDoubleValue(speed), formatDoubleValue(health));
+                formatDoubleValue(scale), formatDoubleValue(speed), formatDoubleValue(health),
+                infoLogAboutActions);
     }
 }
