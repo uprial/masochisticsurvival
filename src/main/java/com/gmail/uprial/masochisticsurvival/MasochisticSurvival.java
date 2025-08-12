@@ -37,7 +37,7 @@ public final class MasochisticSurvival extends JavaPlugin {
     }
 
     private void register(final MasochisticSurvivalConfig masochisticSurvivalConfig) {
-        getServer().getPluginManager().registerEvents(new TakeAimAdapter(), this);
+        getServer().getPluginManager().registerEvents(new TakeAimAdapter(this), this);
         for(final Listener listener : masochisticSurvivalConfig.getListeners()) {
             if(listener != null) {
                 getServer().getPluginManager().registerEvents(listener, this);

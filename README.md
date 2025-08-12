@@ -12,7 +12,7 @@ The most essential aspects are configurable.
 
 ## Features
 
-* Synergies perfectly with [TakeAim](https://github.com/uprial/takeaim) and [CustomCreatures](https://github.com/uprial/customcreatures) plugins
+* Synergies perfectly with [CustomCreatures](https://github.com/uprial/customcreatures), and [TakeAim](https://github.com/uprial/takeaim) is a soft-dependency
 * Nasty Enderman: a percentage of Endermans attack players immediately on spawn and ignore carved pumpkins
 * Nasty Archer: arrow archers have a chance to add both positive and negative effects to their arrows
 * Angry Shooter: shooting mobs target the closest visible player immediately when spawned, and then occasionally
