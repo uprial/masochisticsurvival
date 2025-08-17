@@ -79,7 +79,7 @@ public class RadicalPhantomsListenerTest extends TestConfigBase {
     }
 
     @Test
-    public void testInfoLogAboutActions() throws Exception {
+    public void testWrongInfoLogAboutActions() throws Exception {
         e.expect(InvalidConfigException.class);
         e.expectMessage("Invalid 'info-log-about-actions' flag of 'rp'");
         getFromConfig(null, getPreparedConfig(

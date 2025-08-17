@@ -108,7 +108,7 @@ public class HydraSpiderListenerTest extends TestConfigBase {
     }
 
     @Test
-    public void testInfoLogAboutActions() throws Exception {
+    public void testWrongInfoLogAboutActions() throws Exception {
         e.expect(InvalidConfigException.class);
         e.expectMessage("Invalid 'info-log-about-actions' flag of 'hs'");
         getFromConfig(getPreparedConfig(

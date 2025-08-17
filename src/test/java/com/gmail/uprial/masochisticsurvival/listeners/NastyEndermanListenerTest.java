@@ -18,10 +18,17 @@ public class NastyEndermanListenerTest extends TestConfigBase {
         NastyEndermanListener listener = getFromConfig(getPreparedConfig(
                         "ne:",
                         "  percentage: 0.033",
-                        "  info-log-about-actions: true"),
+                        "  info-log-about-actions: true",
+                        "  baby-world-name: world_the_end",
+                        "  baby-distance-to-center: 3_000",
+                        "  baby-percentage: 33.3"),
                 getParanoiacCustomLogger(), "ne", "'ne'");
         assertNotNull(listener);
-        assertEquals("{percentage: 0.033, info-log-about-actions: true}",
+        assertEquals("{percentage: 0.033, " +
+                        "info-log-about-actions: true, " +
+                        "baby-world-name: world_the_end, " +
+                        "baby-distance-to-center: 3,000, " +
+                        "baby-percentage: 33.3}",
                 listener.toString());
     }
 
@@ -54,13 +61,51 @@ public class NastyEndermanListenerTest extends TestConfigBase {
     }
 
     @Test
-    public void testInfoLogAboutActions() throws Exception {
+    public void testWrongInfoLogAboutActions() throws Exception {
         e.expect(InvalidConfigException.class);
         e.expectMessage("Invalid 'info-log-about-actions' flag of 'ne'");
         getFromConfig(getPreparedConfig(
                         "ne:",
                         " percentage: 0.033",
                         " info-log-about-actions: v"),
+                getCustomLogger(), "ne", "'ne'");
+    }
+
+    @Test
+    public void testWrongBabyWorldName() throws Exception {
+        e.expect(InvalidConfigException.class);
+        e.expectMessage("Null baby world name of 'ne'");
+        getFromConfig(getPreparedConfig(
+                        "ne:",
+                        " percentage: 0.033",
+                        " info-log-about-actions: true"),
+                getCustomLogger(), "ne", "'ne'");
+    }
+
+    @Test
+    public void testWrongBabyDistanceToCenter() throws Exception {
+        e.expect(InvalidConfigException.class);
+        e.expectMessage("A baby distance to center of 'ne' is not an integer");
+        getFromConfig(getPreparedConfig(
+                        "ne:",
+                        " percentage: 0.033",
+                        " info-log-about-actions: true",
+                        " baby-world-name: world_the_end",
+                        " baby-distance-to-center: v"),
+                getCustomLogger(), "ne", "'ne'");
+    }
+
+    @Test
+    public void testWrongBabyPercentage() throws Exception {
+        e.expect(InvalidConfigException.class);
+        e.expectMessage("A baby percentage of 'ne' is not a double");
+        getFromConfig(getPreparedConfig(
+                        "ne:",
+                        " percentage: 0.033",
+                        " info-log-about-actions: true",
+                        " baby-world-name: world_the_end",
+                        " baby-distance-to-center: 3_000",
+                        " baby-percentage: v"),
                 getCustomLogger(), "ne", "'ne'");
     }
 }

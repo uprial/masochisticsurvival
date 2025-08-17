@@ -77,7 +77,8 @@ public class MasochisticSurvivalConfigTest extends TestConfigBase {
     @Test
     public void testNormalConfig() throws Exception {
         assertEquals(
-                "{nasty-enderman={percentage: 0.033, info-log-about-actions: true}, " +
+                "{nasty-enderman={percentage: 0.033, info-log-about-actions: true, " +
+                        "baby-world-name: world_the_end, baby-distance-to-center: 3,000, baby-percentage: 33.3}, " +
                         "nasty-archer={positive-percentage: 0.3, negative-percentage: 1}, " +
                         "angry-shooter={percentage: 100, try-angering-interval-in-s: 30, timeout-in-ms: 5}, " +
                         "nasty-ender-dragon={world-name: world_the_end, " +
@@ -93,6 +94,9 @@ public class MasochisticSurvivalConfigTest extends TestConfigBase {
                         "nasty-enderman:",
                         "  percentage: 0.033",
                         "  info-log-about-actions: true",
+                        "  baby-world-name: world_the_end",
+                        "  baby-distance-to-center: 3_000",
+                        "  baby-percentage: 33.3",
                         "nasty-archer:",
                         "  positive-percentage: 0.3",
                         "  negative-percentage: 1.0",

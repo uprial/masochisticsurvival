@@ -211,7 +211,7 @@ public class NastyEnderDragonListener implements Listener {
                 launch((EnderDragon)event.getEntity(), player);
 
                 // Target a random enderman to the player
-                if (EndermanUtils.isAppropriatePlayer(player)) {
+                if (EndermanUtils.isAppropriatePlayer(player, false)) {
                         //Wait for flying or gliding players on the ground!
                         //&& (!player.isFlying())
                         //&& (!player.isGliding())) {

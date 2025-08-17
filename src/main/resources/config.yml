@@ -20,6 +20,12 @@ nasty-enderman:
   percentage: 0.033
   # <boolean>
   info-log-about-actions: true
+  # <string>
+  baby-world-name: world_the_end
+  # <integer:0..1_000_000>
+  baby-distance-to-center: 3_000
+  # <float:0..100>
+  baby-percentage: 33.3
 
 # Arrow archers have a chance to add both <positive> and <negative> effects to their arrows
 nasty-archer:

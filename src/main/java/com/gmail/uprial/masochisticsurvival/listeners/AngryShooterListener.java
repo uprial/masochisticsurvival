@@ -150,7 +150,7 @@ public class AngryShooterListener implements Listener, TimeListener {
                 && (RandomUtils.PASS(percentage))
                 && TYPE_2_MODE.containsKey(event.getEntity().getType())) {
 
-            final Collection<Player> players = event.getEntity().getWorld().getEntitiesByClass(Player.class);
+            final Collection<Player> players = event.getEntity().getWorld().getPlayers();
             players.removeIf(player -> !AngerHelper.isValidPlayer(player));
             tryAngering((Mob)event.getEntity(), players);
         }

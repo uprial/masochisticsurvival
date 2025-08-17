@@ -67,7 +67,7 @@ public class GreedyVillagerListenerTest extends TestConfigBase {
     }
 
     @Test
-    public void testInfoLogAboutActions() throws Exception {
+    public void testWrongInfoLogAboutActions() throws Exception {
         e.expect(InvalidConfigException.class);
         e.expectMessage("Invalid 'info-log-about-actions' flag of 'gv'");
         getFromConfig(getPreparedConfig(
