@@ -15,6 +15,6 @@ public class EndermanUtils {
 
     public static void setBaby(final Enderman enderman) {
         final AttributeInstance a = enderman.getAttribute(Attribute.SCALE);
-        a.setBaseValue(a.getBaseValue() * 0.65);
+        a.setBaseValue(a.getBaseValue() * 0.6D);
     }
 }

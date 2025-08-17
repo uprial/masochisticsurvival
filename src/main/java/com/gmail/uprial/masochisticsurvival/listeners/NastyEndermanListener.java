@@ -105,7 +105,7 @@ public class NastyEndermanListener implements Listener {
                 enderman.setTarget(player);
 
                 final String message = String.format("%s%s targeted at %s with %.2f health",
-                        baby ? "(baby)" : "",
+                        baby ? "BABY-" : "",
                         format(enderman), format(player), player.getHealth());
 
                 if(infoLogAboutActions) {
