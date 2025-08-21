@@ -192,17 +192,19 @@ public class AngryShooterListener implements Listener, TimeListener {
         });
     }
 
-    // According to https://minecraft.wiki/w/Player
-    private static final Double MAX_PLAYER_HEALTH = 20.0D;
     private Double getMobTargetScore(final Mob mob, final Player player) {
         final Double distance = TakeAimAdapter.getAimPoint(player).distance(getLaunchPoint(mob));
-        final Double health = Math.min(MAX_PLAYER_HEALTH, player.getHealth());
+        final Double health = player.getHealth();
 
         return getScore(distance, health);
     }
 
     static Double getScore(final Double distance, final Double health) {
-        // Inside 50 block distance, considered player health.
+        /*
+            According to https://minecraft.wiki/w/Player,
+            default max player health is 20.0,
+            which affects the distance weight at most for 50.0.
+         */
         return 1.0D * distance + 2.5D * health;
     }
 
