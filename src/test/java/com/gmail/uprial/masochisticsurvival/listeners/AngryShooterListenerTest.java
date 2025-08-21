@@ -12,8 +12,7 @@ import org.junit.rules.ExpectedException;
 import java.util.HashSet;
 import java.util.Set;
 
-import static com.gmail.uprial.masochisticsurvival.listeners.AngryShooterListener.TYPE_2_MODE;
-import static com.gmail.uprial.masochisticsurvival.listeners.AngryShooterListener.getFromConfig;
+import static com.gmail.uprial.masochisticsurvival.listeners.AngryShooterListener.*;
 import static org.junit.Assert.*;
 
 public class AngryShooterListenerTest extends TestConfigBase {
@@ -114,4 +113,17 @@ public class AngryShooterListenerTest extends TestConfigBase {
                         "  try-angering-interval-in-s: 30",
                         "  timeout-in-ms: -1"),
                 getCustomLogger(), "as", "'as'");
-    }}
+    }
+
+    @Test
+    public void testDistanceVsHealthScore() throws Exception {
+        assertTrue(getScore(10.0D, 20.0D)
+                > getScore(20.0D, 10.0D));
+
+        assertTrue(getScore(10.0D, 20.0D)
+                > getScore(50.0D, 0.1D));
+
+        assertFalse(getScore(10.0D, 20.0D)
+                > getScore(70.0D, 0.1D));
+    }
+}

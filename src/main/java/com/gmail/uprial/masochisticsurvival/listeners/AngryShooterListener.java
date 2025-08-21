@@ -157,7 +157,7 @@ public class AngryShooterListener implements Listener, TimeListener {
     }
 
     private boolean tryAngering(final Mob mob, final Collection<Player> players) {
-        final Player player = getClosestVisiblePlayer(mob, players);
+        final Player player = getMostVulnerableVisiblePlayer(mob, players);
 
         if((player != null)
                 && ((mob.getTarget() == null)
@@ -177,7 +177,7 @@ public class AngryShooterListener implements Listener, TimeListener {
         }
     }
 
-    private Player getClosestVisiblePlayer(final Mob mob, final Collection<Player> players) {
+    private Player getMostVulnerableVisiblePlayer(final Mob mob, final Collection<Player> players) {
         return AngerHelper.getSmallestItem(players, (final Player player) -> {
             /*
                 AngerHelper.isValidPlayer(player)
@@ -185,11 +185,25 @@ public class AngryShooterListener implements Listener, TimeListener {
                 and onCreatureSpawn()
              */
             if(isMonsterSeeingPlayer(mob, player)) {
-                return TakeAimAdapter.getAimPoint(player).distance(getLaunchPoint(mob));
+                return getMobTargetScore(mob, player);
             } else {
                 return null;
             }
         });
+    }
+
+    // According to https://minecraft.wiki/w/Player
+    private static final Double MAX_PLAYER_HEALTH = 20.0D;
+    private Double getMobTargetScore(final Mob mob, final Player player) {
+        final Double distance = TakeAimAdapter.getAimPoint(player).distance(getLaunchPoint(mob));
+        final Double health = Math.min(MAX_PLAYER_HEALTH, player.getHealth());
+
+        return getScore(distance, health);
+    }
+
+    static Double getScore(final Double distance, final Double health) {
+        // Inside 50 block distance, considered player health.
+        return 1.0D * distance + 2.5D * health;
     }
 
     private boolean isMonsterSeeingPlayer(final Mob mob, final Player player) {
