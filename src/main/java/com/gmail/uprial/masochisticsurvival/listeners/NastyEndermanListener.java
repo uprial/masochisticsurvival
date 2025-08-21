@@ -15,6 +15,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.regex.Pattern;
+
 import static com.gmail.uprial.masochisticsurvival.common.DoubleHelper.formatDoubleValue;
 import static com.gmail.uprial.masochisticsurvival.common.Formatter.format;
 import static com.gmail.uprial.masochisticsurvival.common.Utils.joinPaths;
@@ -22,7 +24,7 @@ import static com.gmail.uprial.masochisticsurvival.common.Utils.joinPaths;
 public class NastyEndermanListener implements Listener {
     private final double percentage;
     private final boolean infoLogAboutActions;
-    private final String babyWorldName;
+    private final String babyWorldPattern;
     private final int babyDistanceToCenter;
     private final double babyPercentage;
 
@@ -31,13 +33,13 @@ public class NastyEndermanListener implements Listener {
     private NastyEndermanListener(final CustomLogger customLogger,
                                   final double percentage,
                                   final boolean infoLogAboutActions,
-                                  final String babyWorldName,
+                                  final String babyWorldPattern,
                                   final int babyDistanceToCenter,
                                   final double babyPercentage) {
         this.customLogger = customLogger;
         this.percentage = percentage;
         this.infoLogAboutActions = infoLogAboutActions;
-        this.babyWorldName = babyWorldName;
+        this.babyWorldPattern = babyWorldPattern;
         this.babyDistanceToCenter = babyDistanceToCenter;
         this.babyPercentage = babyPercentage;
     }
@@ -66,7 +68,7 @@ public class NastyEndermanListener implements Listener {
             Player player = getStrongestPlayer(world, false);
             if((player == null)
                     && (RandomUtils.PASS(babyPercentage))
-                    && (world.getName().equals(babyWorldName))
+                    && (patternMatches(babyWorldPattern, world.getName()))
                     && (event.getEntity().getLocation().length() > babyDistanceToCenter)) {
 
                 player = getStrongestPlayer(world, true);
@@ -117,6 +119,10 @@ public class NastyEndermanListener implements Listener {
         }
     }
 
+    static boolean patternMatches(final String pattern, final String name) {
+        return Pattern.matches(pattern, name);
+    }
+
     public static NastyEndermanListener getFromConfig(FileConfiguration config, CustomLogger customLogger, String key, String title) throws InvalidConfigException {
         double percentage = ConfigReaderNumbers.getDouble(config, customLogger,
                 joinPaths(key, "percentage"), String.format("percentage of %s", title), 0.0D, RandomUtils.MAX_PERCENT);
@@ -128,8 +134,8 @@ public class NastyEndermanListener implements Listener {
         boolean infoLogAboutActions = ConfigReaderSimple.getBoolean(config, customLogger,
                 joinPaths(key, "info-log-about-actions"), String.format("'info-log-about-actions' flag of %s", title));
 
-        String babyWorldName = ConfigReaderSimple.getString(config,
-                joinPaths(key, "baby-world-name"), String.format("baby world name of %s", title));
+        String babyWorldPattern = ConfigReaderSimple.getString(config,
+                joinPaths(key, "baby-world-pattern"), String.format("baby world pattern of %s", title));
         int babyDistanceToCenter = ConfigReaderNumbers.getInt(config, customLogger,
                 joinPaths(key, "baby-distance-to-center"), String.format("baby distance to center of %s", title), 0, 1_000_000);
         double babyPercentage = ConfigReaderNumbers.getDouble(config, customLogger,
@@ -138,7 +144,7 @@ public class NastyEndermanListener implements Listener {
         return new NastyEndermanListener(customLogger,
                 percentage,
                 infoLogAboutActions,
-                babyWorldName,
+                babyWorldPattern,
                 babyDistanceToCenter,
                 babyPercentage);
     }
@@ -147,12 +153,12 @@ public class NastyEndermanListener implements Listener {
     public String toString() {
         return String.format("{percentage: %s, " +
                         "info-log-about-actions: %b, " +
-                        "baby-world-name: %s, " +
+                        "baby-world-pattern: %s, " +
                         "baby-distance-to-center: %,d, " +
                         "baby-percentage: %s}",
                 formatDoubleValue(percentage),
                 infoLogAboutActions,
-                babyWorldName,
+                babyWorldPattern,
                 babyDistanceToCenter,
                 formatDoubleValue(babyPercentage));
     }

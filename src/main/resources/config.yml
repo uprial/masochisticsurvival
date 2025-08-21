@@ -21,7 +21,7 @@ nasty-enderman:
   # <boolean>
   info-log-about-actions: true
   # <string>
-  baby-world-name: world_the_end
+  baby-world-pattern: "world.*"
   # <integer:0..1_000_000>
   baby-distance-to-center: 3_000
   # <float:0..100>

@@ -7,6 +7,7 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import static com.gmail.uprial.masochisticsurvival.listeners.NastyEndermanListener.getFromConfig;
+import static com.gmail.uprial.masochisticsurvival.listeners.NastyEndermanListener.patternMatches;
 import static org.junit.Assert.*;
 
 public class NastyEndermanListenerTest extends TestConfigBase {
@@ -19,14 +20,14 @@ public class NastyEndermanListenerTest extends TestConfigBase {
                         "ne:",
                         "  percentage: 0.033",
                         "  info-log-about-actions: true",
-                        "  baby-world-name: world_the_end",
+                        "  baby-world-pattern: world.*",
                         "  baby-distance-to-center: 3_000",
                         "  baby-percentage: 33.3"),
                 getParanoiacCustomLogger(), "ne", "'ne'");
         assertNotNull(listener);
         assertEquals("{percentage: 0.033, " +
                         "info-log-about-actions: true, " +
-                        "baby-world-name: world_the_end, " +
+                        "baby-world-pattern: world.*, " +
                         "baby-distance-to-center: 3,000, " +
                         "baby-percentage: 33.3}",
                 listener.toString());
@@ -72,9 +73,9 @@ public class NastyEndermanListenerTest extends TestConfigBase {
     }
 
     @Test
-    public void testWrongBabyWorldName() throws Exception {
+    public void testWrongBabyWorldPattern() throws Exception {
         e.expect(InvalidConfigException.class);
-        e.expectMessage("Null baby world name of 'ne'");
+        e.expectMessage("Null baby world pattern of 'ne'");
         getFromConfig(getPreparedConfig(
                         "ne:",
                         " percentage: 0.033",
@@ -90,7 +91,7 @@ public class NastyEndermanListenerTest extends TestConfigBase {
                         "ne:",
                         " percentage: 0.033",
                         " info-log-about-actions: true",
-                        " baby-world-name: world_the_end",
+                        " baby-world-pattern: world.*",
                         " baby-distance-to-center: v"),
                 getCustomLogger(), "ne", "'ne'");
     }
@@ -103,9 +104,19 @@ public class NastyEndermanListenerTest extends TestConfigBase {
                         "ne:",
                         " percentage: 0.033",
                         " info-log-about-actions: true",
-                        " baby-world-name: world_the_end",
+                        " baby-world-pattern: world.*",
                         " baby-distance-to-center: 3_000",
                         " baby-percentage: v"),
                 getCustomLogger(), "ne", "'ne'");
+    }
+
+    @Test
+    public void testWorldPattern() throws Exception {
+        assertTrue(patternMatches("world.*", "world"));
+        assertTrue(patternMatches("world.*", "world_nether"));
+        assertTrue(patternMatches("world.*", "world_nether"));
+
+        assertFalse(patternMatches("world.*", "not_world"));
+        assertFalse(patternMatches("world.*", "woorld"));
     }
 }
