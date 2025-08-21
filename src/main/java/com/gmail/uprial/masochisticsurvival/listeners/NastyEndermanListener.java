@@ -5,6 +5,7 @@ import com.gmail.uprial.masochisticsurvival.config.ConfigReaderNumbers;
 import com.gmail.uprial.masochisticsurvival.config.ConfigReaderSimple;
 import com.gmail.uprial.masochisticsurvival.config.InvalidConfigException;
 import org.bukkit.Material;
+import org.bukkit.Statistic;
 import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Enderman;
@@ -50,12 +51,30 @@ public class NastyEndermanListener implements Listener {
                     && (!player.isFlying())
                     && (!player.isGliding())
                     && (AngerHelper.isValidPlayer(player))) {
-                return -player.getHealth();
+                return getTargetScore(player);
             } else {
                 return null;
             }
         });
     }
+
+    private Double getTargetScore(final Player player) {
+        // Stored in percentages, 500_000 actually means 5_000 full units.
+        final Double damage = 0.01D * player.getStatistic(Statistic.DAMAGE_DEALT);
+        final Double health = player.getHealth();
+
+        return getScore(damage, health);
+    }
+
+    static Double getScore(final Double damage, final Double health) {
+        /*
+            According to https://minecraft.wiki/w/Player,
+            default max player health is 20.0,
+            which affects the distance damage at most for 5_000.0D * 20.0 = 100_000.0.
+         */
+        return - 1.0D * damage - 5_000.0D * health;
+    }
+
 
     @EventHandler(priority = EventPriority.NORMAL)
     public void onCreatureSpawn(CreatureSpawnEvent event) {

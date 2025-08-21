@@ -6,8 +6,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import static com.gmail.uprial.masochisticsurvival.listeners.NastyEndermanListener.getFromConfig;
-import static com.gmail.uprial.masochisticsurvival.listeners.NastyEndermanListener.patternMatches;
+import static com.gmail.uprial.masochisticsurvival.listeners.NastyEndermanListener.*;
 import static org.junit.Assert.*;
 
 public class NastyEndermanListenerTest extends TestConfigBase {
@@ -118,5 +117,17 @@ public class NastyEndermanListenerTest extends TestConfigBase {
 
         assertFalse(patternMatches("world.*", "not_world"));
         assertFalse(patternMatches("world.*", "woorld"));
+    }
+
+    @Test
+    public void testDamageVsHealthScore() throws Exception {
+        assertTrue(getScore(40_000.0D, 10.0D)
+                > getScore(20_000.0D, 20.0D));
+
+        assertTrue(getScore(110_000.0D, 0.1D)
+                > getScore(20_000.0D, 20.0D));
+
+        assertFalse(getScore(130_000.0D, 0.1D)
+                > getScore(20_000.0D, 20.0D));
     }
 }

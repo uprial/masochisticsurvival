@@ -203,7 +203,7 @@ public class AngryShooterListener implements Listener, TimeListener {
         /*
             According to https://minecraft.wiki/w/Player,
             default max player health is 20.0,
-            which affects the distance weight at most for 50.0.
+            which affects the distance weight at most for 2.5D * 20.0 = 50.0.
          */
         return 1.0D * distance + 2.5D * health;
     }
