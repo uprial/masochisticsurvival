@@ -13,7 +13,7 @@ The most essential aspects are configurable.
 ## Features
 
 * Synergies perfectly with [CustomCreatures](https://github.com/uprial/customcreatures), and softly depend on [TakeAim](https://github.com/uprial/takeaim)
-* Nasty Enderman: a percentage of Endermans attack players immediately on spawn and ignore carved pumpkins
+* Nasty Enderman: an increased percentage of Endermans attack players immediately on spawn and ignore carved pumpkins
 * Nasty Archer: arrow archers have a chance to add both positive and negative effects to their arrows
 * Angry Shooter: shooting mobs target the closest visible player immediately when spawned, and then occasionally
 * Nasty Ender Dragon: the Ender Dragon has increased regen, explosion resistance and damage limit, periodically resurrects healing crystals, and targets fireballs and random endermans to aggressive players
