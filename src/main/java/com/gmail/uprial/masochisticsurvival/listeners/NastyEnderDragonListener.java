@@ -219,8 +219,8 @@ public class NastyEnderDragonListener implements Listener {
                         if (enderman.isValid()
                                 // Any distance 100 >> X >> 0 works for a random pick
                                 && RandomUtils.PASS(10.0D)
-                                // Any distance << 200 works to avoid other islands
-                                && (enderman.getLocation().distance(player.getLocation()) < 100.D)) {
+                                // Don't anger entities that are not simulated by the player
+                                && AngerHelper.isSimulated(enderman, player)) {
                             enderman.setTarget(player);
                             if (customLogger.isDebugMode()) {
                                 customLogger.debug(String.format("Targeted %s at %s",

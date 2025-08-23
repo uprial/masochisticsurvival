@@ -45,12 +45,13 @@ public class NastyEndermanListener implements Listener {
         this.babyPercentage = babyPercentage;
     }
 
-    private Player getStrongestPlayer(final World world, final boolean baby) {
+    private Player getStrongestPlayer(final World world, final Enderman enderman, final boolean baby) {
         return AngerHelper.getSmallestItem(world.getPlayers(), (final Player player) -> {
             if((EndermanUtils.isAppropriatePlayer(player, baby))
                     && (!player.isFlying())
                     && (!player.isGliding())
-                    && (AngerHelper.isValidPlayer(player))) {
+                    && (AngerHelper.isValidPlayer(player))
+                    && (AngerHelper.isSimulated(enderman, player))) {
                 return getTargetScore(player);
             } else {
                 return null;
@@ -82,22 +83,23 @@ public class NastyEndermanListener implements Listener {
                 && (event.getEntity() instanceof Enderman)
                 && (RandomUtils.PASS(percentage))) {
 
-            final World world = event.getEntity().getWorld();
+            final Enderman enderman = (Enderman) event.getEntity();
+
+            final World world = enderman.getWorld();
             boolean baby = false;
-            Player player = getStrongestPlayer(world, false);
+            Player player = getStrongestPlayer(world, enderman, false);
             if((player == null)
                     && (RandomUtils.PASS(babyPercentage))
                     && (patternMatches(babyWorldPattern, world.getName()))
-                    && (event.getEntity().getLocation().length() > babyDistanceToCenter)) {
+                    && (enderman.getLocation().length() > babyDistanceToCenter)) {
 
-                player = getStrongestPlayer(world, true);
+                player = getStrongestPlayer(world, enderman, true);
                 if(player != null) {
                     baby = true;
                 }
             }
 
             if(player != null) {
-                final Enderman enderman = (Enderman) event.getEntity();
 
                 if(baby) {
                     EndermanUtils.setBaby(enderman);
