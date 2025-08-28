@@ -65,8 +65,8 @@ public class AngerHelper {
         According to https://minecraft.wiki/w/Server.properties,
         max view-distance and simulation-distance are both 32 chunks.
      */
-    public static boolean isSimulated(final Entity entity, final Player player) {
-        final Chunk entityChunk = entity.getLocation().getChunk();
+    public static boolean isSimulated(final Location location, final Player player) {
+        final Chunk entityChunk = location.getChunk();
         final Chunk playerChunk = player.getLocation().getChunk();
         final int simulationDistance = player.getWorld().getSimulationDistance();
 

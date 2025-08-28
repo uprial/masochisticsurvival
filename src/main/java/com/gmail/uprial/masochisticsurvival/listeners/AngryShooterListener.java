@@ -211,7 +211,7 @@ public class AngryShooterListener implements Listener, TimeListener {
     private boolean isMonsterSeeingPlayer(final Mob mob, final Player player) {
         return
                 // Don't anger entities that are not simulated by the player
-                (AngerHelper.isSimulated(mob, player))
+                (AngerHelper.isSimulated(mob.getLocation(), player))
                 // Check for direct vision
                 && (null == AngerHelper.rayTraceBlocks(
                         getLaunchPoint(mob),

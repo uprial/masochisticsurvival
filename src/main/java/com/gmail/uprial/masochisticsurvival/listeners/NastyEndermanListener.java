@@ -51,7 +51,7 @@ public class NastyEndermanListener implements Listener {
                     && (!player.isFlying())
                     && (!player.isGliding())
                     && (AngerHelper.isValidPlayer(player))
-                    && (AngerHelper.isSimulated(enderman, player))) {
+                    && (AngerHelper.isSimulated(enderman.getLocation(), player))) {
                 return getTargetScore(player);
             } else {
                 return null;
