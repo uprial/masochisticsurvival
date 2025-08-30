@@ -18,10 +18,11 @@ public class ExplosiveShooterListenerTest extends TestConfigBase {
         ExplosiveShooterListener listener = getFromConfig(null, getPreparedConfig(
                         "es:",
                         "  percentage: 1.0",
-                        "  power: 2.0"),
+                        "  power: 2.0",
+                        "  percentage-d2cm: 2_000"),
                 getParanoiacCustomLogger(), "es", "'es'");
         assertNotNull(listener);
-        assertEquals("{percentage: 1, power: 2}",
+        assertEquals("{percentage: 1, power: 2, percentage-d2cm: 2,000}",
                 listener.toString());
     }
 
@@ -61,6 +62,18 @@ public class ExplosiveShooterListenerTest extends TestConfigBase {
                         "es:",
                         " percentage: 1.0",
                         " power: v"),
+                getCustomLogger(), "es", "'es'");
+    }
+
+    @Test
+    public void testWrongPercentageD2CM() throws Exception {
+        e.expect(InvalidConfigException.class);
+        e.expectMessage("A percentage d2cm of 'es' is not an integer");
+        getFromConfig(null, getPreparedConfig(
+                        "es:",
+                        " percentage: 1.0",
+                        " power: 2.0",
+                        " percentage-d2cm: v"),
                 getCustomLogger(), "es", "'es'");
     }
 }

@@ -78,14 +78,15 @@ public class MasochisticSurvivalConfigTest extends TestConfigBase {
     public void testNormalConfig() throws Exception {
         assertEquals(
                 "{nasty-enderman={percentage: 0.033, info-log-about-actions: true, " +
-                        "baby-world-pattern: world.*, baby-distance-to-center: 3,000, baby-percentage: 33.3}, " +
-                        "nasty-archer={positive-percentage: 0.3, negative-percentage: 1}, " +
+                        "baby-world-pattern: world.*, baby-min-d2c: 3,000, " +
+                        "baby-percentage: 33.3, percentage-d2cm: 2,000}, " +
+                        "nasty-archer={positive-percentage: 0.3, negative-percentage: 1, negative-percentage-d2cm: 2,000}, " +
                         "angry-shooter={percentage: 100, try-angering-interval-in-s: 30, timeout-in-ms: 5}, " +
                         "nasty-ender-dragon={world-name: world_the_end, " +
                         "resurrection-interval-in-s: 30, resurrection-amount: 2, " +
                         "explosion-damage-limit-per-s: 50, explosion-damage-reduction: 5, " +
                         "balls-interval-in-s: 3, regen-multiplier: 2}, " +
-                        "explosive-shooter={percentage: 1, power: 2}, " +
+                        "explosive-shooter={percentage: 1, power: 2, percentage-d2cm: 2,000}, " +
                         "greedy-villager={replace-protection: true, overprice-mending: true, info-log-about-actions: true}, " +
                         "limit-elytras={initial-height-excess: 10, height-per-freeze-second: 3}, " +
                         "hydra-spiders={percentage: 5, amount: 3, scale: 0.7, speed: 1.3, health: 0.7, info-log-about-actions: true}, " +
@@ -95,11 +96,13 @@ public class MasochisticSurvivalConfigTest extends TestConfigBase {
                         "  percentage: 0.033",
                         "  info-log-about-actions: true",
                         "  baby-world-pattern: world.*",
-                        "  baby-distance-to-center: 3_000",
+                        "  baby-min-d2c: 3_000",
                         "  baby-percentage: 33.3",
+                        "  percentage-d2cm: 2_000",
                         "nasty-archer:",
                         "  positive-percentage: 0.3",
                         "  negative-percentage: 1.0",
+                        "  negative-percentage-d2cm: 2_000",
                         "angry-shooter:",
                         "  percentage: 100",
                         "  try-angering-interval-in-s: 30",
@@ -116,6 +119,7 @@ public class MasochisticSurvivalConfigTest extends TestConfigBase {
                         "explosive-shooter:",
                         "  percentage: 1.0",
                         "  power: 2.0",
+                        "  percentage-d2cm: 2_000",
                         "greedy-villager:",
                         "  replace-protection: true",
                         "  overprice-mending: true",

@@ -12,18 +12,24 @@
 #
 debug: false
 
+# Legend:
+# 'd2c' is 'distance-to-center'
+# 'd2cm' is 'distance-to-center-miltiplier'
+
 # A <percentage> of Endermans attack players immediately on spawn and ignore carved pumpkins
 nasty-enderman:
   # <float:0..100>
   # The value was set based on feedback from a server with 14 active players,
   # up to 11 online, with both hardcore and casual profiles.
   percentage: 0.033
+  # <integer:1..1_000_000>
+  percentage-d2cm: 2_000
   # <boolean>
   info-log-about-actions: true
   # <string>
   baby-world-pattern: "world.*"
   # <integer:0..1_000_000>
-  baby-distance-to-center: 3_000
+  baby-min-d2c: 3_000
   # <float:0..100>
   baby-percentage: 33.3
 
@@ -33,6 +39,8 @@ nasty-archer:
   positive-percentage: 0.3
   # <float:0..100>
   negative-percentage: 1.0
+  # <integer:1..1_000_000>
+  negative-percentage-d2cm: 2_000
 
 # Shooting mobs target the closest visible player immediately when spawned, and then occasionally
 angry-shooter:
@@ -49,7 +57,7 @@ angry-shooter:
   # When reporting to the plugin Author with details about
   # the players online, other plugins, previous log records, etc.,
   # you may request an improvement of the plugin for your server.
-  timeout-in-ms: 5
+  timeout-in-ms: 10
 
 # The Ender Dragon has <increased regen>, explosion <resistance> and <damage limit>,
 # <periodically resurrects> <resurrection-amount> healing crystals,
@@ -80,6 +88,8 @@ explosive-shooter:
   percentage: 1.0
   # <float:0..16>
   power: 2.0
+  # <integer:1..1_000_000>
+  percentage-d2cm: 2_000
 
 # Villagers don't sell imbalanced clothes with <environmental protection> and overprice imbalanced <mending>
 greedy-villager:

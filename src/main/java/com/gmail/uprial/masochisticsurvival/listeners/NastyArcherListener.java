@@ -2,6 +2,7 @@ package com.gmail.uprial.masochisticsurvival.listeners;
 
 import com.gmail.uprial.masochisticsurvival.MasochisticSurvival;
 import com.gmail.uprial.masochisticsurvival.common.CustomLogger;
+import com.gmail.uprial.masochisticsurvival.common.D2C;
 import com.gmail.uprial.masochisticsurvival.common.RandomUtils;
 import com.gmail.uprial.masochisticsurvival.config.ConfigReaderNumbers;
 import com.gmail.uprial.masochisticsurvival.config.InvalidConfigException;
@@ -31,15 +32,18 @@ public class NastyArcherListener implements Listener {
     private final CustomLogger customLogger;
     private final double positivePercentage;
     private final double negativePercentage;
+    private final int negativePercentageD2CM;
 
     public NastyArcherListener(final MasochisticSurvival plugin,
                                final CustomLogger customLogger,
                                final double positivePercentage,
-                               final double negativePercentage) {
+                               final double negativePercentage,
+                               final int negativePercentageD2CM) {
         this.plugin = plugin;
         this.customLogger = customLogger;
         this.positivePercentage = positivePercentage;
         this.negativePercentage = negativePercentage;
+        this.negativePercentageD2CM = negativePercentageD2CM;
     }
 
     // WARNING: please keep the legacy prefix for backward compatibility
@@ -140,7 +144,7 @@ public class NastyArcherListener implements Listener {
                     // Called once per entity life: empty lists are also cached in metadata
                     final Set<PotionEffect> newPotionEffects = new HashSet<>();
                     for (Map.Entry<PotionEffectType, E> entry : effectMap.entrySet()) {
-                        if (RandomUtils.PASS(getPercentage(entry.getValue().isPositive()))) {
+                        if (RandomUtils.PASS(getPercentage(entity, entry.getValue().isPositive()))) {
                             newPotionEffects.add(
                                     new PotionEffect(entry.getKey(),
                                             seconds2ticks(entry.getValue().getDuration()),
@@ -163,11 +167,11 @@ public class NastyArcherListener implements Listener {
         }
     }
 
-    private double getPercentage(final boolean positive) {
+    private double getPercentage(final LivingEntity entity, final boolean positive) {
         if(positive) {
             return positivePercentage;
         } else {
-            return negativePercentage;
+            return negativePercentage + D2C.get(entity) / negativePercentageD2CM;
         }
     }
 
@@ -181,12 +185,22 @@ public class NastyArcherListener implements Listener {
             return null;
         }
 
-        return new NastyArcherListener(plugin, customLogger, positivePercentage, negativePercentage);
+        int negativePercentageD2CM = ConfigReaderNumbers.getInt(config, customLogger,
+                joinPaths(key, "negative-percentage-d2cm"), String.format("negative percentage d2cm of %s", title), 1, 1_000_000);
+
+        return new NastyArcherListener(plugin, customLogger,
+                positivePercentage,
+                negativePercentage,
+                negativePercentageD2CM);
     }
 
     @Override
     public String toString() {
-        return String.format("{positive-percentage: %s, negative-percentage: %s}",
-                formatDoubleValue(positivePercentage), formatDoubleValue(negativePercentage));
+        return String.format("{positive-percentage: %s, " +
+                        "negative-percentage: %s, " +
+                        "negative-percentage-d2cm: %,d}",
+                formatDoubleValue(positivePercentage),
+                formatDoubleValue(negativePercentage),
+                negativePercentageD2CM);
     }
 }

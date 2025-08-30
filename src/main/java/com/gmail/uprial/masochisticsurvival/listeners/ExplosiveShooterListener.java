@@ -2,6 +2,7 @@ package com.gmail.uprial.masochisticsurvival.listeners;
 
 import com.gmail.uprial.masochisticsurvival.MasochisticSurvival;
 import com.gmail.uprial.masochisticsurvival.common.CustomLogger;
+import com.gmail.uprial.masochisticsurvival.common.D2C;
 import com.gmail.uprial.masochisticsurvival.common.RandomUtils;
 import com.gmail.uprial.masochisticsurvival.config.ConfigReaderNumbers;
 import com.gmail.uprial.masochisticsurvival.config.InvalidConfigException;
@@ -23,15 +24,18 @@ public class ExplosiveShooterListener implements Listener {
     private final CustomLogger customLogger;
     private final double percentage;
     private final double power;
+    private final int percentageD2CM;
 
     public ExplosiveShooterListener(final MasochisticSurvival plugin,
                                     final CustomLogger customLogger,
                                     final double percentage,
-                                    final double power) {
+                                    final double power,
+                                    final int percentageD2CM) {
         this.plugin = plugin;
         this.customLogger = customLogger;
         this.percentage = percentage;
         this.power = power;
+        this.percentageD2CM = percentageD2CM;
     }
 
     // WARNING: please keep the legacy prefix for backward compatibility
@@ -52,7 +56,7 @@ public class ExplosiveShooterListener implements Listener {
                 final Boolean explosion = getMetadataOrDefault(plugin, entity, MK_EXPLOSION, ()  -> {
                     // Called once per entity life: empty lists are also cached in metadata
                     final boolean newExplosion;
-                    if(RandomUtils.PASS(percentage)) {
+                    if(RandomUtils.PASS(getPercentage(entity))) {
                         newExplosion = true;
                         if (customLogger.isDebugMode()) {
                             customLogger.debug(String.format("%s of %s got explosion with power %.1f",
@@ -73,6 +77,10 @@ public class ExplosiveShooterListener implements Listener {
         }
     }
 
+    private double getPercentage(final LivingEntity entity) {
+        return percentage + D2C.get(entity) / percentageD2CM;
+    }
+
     private double distance(final Entity entity1, final Entity entity2) {
         return entity1.getLocation().distance(entity2.getLocation());
     }
@@ -88,13 +96,18 @@ public class ExplosiveShooterListener implements Listener {
         double power = ConfigReaderNumbers.getDouble(config, customLogger,
                 joinPaths(key, "power"), String.format("power of %s", title), 0.0D, 16.0D);
 
+        int percentageD2CM = ConfigReaderNumbers.getInt(config, customLogger,
+                joinPaths(key, "percentage-d2cm"), String.format("percentage d2cm of %s", title), 1, 1_000_000);
 
-        return new ExplosiveShooterListener(plugin, customLogger, percentage, power);
+        return new ExplosiveShooterListener(plugin, customLogger,
+                percentage,
+                power,
+                percentageD2CM);
     }
 
     @Override
     public String toString() {
-        return String.format("{percentage: %s, power: %s}",
-                formatDoubleValue(percentage), formatDoubleValue(power));
+        return String.format("{percentage: %s, power: %s, percentage-d2cm: %,d}",
+                formatDoubleValue(percentage), formatDoubleValue(power), percentageD2CM);
     }
 }

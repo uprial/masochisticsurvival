@@ -18,10 +18,13 @@ public class NastyArcherListenerTest extends TestConfigBase {
         NastyArcherListener listener = getFromConfig(null, getPreparedConfig(
                         "na:",
                         "  positive-percentage: 0.3",
-                        "  negative-percentage: 1.0"),
+                        "  negative-percentage: 1.0",
+                        "  negative-percentage-d2cm: 2_000"),
                 getParanoiacCustomLogger(), "na", "'na'");
         assertNotNull(listener);
-        assertEquals("{positive-percentage: 0.3, negative-percentage: 1}",
+        assertEquals("{positive-percentage: 0.3, " +
+                        "negative-percentage: 1, " +
+                        "negative-percentage-d2cm: 2,000}",
                 listener.toString());
     }
 
@@ -64,4 +67,15 @@ public class NastyArcherListenerTest extends TestConfigBase {
                         " negative-percentage: v"),
                 getCustomLogger(), "na", "'na'");
     }
-}
+
+    @Test
+    public void testWrongNegativePercentageD2CM() throws Exception {
+        e.expect(InvalidConfigException.class);
+        e.expectMessage("A negative percentage d2cm of 'na' is not an integer");
+        getFromConfig(null, getPreparedConfig(
+                        "na:",
+                        " positive-percentage: 1",
+                        " negative-percentage: 1.0",
+                        " negative-percentage-d2cm: v"),
+                getCustomLogger(), "na", "'na'");
+    }}

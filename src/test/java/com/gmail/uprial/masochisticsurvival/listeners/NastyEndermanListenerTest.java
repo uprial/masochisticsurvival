@@ -20,15 +20,17 @@ public class NastyEndermanListenerTest extends TestConfigBase {
                         "  percentage: 0.033",
                         "  info-log-about-actions: true",
                         "  baby-world-pattern: world.*",
-                        "  baby-distance-to-center: 3_000",
-                        "  baby-percentage: 33.3"),
+                        "  baby-min-d2c: 3_000",
+                        "  baby-percentage: 33.3",
+                        "  percentage-d2cm: 2_000"),
                 getParanoiacCustomLogger(), "ne", "'ne'");
         assertNotNull(listener);
         assertEquals("{percentage: 0.033, " +
                         "info-log-about-actions: true, " +
                         "baby-world-pattern: world.*, " +
-                        "baby-distance-to-center: 3,000, " +
-                        "baby-percentage: 33.3}",
+                        "baby-min-d2c: 3,000, " +
+                        "baby-percentage: 33.3, " +
+                        "percentage-d2cm: 2,000}",
                 listener.toString());
     }
 
@@ -83,15 +85,15 @@ public class NastyEndermanListenerTest extends TestConfigBase {
     }
 
     @Test
-    public void testWrongBabyDistanceToCenter() throws Exception {
+    public void testWrongBabyD2C() throws Exception {
         e.expect(InvalidConfigException.class);
-        e.expectMessage("A baby distance to center of 'ne' is not an integer");
+        e.expectMessage("A baby min d2c of 'ne' is not an integer");
         getFromConfig(getPreparedConfig(
                         "ne:",
                         " percentage: 0.033",
                         " info-log-about-actions: true",
                         " baby-world-pattern: world.*",
-                        " baby-distance-to-center: v"),
+                        " baby-min-d2c: v"),
                 getCustomLogger(), "ne", "'ne'");
     }
 
@@ -104,11 +106,25 @@ public class NastyEndermanListenerTest extends TestConfigBase {
                         " percentage: 0.033",
                         " info-log-about-actions: true",
                         " baby-world-pattern: world.*",
-                        " baby-distance-to-center: 3_000",
+                        " baby-min-d2c: 3_000",
                         " baby-percentage: v"),
                 getCustomLogger(), "ne", "'ne'");
     }
 
+    @Test
+    public void testWrongPercentageD2CM() throws Exception {
+        e.expect(InvalidConfigException.class);
+        e.expectMessage("A percentage d2cm of 'ne' is not an integer");
+        getFromConfig(getPreparedConfig(
+                        "ne:",
+                        " percentage: 0.033",
+                        " info-log-about-actions: true",
+                        " baby-world-pattern: world.*",
+                        " baby-min-d2c: 3_000",
+                        " baby-percentage: 33.3",
+                        " percentage-d2cm: v"),
+                getCustomLogger(), "ne", "'ne'");
+    }
     @Test
     public void testWorldPattern() throws Exception {
         assertTrue(patternMatches("world.*", "world"));
