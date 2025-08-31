@@ -1,2 +1,2 @@
 # New features
-* Nasty Enderman, Nasty Archer, and Explosive Shooter are more frequent further from the center
+* Nasty Enderman, Nasty Archer, and Explosive Shooter are tougher the further a target player is from the center

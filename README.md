@@ -22,6 +22,7 @@ The most essential aspects are configurable.
 * Limit Elytras: players flying too high are frozen
 * Hydra Spiders: a percentage of Spiders multiply on death into smaller and faster
 * Radical Phantoms: a percentage of Phantoms explode when give damage, take damage, or die
+* Nasty Enderman, Nasty Archer, and Explosive Shooter are tougher the further a target player is from the center
 
 ![A Minecraft picture: an enderman holds a pumpkin, a skeleton fires an enchanted arrow into a sad player, an ender dragon laughs, a villager doesn't trade, a spider duplicates, a phantom explides, all mobs are smart](images/masochistic-survival-promo.png)
 
