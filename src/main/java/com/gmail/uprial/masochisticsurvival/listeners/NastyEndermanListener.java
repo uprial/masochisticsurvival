@@ -145,7 +145,7 @@ public class NastyEndermanListener implements Listener {
     }
 
     private double getPercentage(final LivingEntity entity) {
-        return percentage + D2C.get(entity) / percentageD2CM;
+        return percentage * (1.0D + D2C.get(entity) / percentageD2CM);
     }
 
     static boolean patternMatches(final String pattern, final String name) {

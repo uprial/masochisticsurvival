@@ -78,7 +78,7 @@ public class ExplosiveShooterListener implements Listener {
     }
 
     private double getPercentage(final LivingEntity entity) {
-        return percentage + D2C.get(entity) / percentageD2CM;
+        return percentage * (1.0D + D2C.get(entity) / percentageD2CM);
     }
 
     private double distance(final Entity entity1, final Entity entity2) {

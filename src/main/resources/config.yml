@@ -14,7 +14,7 @@ debug: false
 
 # Legend:
 # 'd2c' is 'distance-to-center'
-# 'd2cm' is 'distance-to-center-miltiplier'
+# 'd2cm' is 'distance-to-center-multiplier'
 
 # A <percentage> of Endermans attack players immediately on spawn and ignore carved pumpkins
 nasty-enderman:

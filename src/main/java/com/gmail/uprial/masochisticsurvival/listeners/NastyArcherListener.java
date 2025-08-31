@@ -171,7 +171,7 @@ public class NastyArcherListener implements Listener {
         if(positive) {
             return positivePercentage;
         } else {
-            return negativePercentage + D2C.get(entity) / negativePercentageD2CM;
+            return negativePercentage * (1.0D + D2C.get(entity) / negativePercentageD2CM);
         }
     }
 
