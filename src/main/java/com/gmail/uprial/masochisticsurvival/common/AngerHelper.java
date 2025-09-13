@@ -65,24 +65,20 @@ public class AngerHelper {
         max view-distance and simulation-distance are both 32 chunks.
      */
     public static boolean isSimulated(final Location location, final Player player) {
-        final Chunk entityChunk = location.getChunk();
-        final Chunk playerChunk = player.getLocation().getChunk();
-        final int simulationDistance = player.getWorld().getSimulationDistance();
+        final int sd = player.getWorld().getSimulationDistance();
 
-        return (
-                    // Fail fast without Math.sqrt() and Math.pow()
-                    playerChunk.getX() - entityChunk.getX()
-                    +
-                    playerChunk.getZ() - entityChunk.getZ()
-                    <=
-                    simulationDistance * 2
-                ) && (
-                    Math.sqrt(
-                        Math.pow(playerChunk.getX() - entityChunk.getX(), 2.0D)
-                        +
-                        Math.pow(playerChunk.getZ() - entityChunk.getZ(), 2.0D)
-                    ) <= simulationDistance
-                );
+        final Chunk entityChunk = location.getChunk();
+        final int ecx = entityChunk.getX();
+        final int ecz = entityChunk.getZ();
+
+        final Chunk playerChunk = player.getLocation().getChunk();
+        final int pcx = playerChunk.getX();
+        final int pcz = playerChunk.getZ();
+
+        return (ecx >= pcx - sd)
+                && (ecx <= pcx + sd)
+                && (ecz >= pcz - sd)
+                && (ecz <= pcz + sd);
     }
 
     private static boolean isInvisiblePlayer(final Player player) {
