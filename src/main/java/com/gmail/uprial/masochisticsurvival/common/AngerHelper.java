@@ -75,6 +75,10 @@ public class AngerHelper {
         final int pcx = playerChunk.getX();
         final int pcz = playerChunk.getZ();
 
+        /*
+            According to https://minecraft.wiki/w/Chunk,
+            side length of the square of chunks loaded follows the formula 2 * simulation-distance + 1.
+         */
         return (ecx >= pcx - sd)
                 && (ecx <= pcx + sd)
                 && (ecz >= pcz - sd)
