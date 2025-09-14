@@ -35,7 +35,9 @@ public class Formatter {
     }
 
     private static String ps2string(final ProjectileSource ps) {
-        if(ps instanceof Entity) {
+        if(ps == null) {
+            return "null";
+        } else if(ps instanceof Entity) {
             return format((Entity)ps);
         } else {
             return ps.getClass().getName();

@@ -133,7 +133,7 @@ public class TestUnsafeValues implements UnsafeValues {
 
     @Override
     public DamageSource.Builder createDamageSourceBuilder(DamageType damageType) {
-        return null;
+        return new TestDamageSourceBuilder();
     }
 
     @Override

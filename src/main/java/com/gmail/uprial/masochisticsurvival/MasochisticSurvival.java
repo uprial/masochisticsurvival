@@ -16,7 +16,7 @@ import java.util.List;
 
 import static com.gmail.uprial.masochisticsurvival.MasochisticSurvivalCommandExecutor.COMMAND_NS;
 
-public final class MasochisticSurvival extends JavaPlugin {
+public class MasochisticSurvival extends JavaPlugin {
     private final String CONFIG_FILE_NAME = "config.yml";
     private final File configFile = new File(getDataFolder(), CONFIG_FILE_NAME);
 
