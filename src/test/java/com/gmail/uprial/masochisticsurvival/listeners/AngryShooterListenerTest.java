@@ -45,12 +45,15 @@ public class AngryShooterListenerTest extends TestConfigBase {
                         "as:",
                         "  percentage: 100",
                         "  try-angering-interval-in-s: 30",
-                        "  timeout-in-ms: 5"),
+                        "  timeout-in-ms: 5",
+                        "  player-game-modes:",
+                        "    - SURVIVAL"),
                 getParanoiacCustomLogger(), "as", "'as'");
         assertNotNull(listener);
         assertEquals("{percentage: 100, " +
                         "try-angering-interval-in-s: 30, " +
-                        "timeout-in-ms: 5}",
+                        "timeout-in-ms: 5, " +
+                        "player-game-modes: [SURVIVAL]}",
                 listener.toString());
     }
 
@@ -112,6 +115,20 @@ public class AngryShooterListenerTest extends TestConfigBase {
                         "  percentage: 100",
                         "  try-angering-interval-in-s: 30",
                         "  timeout-in-ms: -1"),
+                getCustomLogger(), "as", "'as'");
+    }
+
+    @Test
+    public void testWrongPlayerGameModes() throws Exception {
+        e.expect(InvalidConfigException.class);
+        e.expectMessage("Invalid org.bukkit.GameMode 'X' in player game modes of 'as' at pos 0");
+        getFromConfig(null, getPreparedConfig(
+                        "as:",
+                        "  percentage: 100",
+                        "  try-angering-interval-in-s: 30",
+                        "  timeout-in-ms: 5",
+                        "  player-game-modes:",
+                        "    - X"),
                 getCustomLogger(), "as", "'as'");
     }
 

@@ -81,7 +81,7 @@ public class MasochisticSurvivalConfigTest extends TestConfigBase {
                         "baby-world-pattern: world.*, baby-min-d2c: 3,000, " +
                         "baby-percentage: 33.3, percentage-d2cm: 2,000}, " +
                         "nasty-archer={positive-percentage: 0.3, negative-percentage: 1, negative-percentage-d2cm: 2,000}, " +
-                        "angry-shooter={percentage: 100, try-angering-interval-in-s: 30, timeout-in-ms: 5}, " +
+                        "angry-shooter={percentage: 100, try-angering-interval-in-s: 30, timeout-in-ms: 5, player-game-modes: [SURVIVAL]}, " +
                         "nasty-ender-dragon={world-name: world_the_end, " +
                         "resurrection-interval-in-s: 30, resurrection-amount: 2, " +
                         "explosion-damage-limit-per-s: 50, explosion-damage-reduction: 5, " +
@@ -107,6 +107,8 @@ public class MasochisticSurvivalConfigTest extends TestConfigBase {
                         "  percentage: 100",
                         "  try-angering-interval-in-s: 30",
                         "  timeout-in-ms: 5",
+                        "  player-game-modes:",
+                        "   - SURVIVAL",
                         "nasty-ender-dragon:",
                         "  enabled: true",
                         "  world-name: world_the_end",

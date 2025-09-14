@@ -4,10 +4,12 @@ import com.gmail.uprial.masochisticsurvival.MasochisticSurvival;
 import com.gmail.uprial.masochisticsurvival.common.AngerHelper;
 import com.gmail.uprial.masochisticsurvival.common.CustomLogger;
 import com.gmail.uprial.masochisticsurvival.common.RandomUtils;
+import com.gmail.uprial.masochisticsurvival.config.ConfigReaderEnums;
 import com.gmail.uprial.masochisticsurvival.config.ConfigReaderNumbers;
 import com.gmail.uprial.masochisticsurvival.config.InvalidConfigException;
 import com.google.common.collect.ImmutableMap;
 import org.bukkit.FluidCollisionMode;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -29,6 +31,7 @@ public class AngryShooterListener implements Listener, TimeListener {
     private final double percentage;
     private final int tryAngeringIntervalInS;
     private final int timeoutInMs;
+    private final Set<GameMode> playerGameModes;
 
     private final MasochisticSurvival plugin;
     private final CustomLogger customLogger;
@@ -71,12 +74,14 @@ public class AngryShooterListener implements Listener, TimeListener {
                                 final CustomLogger customLogger,
                                 final double percentage,
                                 final int tryAngeringIntervalInS,
-                                final int timeoutInMs) {
+                                final int timeoutInMs,
+                                final Set<GameMode> playerGameModes) {
         this.plugin = plugin;
         this.customLogger = customLogger;
         this.percentage = percentage;
         this.tryAngeringIntervalInS = tryAngeringIntervalInS;
         this.timeoutInMs = timeoutInMs;
+        this.playerGameModes = playerGameModes;
 
         task = new BukkitRunnable() {
             @Override
@@ -109,7 +114,7 @@ public class AngryShooterListener implements Listener, TimeListener {
 
         final Map<UUID, List<Player>> worldsPlayers = new HashMap<>();
         for(final Player player : plugin.getServer().getOnlinePlayers()) {
-            if(AngerHelper.isValidPlayer(player)) {
+            if(isValidPlayer(player)) {
                 worldsPlayers
                         .computeIfAbsent(player.getWorld().getUID(), (k) -> new ArrayList<>())
                         .add(player);
@@ -151,9 +156,13 @@ public class AngryShooterListener implements Listener, TimeListener {
                 && TYPE_2_MODE.containsKey(event.getEntity().getType())) {
 
             final Collection<Player> players = event.getEntity().getWorld().getPlayers();
-            players.removeIf(player -> !AngerHelper.isValidPlayer(player));
+            players.removeIf(player -> !isValidPlayer(player));
             tryAngering((Mob)event.getEntity(), players);
         }
+    }
+
+    private boolean isValidPlayer(final Player player) {
+        return AngerHelper.isValidPlayer(player) && playerGameModes.contains(player.getGameMode());
     }
 
     private boolean tryAngering(final Mob mob, final Collection<Player> players) {
@@ -180,7 +189,7 @@ public class AngryShooterListener implements Listener, TimeListener {
     private Player getMostVulnerableVisiblePlayer(final Mob mob, final Collection<Player> players) {
         return AngerHelper.getSmallestItem(players, (final Player player) -> {
             /*
-                AngerHelper.isValidPlayer(player)
+                this.isValidPlayer(player)
                 is already checked in trigger()
                 and onCreatureSpawn()
              */
@@ -233,7 +242,10 @@ public class AngryShooterListener implements Listener, TimeListener {
         int timeoutInMs = ConfigReaderNumbers.getInt(config, customLogger,
                 joinPaths(key, "timeout-in-ms"), String.format("timeout in ms of %s", title), 1, 3600_000);
 
-        return new AngryShooterListener(plugin, customLogger, percentage, tryAngeringIntervalInS, timeoutInMs);
+        Set<GameMode> playerGameModes = ConfigReaderEnums.getSet(GameMode.class, config, customLogger,
+                joinPaths(key, "player-game-modes"), String.format("player game modes of %s", title));
+
+        return new AngryShooterListener(plugin, customLogger, percentage, tryAngeringIntervalInS, timeoutInMs, playerGameModes);
     }
 
     private Location getLaunchPoint(final Mob mob) {
@@ -244,9 +256,11 @@ public class AngryShooterListener implements Listener, TimeListener {
     public String toString() {
         return String.format("{percentage: %s, " +
                         "try-angering-interval-in-s: %d, " +
-                        "timeout-in-ms: %d}",
+                        "timeout-in-ms: %d, " +
+                        "player-game-modes: %s}",
                 formatDoubleValue(percentage),
                 tryAngeringIntervalInS,
-                timeoutInMs);
+                timeoutInMs,
+                playerGameModes);
     }
 }

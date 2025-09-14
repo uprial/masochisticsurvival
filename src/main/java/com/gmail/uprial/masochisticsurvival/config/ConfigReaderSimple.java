@@ -3,6 +3,9 @@ package com.gmail.uprial.masochisticsurvival.config;
 import com.gmail.uprial.masochisticsurvival.common.CustomLogger;
 import org.bukkit.configuration.file.FileConfiguration;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public final class ConfigReaderSimple {
     public static String getString(FileConfiguration config, String key, String title) throws InvalidConfigException {
         String string = config.getString(key);
@@ -15,6 +18,21 @@ public final class ConfigReaderSimple {
         }
 
         return string;
+    }
+
+    public static List<String> getStringList(FileConfiguration config, CustomLogger customLogger, String key, String title) {
+        List<?> lines = config.getList(key);
+        if(lines != null) {
+            List<String> strings = new ArrayList<>();
+            for (Object line : lines) {
+                strings.add(line.toString());
+            }
+
+            return strings;
+        } else {
+            customLogger.debug(String.format("Empty %s. Use default value NULL", title));
+            return null;
+        }
     }
 
     public static boolean getBoolean(FileConfiguration config, CustomLogger customLogger, String key, String title, boolean defaultValue) throws InvalidConfigException {

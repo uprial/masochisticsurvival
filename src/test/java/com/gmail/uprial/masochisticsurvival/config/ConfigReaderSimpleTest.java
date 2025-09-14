@@ -5,6 +5,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
+import java.util.List;
+
 import static com.gmail.uprial.masochisticsurvival.config.ConfigReaderSimple.*;
 import static org.junit.Assert.*;
 
@@ -31,6 +33,28 @@ public class ConfigReaderSimpleTest extends TestConfigBase {
     public void testNormalString() throws Exception {
         assertEquals("val", getString(getPreparedConfig("s: val"), "s", "string"));
     }
+
+    // ==== getStringList ====
+    @Test
+    public void testEmptyStringList() throws Exception {
+        e.expect(RuntimeException.class);
+        e.expectMessage("Empty list. Use default value NULL");
+        getStringList(getPreparedConfig("sl: "), getDebugFearingCustomLogger(), "sl", "list");
+    }
+
+    @Test
+    public void testEmptyStringListValue() throws Exception {
+        assertNull(getStringList(getPreparedConfig("sl: "), getCustomLogger(), "sl", "list"));
+    }
+
+    @Test
+    public void testStringList() throws Exception {
+        List<String> sl = getStringList(getPreparedConfig("sl: ", " - x"), getDebugFearingCustomLogger(), "sl", "list");
+        assertNotNull(sl);
+        assertEquals(1, sl.size());
+        assertEquals("x", sl.get(0));
+    }
+
 
     // ==== getBoolean ====
     @Test
