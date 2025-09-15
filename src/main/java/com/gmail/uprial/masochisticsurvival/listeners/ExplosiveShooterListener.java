@@ -82,7 +82,11 @@ public class ExplosiveShooterListener implements Listener {
     }
 
     private double distance(final Entity entity1, final Entity entity2) {
-        return entity1.getLocation().distance(entity2.getLocation());
+        if(entity1.getWorld().getUID().equals(entity2.getWorld().getUID())) {
+            return entity1.getLocation().distance(entity2.getLocation());
+        } else {
+            return Double.MAX_VALUE;
+        }
     }
 
     public static ExplosiveShooterListener getFromConfig(MasochisticSurvival plugin, FileConfiguration config, CustomLogger customLogger, String key, String title) throws InvalidConfigException {
